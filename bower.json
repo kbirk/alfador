@@ -1,0 +1,27 @@
+{
+    "name": "alfador",
+    "version": "0.1.0",
+    "homepage": "https://github.com/kbirk/alfador",
+    "description": "A fast 3D math library",
+    "author": "Kevin Birk <birk.kevin@gmail.com>",
+    "main": "./build/alfador.min.js",
+    "moduleType": [
+        "globals"
+    ],
+    "keywords": [
+        "vector",
+        "matrix",
+        "3d",
+        "math"
+    ],
+    "license": "MIT",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "src",
+        "gulpfile.js",
+        "package.json",
+        "test"
+    ]
+}

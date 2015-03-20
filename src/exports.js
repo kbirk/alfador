@@ -1,0 +1,15 @@
+(function () {
+
+    "use strict";
+
+    module.exports = {
+        Mat33: require('./Mat33'),
+        Mat44: require('./Mat44'),
+        Vec2: require('./Vec2'),
+        Vec3: require('./Vec3'),
+        Vec4: require('./Vec3'),
+        Quaternion: require('./Quaternion'),
+        Transform: require('./Transform')
+    };
+
+}());
