@@ -3,6 +3,7 @@
     "version": "0.1.0",
     "description": "A fast 3D math library",
     "author": "Kevin Birk <birk.kevin@gmail.com>",
+    "homepage": "https://github.com/kbirk/alfador",
     "main": "./src/exports.js",
     "license": "MIT",
     "keywords": [
