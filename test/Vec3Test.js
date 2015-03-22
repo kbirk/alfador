@@ -221,7 +221,7 @@ describe('Vec3', function() {
     });
 
     describe('#toArray', function() {
-        it('should return a Array with three matching components', function() {
+        it('should return an Array with three matching components', function() {
             var v = Vec3.random(),
                 a = v.toArray();
             assert.equal( a instanceof Array, true );

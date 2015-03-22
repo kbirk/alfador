@@ -210,7 +210,7 @@ describe('Vec4', function() {
     });
 
     describe('#toArray', function() {
-        it('should return a Array with four matching components', function() {
+        it('should return an Array with four matching components', function() {
             var v = Vec4.random(),
                 a = v.toArray();
             assert.equal( a instanceof Array, true );

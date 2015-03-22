@@ -5,6 +5,11 @@
     var Vec3 = require('./Vec3'),
         Mat33 = require('./Mat33');
 
+    /**
+     * Instantiates a Quaternion object.
+     * @class Quaternion
+     * @classdesc A quaternion representing an orientation.
+     */
     function Quaternion() {
         switch ( arguments.length ) {
             case 1:
@@ -38,10 +43,26 @@
         return this;
     }
 
+    /**
+     * Returns a quaternion that represents an oreintation matching
+     * the identity matrix.
+     * @memberof Quaternion
+     *
+     * @returns {Quaternion} The identity quaternion.
+     */
     Quaternion.identity = function() {
         return new Quaternion( 1, 0, 0, 0 );
     };
 
+    /**
+     * Concatenates the rotations of the two quaternions, returning
+     * a new Quaternion object.
+     * @memberof Quaternion
+     *
+     * @param {Quaternion} that - The quaterion to concatenate.
+     *
+     * @returns {Quaternion} The resulting concatenated quaternion.
+     */
     Quaternion.prototype.multQuaternion = function( that ) {
         var w = (that.w * this.w) - (that.x * this.x) - (that.y * this.y) - (that.z * this.z),
             x = this.y*that.z - this.z*that.y + this.w*that.x + this.x*that.w,
@@ -50,20 +71,44 @@
         return new Quaternion( w, x, y, z );
     };
 
+    /**
+     * Applies the orientation of the quaternion as a rotation
+     * matrix to the provided vector, returning a new Vec3 object.
+     * @memberof Quaternion
+     *
+     * @param {Vec3|Vec4} that - The vector to rotate.
+     *
+     * @returns {Vec3} The resulting rotated vector.
+     */
     Quaternion.prototype.multVector = function( that ) {
         var vq = new Quaternion( 0, that.x, that.y, that.z ),
             r = this.multQuaternion( vq ).multQuaternion( this.inverse() );
         return new Vec3( r.x, r.y, r.z );
     };
 
+    /**
+     * Multiples the quaternion by either a vector or quaternion
+     * argument.
+     * @memberof Quaternion
+     *
+     * @param {Vec3|Vec4|Quaternion} that - The vector or quaternion argument.
+     *
+     * @returns {Vec3|Quaternion} The multiplied result.
+     */
     Quaternion.prototype.mult = function( that ) {
-        if ( that instanceof Vec3 ) {
-            return this.multVector( that );
-        } else {
+        if ( that instanceof Quaternion ) {
             return this.multQuaternion( that );
+        } else {
+            return this.multVector( that );
         }
     };
 
+    /**
+     * Returns the rotation matrix that the quaternion represents.
+     * @memberof Quaternion
+     *
+     * @returns {Mat33} The rotation matrix represented by the quaternion.
+     */
     Quaternion.prototype.matrix = function() {
         var xx = this.x*this.x,
             yy = this.y*this.y,
@@ -79,10 +124,30 @@
                            2*xz + 2*yw, 2*yz - 2*xw, 1 - 2*xx - 2*yy ]);
     };
 
+    /**
+     * Returns a quaternion representing the rotation defined by an axis
+     * and an angle.
+     * @memberof Quaternion
+     *
+     * @params {number} angle - The angle of the rotation, in degrees.
+     * @params {Vec3} axis - The the axis of the rotation.
+     *
+     * @returns {Quaternion} The quaternion representing the rotation.
+     */
     Quaternion.rotationDegrees = function( angle, axis ) {
         return Quaternion.rotationRadians( angle*( Math.PI/180 ), axis );
     };
 
+    /**
+     * Returns a quaternion representing the rotation defined by an axis
+     * and an angle.
+     * @memberof Quaternion
+     *
+     * @params {number} angle - The angle of the rotation, in radians.
+     * @params {Vec3} axis - The the axis of the rotation.
+     *
+     * @returns {Quaternion} The quaternion representing the rotation.
+     */
     Quaternion.rotationRadians = function( angle, axis ) {
         // normalize arguments
         angle = ( angle > 0 ) ?  angle % (2*Math.PI) : angle % (-2*Math.PI);
@@ -97,14 +162,16 @@
             axis.z * sina ).normalize();
     };
 
-    Quaternion.prototype.length = function() {
-        return Math.sqrt( this.lengthSquared() );
-    };
-
-    Quaternion.prototype.lengthSquared = function() {
-        return this.x*this.x + this.y*this.y + this.z*this.z + this.w*this.w;
-    };
-
+    /**
+     * Returns true if the vector components match those of a provided vector.
+     * An optional epsilon value may be provided.
+     * @memberof Quaternion
+     *
+     * @param {Quaternion} - The vector to calculate the dot product with.
+     * @param {number} - The epsilon value. Optional.
+     *
+     * @returns {boolean} Whether or not the vector components match.
+     */
     Quaternion.prototype.equals = function( that, epsilon ) {
         epsilon = epsilon === undefined ? 0 : epsilon;
         return ( this.x === that.x || Math.abs( this.x - that.x ) <= epsilon ) &&
@@ -113,8 +180,18 @@
             ( this.w === that.w || Math.abs( this.w - that.w ) <= epsilon );
     };
 
+    /**
+     * Returns a new Quaternion of unit length.
+     * @memberof Quaternion
+     *
+     * @returns {Quaternion} The quaternion of unit length.
+     */
     Quaternion.prototype.normalize = function() {
-        var mag = this.length();
+        var mag = Math.sqrt(
+                this.x*this.x +
+                this.y*this.y +
+                this.z*this.z +
+                this.w*this.w );
         if ( mag !== 0 ) {
             return new Quaternion(
                 this.w / mag,
@@ -125,26 +202,56 @@
         return new Quaternion();
     };
 
+    /**
+     * Returns the conjugate of the quaternion.
+     * @memberof Quaternion
+     *
+     * @returns {Quaternion} The conjugate of the quaternion.
+     */
     Quaternion.prototype.conjugate = function() {
          return new Quaternion( this.w, -this.x, -this.y, -this.z );
     };
 
+    /**
+     * Returns the inverse of the quaternion.
+     * @memberof Quaternion
+     *
+     * @returns {Quaternion} The inverse of the quaternion.
+     */
     Quaternion.prototype.inverse = function() {
         return this.conjugate();
     };
 
+    /**
+     * Returns a random Quaternion of unit length.
+     * @memberof Quaternion
+     *
+     * @returns {Quaternion} A random vector of unit length.
+     */
     Quaternion.random = function() {
         var axis = Vec3.random().normalize(),
             angle = Math.random();
         return Quaternion.rotationRadians( angle, axis );
     };
 
+    /**
+     * Returns a string representation of the quaternion.
+     * @memberof Quaternion
+     *
+     * @returns {String} The string representation of the quaternion.
+     */
     Quaternion.prototype.toString = function() {
         return this.x + ", " + this.y + ", " + this.z + ", " + this.w;
     };
 
+    /**
+     * Returns an array representation of the quaternion.
+     * @memberof Quaternion
+     *
+     * @returns {Array} The quaternion as an array.
+     */
     Quaternion.prototype.toArray = function() {
-        return [ this.x, this.y, this.z, this.w ];
+        return [  this.w, this.x, this.y, this.z ];
     };
 
     module.exports = Quaternion;

@@ -209,7 +209,7 @@ describe('Vec2', function() {
     });
 
     describe('#toArray', function() {
-        it('should return a Array with two matching components', function() {
+        it('should return an Array with two matching components', function() {
             var v = Vec2.random(),
                 a = v.toArray();
             assert.equal( a instanceof Array, true );

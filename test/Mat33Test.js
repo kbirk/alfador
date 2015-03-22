@@ -365,7 +365,7 @@ describe('Mat33', function() {
     });
 
     describe('#toArray', function() {
-        it('should return a Array with nine matching components', function() {
+        it('should return an Array with nine matching components', function() {
             var m = Mat33.random(),
                 a = m.toArray(),
                 i;

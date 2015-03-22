@@ -36,7 +36,7 @@ describe('Quaternion', function() {
     });
 
     describe('#random()', function() {
-        it('should return a Quaternion representing a random angle', function() {
+        it('should return a Quaternion representing a random orientation', function() {
             var r0 = Quaternion.random(),
                 r1 = Quaternion.random();
             assert.equal( r0.equals( new Quaternion( 0, 0, 0, 0 ) ), false );
@@ -175,36 +175,19 @@ describe('Quaternion', function() {
         });
     });
 
-    describe('#length', function() {
-        it('should return the length of the vector', function() {
-            var v0 = new Quaternion( 1, 1, 1, 1 ),
-                r = Math.random(),
-                v1 = new Quaternion( r, 0, 0, 0 );
-
-            assert.equal( v0.length() - 2 < EPSILON , true );
-            assert.equal( v1.length() - r < EPSILON , true );
-        });
-    });
-
-    describe('#lengthSquared', function() {
-        it('should return the squared length of the vector', function() {
-            var v0 = new Quaternion( 1, 1, 1, 1 ),
-                r = Math.random(),
-                v1 = new Quaternion( r, 0, 0, 0 );
-
-            assert.equal( v0.lengthSquared() - 4 < EPSILON , true );
-            assert.equal( v1.lengthSquared() - r*r < EPSILON , true );
-        });
-    });
-
     describe('#normalize', function() {
-        it('should return an equivolent vector of unit length', function() {
+        it('should return an equivolent quaternion of unit length', function() {
             var v = Quaternion.random();
             v.x += 1;
             v.y += 1;
             v.z += 1;
             v.z += 1;
-            assert.equal( v.normalize().length() - 1 < EPSILON, true );
+            v = v.normalize()
+            assert.equal( Math.sqrt(
+                v.x*v.x +
+                v.y*v.y +
+                v.z*v.z +
+                v.w*v.w ) - 1 < EPSILON, true );
         });
         it('should return an identity quaternion if the original length is zero', function() {
             var v = new Quaternion( 0, 0, 0, 0 );
@@ -225,15 +208,15 @@ describe('Quaternion', function() {
     });
 
     describe('#toArray', function() {
-        it('should return a Array with four matching components', function() {
+        it('should return an Array with four matching components', function() {
             var v = Quaternion.random(),
                 a = v.toArray();
             assert.equal( a instanceof Array, true );
             assert.equal( a.length === 4, true );
-            assert.equal( a[0] - v.x < EPSILON, true );
-            assert.equal( a[1] - v.y < EPSILON, true );
-            assert.equal( a[2] - v.z < EPSILON, true );
-            assert.equal( a[3] - v.w < EPSILON, true );
+            assert.equal( a[0] - v.w < EPSILON, true );
+            assert.equal( a[1] - v.x < EPSILON, true );
+            assert.equal( a[2] - v.y < EPSILON, true );
+            assert.equal( a[3] - v.z < EPSILON, true );
         });
     });
 

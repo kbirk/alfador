@@ -403,7 +403,7 @@ describe('Mat44', function() {
     });
 
     describe('#toArray', function() {
-        it('should return a Array with sixteen matching components', function() {
+        it('should return an Array with sixteen matching components', function() {
             var m = Mat44.random(),
                 a = m.toArray(),
                 i;
