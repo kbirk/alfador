@@ -29,6 +29,16 @@
     }
 
     /**
+     * Returns a new Vec2 with each component negated.
+     * @memberof Vec2
+     *
+     * @returns {Vec2} The negated vector.
+     */
+    Vec2.prototype.negate = function() {
+        return new Vec2( -this.x, -this.y );
+    };
+
+    /**
      * Adds the vector with the provided vector argument, returning a new Vec2
      * object representing the sum.
      * @memberof Vec2

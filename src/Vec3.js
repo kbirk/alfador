@@ -32,7 +32,17 @@
     }
 
     /**
-     * Adds the vector with the provided vector argument, returning a new Vec2
+     * Returns a new Vec3 with each component negated.
+     * @memberof Vec3
+     *
+     * @returns {Vec3} The negated vector.
+     */
+    Vec3.prototype.negate = function() {
+        return new Vec3( -this.x, -this.y, -this.z );
+    };
+
+    /**
+     * Adds the vector with the provided vector argument, returning a new Vec3
      * object representing the sum.
      * @memberof Vec3
      *
@@ -48,8 +58,8 @@
     };
 
     /**
-     * Subtracts the provided vector argument from the vector, returning a new Vec2
-     * object representing the difference.
+     * Subtracts the provided vector argument from the vector, returning a new
+     * Vec3 object representing the difference.
      * @memberof Vec3
      *
      * @param {Vec3|Vec4|Array} - The vector to subtract.
@@ -64,7 +74,7 @@
     };
 
     /**
-     * Multiplies the vector with the provided scalar argument, returning a new Vec2
+     * Multiplies the vector with the provided scalar argument, returning a new Vec3
      * object representing the scaled vector.
      * @memberof Vec3
      *
@@ -77,7 +87,7 @@
     };
 
     /**
-     * Divides the vector with the provided scalar argument, returning a new Vec2
+     * Divides the vector with the provided scalar argument, returning a new Vec3
      * object representing the scaled vector.
      * @memberof Vec3
      *

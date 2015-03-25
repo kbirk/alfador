@@ -130,7 +130,7 @@
      * @memberof Quaternion
      *
      * @params {number} angle - The angle of the rotation, in degrees.
-     * @params {Vec3} axis - The the axis of the rotation.
+     * @params {Vec3} axis - The axis of the rotation.
      *
      * @returns {Quaternion} The quaternion representing the rotation.
      */
@@ -144,7 +144,7 @@
      * @memberof Quaternion
      *
      * @params {number} angle - The angle of the rotation, in radians.
-     * @params {Vec3} axis - The the axis of the rotation.
+     * @params {Vec3} axis - The axis of the rotation.
      *
      * @returns {Quaternion} The quaternion representing the rotation.
      */
