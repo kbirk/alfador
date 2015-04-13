@@ -1,6 +1,6 @@
 {
     "name": "alfador",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "homepage": "https://github.com/kbirk/alfador",
     "description": "A fast 3D math library for JavaScript",
     "author": "Kevin Birk <birk.kevin@gmail.com>",
