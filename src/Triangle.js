@@ -58,8 +58,8 @@
     Triangle.prototype.getNormal = function() {
         if ( !this.normal ) {
             var positions = this.positions,
-                ab = positions[0].sub( positions[1] ),
-                ac = positions[0].sub( positions[2] );
+                ab = positions[1].sub( positions[0] ),
+                ac = positions[2].sub( positions[0] );
             this.normal = ab.cross( ac ).normalize();
         }
         return this.normal;
