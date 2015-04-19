@@ -9,7 +9,8 @@
         Vec3: require('./Vec3'),
         Vec4: require('./Vec3'),
         Quaternion: require('./Quaternion'),
-        Transform: require('./Transform')
+        Transform: require('./Transform'),
+        Triangle: require('./Triangle')
     };
 
 }());
