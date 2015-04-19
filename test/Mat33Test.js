@@ -207,8 +207,7 @@ describe('Mat33', function() {
 
     describe('#rotationDegrees()', function() {
         it('should return a rotation matrix, rotating counter-clockwise', function() {
-            var r = Math.random(),
-                up =  new Vec3( 0, 1, 0 ),
+            var up =  new Vec3( 0, 1, 0 ),
                 left =  new Vec3( 1, 0, 0 ),
                 right = new Vec3( -1, 0, 0 ),
                 forward =  new Vec3( 0, 0, 1 ),
@@ -238,8 +237,7 @@ describe('Mat33', function() {
 
     describe('#rotationRadians()', function() {
         it('should return a rotation matrix, rotating counter-clockwise', function() {
-            var r = Math.random(),
-                up =  new Vec3( 0, 1, 0 ),
+            var up =  new Vec3( 0, 1, 0 ),
                 left =  new Vec3( 1, 0, 0 ),
                 right = new Vec3( -1, 0, 0 ),
                 forward =  new Vec3( 0, 0, 1 ),
@@ -307,8 +305,8 @@ describe('Mat33', function() {
 
         it('should not modify the calling object', function() {
             var p = Mat33.random(),
-                c = new Mat33( p ),
-                q = p.transpose();
+                c = new Mat33( p );
+            p.transpose();
             assert.equal( p.equals( c ), true );
         });
     });
@@ -330,8 +328,8 @@ describe('Mat33', function() {
 
         it('should not modify the calling object', function() {
             var p = Mat33.random(),
-                c = new Mat33( p ),
-                q = p.inverse();
+                c = new Mat33( p );
+            p.inverse();
             assert.equal( p.equals( c ), true );
         });
     });

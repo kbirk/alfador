@@ -28,6 +28,13 @@ describe('Vec4', function() {
                               Math.random() );
             assert.equal( v.equals( new Vec4( v.x, v.y, v.z, v.w ) ), true );
         });
+        it('should accept and array of input', function() {
+            var v = new Vec4( Math.random(),
+                              Math.random(),
+                              Math.random(),
+                              Math.random() );
+            assert.equal( v.equals( [ v.x, v.y, v.z, v.w ] ), true );
+        });
         it('should accept a second epsilon parameter, return true if each component is <= epsilon', function() {
             var r = Math.random(),
                 v = new Vec4( r, r, r, r );
@@ -41,7 +48,7 @@ describe('Vec4', function() {
                 r1 = Vec4.random();
             assert.equal( r0.equals( new Vec4( 0, 0, 0, 0 ) ), false );
             assert.equal( r1.equals( new Vec4( 0, 0, 0, 0 ) ), false );
-        })
+        });
     });
 
     describe('#constructor()', function() {
@@ -95,6 +102,13 @@ describe('Vec4', function() {
             assert.equal( r.equals( new Vec4( 0, 0, 0, 0 ) ), true );
             assert.equal( s.equals( new Vec4( 0, 0, 0, 0 ) ), true );
             assert.equal( t.equals( new Vec4( 0, 0, 0, 0 ) ), true );
+        });
+    });
+
+    describe('#negate', function() {
+        it('should return a Vec4 with each component negated', function() {
+            var v = Vec4.random();
+            assert( v.negate().equals( new Vec4( -v.x, -v.y, -v.z, -v.w ) ) );
         });
     });
 

@@ -41,7 +41,7 @@ describe('Quaternion', function() {
                 r1 = Quaternion.random();
             assert.equal( r0.equals( new Quaternion( 0, 0, 0, 0 ) ), false );
             assert.equal( r1.equals( new Quaternion( 0, 0, 0, 0 ) ), false );
-        })
+        });
     });
 
     describe('#constructor()', function() {
@@ -120,8 +120,7 @@ describe('Quaternion', function() {
 
     describe('#rotationRadians()', function() {
         it('should return a rotation matrix, rotating counter-clockwise', function() {
-            var r = Math.random(),
-                up =  new Vec3( 0, 1, 0 ),
+            var up =  new Vec3( 0, 1, 0 ),
                 left =  new Vec3( 1, 0, 0 ),
                 right = new Vec3( -1, 0, 0 ),
                 forward =  new Vec3( 0, 0, 1 ),
@@ -158,7 +157,6 @@ describe('Quaternion', function() {
                 angleA = Math.random(),
                 axisB = Vec3.random(),
                 angleB = Math.random(),
-                vec = Vec3.random(),
                 rotMatrixA = Mat33.rotationRadians( angleA, axisA ),
                 rotQuaternionA = Quaternion.rotationRadians( angleA, axisA ),
                 rotMatrixB = Mat33.rotationRadians( angleB, axisB ),
@@ -182,7 +180,7 @@ describe('Quaternion', function() {
             v.y += 1;
             v.z += 1;
             v.z += 1;
-            v = v.normalize()
+            v = v.normalize();
             assert.equal( Math.sqrt(
                 v.x*v.x +
                 v.y*v.y +

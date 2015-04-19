@@ -20,6 +20,11 @@ describe('Vec2', function() {
                               Math.random() );
             assert.equal( v.equals( new Vec2( v.x, v.y ) ), true );
         });
+        it('should accept an array of input', function() {
+            var v = new Vec2( Math.random(),
+                              Math.random() );
+            assert.equal( v.equals( [v.x, v.y ] ), true );
+        });
         it('should accept a second epsilon parameter, return true if each component is <= epsilon', function() {
             var r = Math.random(),
                 v = new Vec2( r, r );
@@ -33,7 +38,7 @@ describe('Vec2', function() {
                 r1 = Vec2.random();
             assert.equal( r0.equals( new Vec2( 0, 0 ) ), false );
             assert.equal( r1.equals( new Vec2( 0, 0 ) ), false );
-        })
+        });
     });
 
     describe('#constructor()', function() {
@@ -59,7 +64,7 @@ describe('Vec2', function() {
             assert.equal( p.equals( q ), true );
         });
         it('should return a truncated deep copy when supplied another Vec3', function() {
-            var p = Vec4.random(),
+            var p = Vec3.random(),
                 q = new Vec2( p ),
                 s = new Vec2( p.x, p.y );
             assert.equal( q.equals( s ), true );
@@ -83,6 +88,13 @@ describe('Vec2', function() {
             assert.equal( r.equals( new Vec2( 0, 0 ) ), true );
             assert.equal( s.equals( new Vec2( 0, 0 ) ), true );
             assert.equal( t.equals( new Vec2( 0, 0 ) ), true );
+        });
+    });
+
+    describe('#negate', function() {
+        it('should return a Vec2 with each component negated', function() {
+            var v = Vec2.random();
+            assert( v.negate().equals( new Vec2( -v.x, -v.y ) ) );
         });
     });
 

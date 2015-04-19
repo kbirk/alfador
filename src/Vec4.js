@@ -186,11 +186,15 @@
      * @returns {boolean} Whether or not the vector components match.
      */
     Vec4.prototype.equals = function( that, epsilon ) {
+        var x = that.x !== undefined ? that.x : that[0],
+            y = that.y !== undefined ? that.y : that[1],
+            z = that.z !== undefined ? that.z : that[2],
+            w = that.w !== undefined ? that.w : that[3];
         epsilon = epsilon === undefined ? 0 : epsilon;
-        return ( this.x === that.x || Math.abs( this.x - that.x ) <= epsilon ) &&
-            ( this.y === that.y || Math.abs( this.y - that.y ) <= epsilon ) &&
-            ( this.z === that.z || Math.abs( this.z - that.z ) <= epsilon ) &&
-            ( this.w === that.w || Math.abs( this.w - that.w ) <= epsilon );
+        return ( this.x === x || Math.abs( this.x - x ) <= epsilon ) &&
+            ( this.y === y || Math.abs( this.y - y ) <= epsilon ) &&
+            ( this.z === z || Math.abs( this.z - z ) <= epsilon ) &&
+            ( this.w === w || Math.abs( this.w - w ) <= epsilon );
     };
 
     /**

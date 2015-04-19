@@ -521,8 +521,8 @@ describe('Transform', function() {
         });
         it('should not modify calling object', function() {
             var p = Transform.random(),
-                q = new Transform( p ),
-                r = p.localToWorld( Vec3.random() );
+                q = new Transform( p );
+            p.localToWorld( Vec3.random() );
             assert.equal( q.matrix().equals( p.matrix(), EPSILON ), true );
         });
     });
@@ -554,8 +554,8 @@ describe('Transform', function() {
         });
         it('should not modify calling object', function() {
             var p = Transform.random(),
-                q = new Transform( p ),
-                r = p.worldToLocal( Vec3.random() );
+                q = new Transform( p );
+            p.worldToLocal( Vec3.random() );
             assert.equal( q.matrix().equals( p.matrix(), EPSILON ), true );
         });
     });

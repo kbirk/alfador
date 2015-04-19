@@ -24,6 +24,12 @@ describe('Vec3', function() {
                               Math.random() );
             assert.equal( v.equals( new Vec3( v.x, v.y, v.z) ), true );
         });
+        it('should accept an array of input', function() {
+            var v = new Vec3( Math.random(),
+                              Math.random(),
+                              Math.random() );
+            assert.equal( v.equals( [ v.x, v.y, v.z ] ), true );
+        });
         it('should accept a second epsilon parameter, return true if each component is <= epsilon', function() {
             var r = Math.random(),
                 v = new Vec3( r, r, r );
@@ -37,7 +43,7 @@ describe('Vec3', function() {
                 r1 = Vec3.random();
             assert.equal( r0.equals( new Vec3( 0, 0, 0 ) ), false );
             assert.equal( r1.equals( new Vec3( 0, 0, 0 ) ), false );
-        })
+        });
     });
 
     describe('#constructor()', function() {
@@ -89,6 +95,13 @@ describe('Vec3', function() {
             assert.equal( r.equals( new Vec3( 0, 0, 0 ) ), true );
             assert.equal( s.equals( new Vec3( 0, 0, 0 ) ), true );
             assert.equal( t.equals( new Vec3( 0, 0, 0 ) ), true );
+        });
+    });
+
+    describe('#negate', function() {
+        it('should return a Vec3 with each component negated', function() {
+            var v = Vec3.random();
+            assert( v.negate().equals( new Vec3( -v.x, -v.y, -v.z ) ) );
         });
     });
 

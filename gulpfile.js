@@ -29,7 +29,7 @@
             .pipe( gulp.dest( 'build' ) );
     }
 
-    function build( root, output, minify, watch ) {
+    function build( root, output, minify ) {
         var browserify = require('browserify'),
             b = browserify( root, {
                 debug: !minify,
@@ -65,6 +65,7 @@
             mocha = require('gulp-mocha');
         return gulp.src( './src/*.js' )
             .pipe( istanbul( { includeUntested: false } ) ) // Covering files
+            .pipe( istanbul.hookRequire() )
             .on( 'finish', function () {
                 return gulp.src( [ './test/*.js' ] )
                     .pipe( mocha( { reporter: 'list' } )
