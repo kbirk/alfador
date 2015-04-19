@@ -109,8 +109,7 @@ describe('Transform', function() {
             assert.equal( p.matrix().equals( q.matrix() ), false );
         });
         it('should return a Transform that is orthogonal', function() {
-            var p = Transform.random(),
-                q = Transform.identity();
+            var p = Transform.random();
             assert.equal( p.up().dot( p.forward() ) < EPSILON, true );
         });
     });

@@ -10,7 +10,7 @@
         "url" : "https://github.com/kbirk/alfador.git"
     },
     "files": [
-        "build"
+        "src"
     ],
     "keywords": [
         "vector",

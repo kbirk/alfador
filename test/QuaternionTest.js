@@ -96,8 +96,7 @@ describe('Quaternion', function() {
 
     describe('#rotationDegrees()', function() {
         it('should return a rotation matrix, rotating counter-clockwise', function() {
-            var r = Math.random(),
-                up =  new Vec3( 0, 1, 0 ),
+            var up =  new Vec3( 0, 1, 0 ),
                 left =  new Vec3( 1, 0, 0 ),
                 right = new Vec3( -1, 0, 0 ),
                 forward =  new Vec3( 0, 0, 1 ),

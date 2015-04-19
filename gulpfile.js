@@ -54,7 +54,7 @@
 
     gulp.task('lint', function() {
         var jshint = require('gulp-jshint');
-        return gulp.src( './src/**/*.js' )
+        return gulp.src( [ './src/**/*.js', './test/**/*.js' ] )
             .pipe( jshint() )
             .pipe( jshint('.jshintrc') )
             .pipe( jshint.reporter('jshint-stylish') );
