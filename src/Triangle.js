@@ -14,15 +14,15 @@
             case 1:
                 // array or object argument
                 var arg = arguments[0];
-                this.a = arg[0] || arg.a;
-                this.b = arg[1] || arg.b;
-                this.c = arg[2] || arg.c;
+                this.a = new Vec3( arg[0] || arg.a );
+                this.b = new Vec3( arg[1] || arg.b );
+                this.c = new Vec3( arg[2] || arg.c );
                 break;
             case 3:
                 // individual vector arguments
-                this.a = arguments[0];
-                this.b = arguments[1];
-                this.c = arguments[2];
+                this.a = new Vec3( arguments[0] );
+                this.b = new Vec3( arguments[1] );
+                this.c = new Vec3( arguments[2] );
                 break;
             default:
                 this.a = new Vec3( 0, 0, 0 );
@@ -108,9 +108,9 @@
      */
     Triangle.prototype.equals = function( that, epsilon ) {
         epsilon = epsilon === undefined ? 0 : epsilon;
-        return ( this.a === that.a || Math.abs( this.a - that.a ) <= epsilon ) &&
-            ( this.b === that.b || Math.abs( this.b - that.b ) <= epsilon ) &&
-            ( this.c === that.c || Math.abs( this.c - that.c ) <= epsilon );
+        return this.a.equals( that.a, epsilon ) &&
+            this.b.equals( that.b, epsilon ) &&
+            this.c.equals( that.c, epsilon );
     };
 
     /**

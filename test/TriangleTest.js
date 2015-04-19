@@ -29,9 +29,9 @@ describe('Triangle', function() {
                 b = new Vec3.random(),
                 c = new Vec3.random(),
                 t = new Triangle( a, b, c );
-            assert( !t.equals( new Triangle( a.add( [ 0.99, 0 , 0 ] ), b, c ), 1 ) );
-            assert( !t.equals( new Triangle( a, b.add( [ 0.99, 0 , 0 ] ), c ), 1 ) );
-            assert( !t.equals( new Triangle( a, b, c.add( [ 0.99, 0 , 0 ] ) ), 1 ) );
+            assert( t.equals( new Triangle( a.add( [ 0.9, 0 , 0 ] ), b, c ), 1 ) );
+            assert( t.equals( new Triangle( a, b.add( [ 0.9, 0 , 0 ] ), c ), 1 ) );
+            assert( t.equals( new Triangle( a, b, c.add( [ 0.9, 0 , 0 ] ) ), 1 ) );
         });
     });
 
@@ -80,6 +80,12 @@ describe('Triangle', function() {
             assert( t.a.equals( [ 0, 0, 0 ] ) );
             assert( t.b.equals( [ 1, 0, 0 ] ) );
             assert( t.c.equals( [ 1, 1, 0 ] ) );
+        });
+        it('should convert any positions to instances of Vec3', function() {
+            var t = new Triangle( [ 0, 0, 0 ], [ 1, 0, 0 ], [ 1, 1, 0 ] );
+            assert( t.a instanceof Vec3 );
+            assert( t.b instanceof Vec3 );
+            assert( t.c instanceof Vec3 );
         });
     });
 
