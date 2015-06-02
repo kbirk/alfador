@@ -13,16 +13,18 @@
      */
     function Mat44( that ) {
         if ( that ) {
-            if ( that instanceof Mat33 ) {
-                // copy data by value, account for index differences
-                this.data = [
-                    that.data[0], that.data[1], that.data[2], 0,
-                    that.data[3], that.data[4], that.data[5], 0,
-                    that.data[6], that.data[7], that.data[8], 0,
-                    0, 0, 0, 1 ];
-            } else if ( that instanceof Mat44 ) {
-                // copy data by value
-                this.data = that.data.slice( 0 );
+            if ( that.data instanceof Array ) {
+                if ( that.data.length === 9 ) {
+                    // copy Mat33 data by value, account for index differences
+                    this.data = [
+                        that.data[0], that.data[1], that.data[2], 0,
+                        that.data[3], that.data[4], that.data[5], 0,
+                        that.data[6], that.data[7], that.data[8], 0,
+                        0, 0, 0, 1 ];
+                } else if ( that.data.length === 16 ) {
+                    // copy Mat44 data by value
+                    this.data = that.data.slice( 0 );
+                }
             } else if ( that.length === 16 ) {
                  // copy array by value, use prototype to cast array buffers
                 this.data = Array.prototype.slice.call( that );
@@ -32,7 +34,6 @@
         } else {
             return Mat44.identity();
         }
-        return this;
     }
 
     /**
@@ -90,23 +91,23 @@
      * @returns {Mat44} The scale matrix.
      */
     Mat44.scale = function( scale ) {
-        if ( scale instanceof Array ) {
-            return new Mat44(
-                [ scale[0], 0, 0, 0,
+        if ( typeof scale === "number" ) {
+            return new Mat44([
+                scale, 0, 0, 0,
+                0, scale, 0, 0,
+                0, 0, scale, 0,
+                0, 0, 0, 1 ]);
+        } else if ( scale instanceof Array ) {
+            return new Mat44([
+                scale[0], 0, 0, 0,
                 0, scale[1], 0, 0,
                 0, 0, scale[2], 0,
                 0, 0, 0, 1 ]);
-        } else if ( scale instanceof Vec3 ) {
-            return new Mat44([
-                scale.x, 0, 0, 0,
-                0, scale.y, 0, 0,
-                0, 0, scale.z, 0,
-                0, 0, 0, 1 ]);
         }
         return new Mat44([
-            scale, 0, 0, 0,
-            0, scale, 0, 0,
-            0, 0, scale, 0,
+            scale.x, 0, 0, 0,
+            0, scale.y, 0, 0,
+            0, 0, scale.z, 0,
             0, 0, 0, 1 ]);
     };
 
@@ -220,7 +221,8 @@
      */
     Mat44.prototype.multVector3 = function( that ) {
         // ensure 'that' is a Vec3
-        that = ( that instanceof Vec3 ) ? that : new Vec3( that );
+        // it is safe to only cast if Array since Vec4 has own method
+        that = ( that instanceof Array ) ? new Vec3( that ) : that;
         return new Vec3({
             x: this.data[0] * that.x +
                 this.data[4] * that.y +
@@ -245,7 +247,8 @@
      */
     Mat44.prototype.multVector4 = function( that ) {
         // ensure 'that' is a Vec4
-        that = ( that instanceof Vec4 ) ? that : new Vec4( that );
+        // it is safe to only cast if Array since Vec3 has own method
+        that = ( that instanceof Array ) ? new Vec4( that ) : that;
         return new Vec4({
             x: this.data[0] * that.x +
                 this.data[4] * that.y +
@@ -297,7 +300,11 @@
         var mat = new Mat44(),
             i;
         // ensure 'that' is a Mat44
-        that = ( that instanceof Mat44 ) ? that : new Mat44( that );
+        // must check if Array or Mat44
+        if ( ( that.data && that.data.length === 9 ) ||
+            that instanceof Array ) {
+            that = new Mat44( that );
+        }
         for ( i=0; i<4; i++ ) {
             mat.data[i] = this.data[i] * that.data[0] +
                 this.data[i+4] * that.data[1] +
@@ -329,8 +336,10 @@
      */
     Mat44.prototype.mult = function( that ) {
         if ( typeof that === "number" ) {
+            // scalar
             return this.multScalar( that );
         } else if ( that instanceof Array ) {
+            // array
             if ( that.length === 3 ) {
                 return this.multVector3( that );
             } else if ( that.length === 4 ) {
@@ -338,13 +347,20 @@
             } else {
                 return this.multMatrix( that );
             }
-        } else if ( that instanceof Vec3 ) {
-            return this.multVector3( that );
-        } else if ( that instanceof Vec4 ) {
-            return this.multVector4( that );
-        } else {
-            return this.multMatrix( that );
         }
+        // vector
+        if ( that.x !== undefined &&
+            that.y !== undefined &&
+            that.z !== undefined ) {
+            if ( that.w !== undefined ) {
+                // vec4
+                return this.multVector4( that );
+            }
+            //vec3
+            return this.multVector3( that );
+        }
+        // matrix
+        return this.multMatrix( that );
     };
 
     /**

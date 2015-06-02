@@ -59,11 +59,12 @@
      * a new Quaternion object.
      * @memberof Quaternion
      *
-     * @param {Quaternion} that - The quaterion to concatenate.
+     * @param {Quaternion|Array} that - The quaterion to concatenate.
      *
      * @returns {Quaternion} The resulting concatenated quaternion.
      */
-    Quaternion.prototype.multQuaternion = function( that ) {
+    Quaternion.prototype.mult = function( that ) {
+        that = ( that instanceof Array ) ? new Quaternion( that ) : that;
         var w = (that.w * this.w) - (that.x * this.x) - (that.y * this.y) - (that.z * this.z),
             x = this.y*that.z - this.z*that.y + this.w*that.x + this.x*that.w,
             y = this.z*that.x - this.x*that.z + this.w*that.y + this.y*that.w,
@@ -76,31 +77,15 @@
      * matrix to the provided vector, returning a new Vec3 object.
      * @memberof Quaternion
      *
-     * @param {Vec3|Vec4} that - The vector to rotate.
+     * @param {Vec3|Vec4|Array} that - The vector to rotate.
      *
      * @returns {Vec3} The resulting rotated vector.
      */
-    Quaternion.prototype.multVector = function( that ) {
+    Quaternion.prototype.rotate = function( that ) {
+        that = ( that instanceof Array ) ? new Vec3( that ) : that;
         var vq = new Quaternion( 0, that.x, that.y, that.z ),
-            r = this.multQuaternion( vq ).multQuaternion( this.inverse() );
+            r = this.mult( vq ).mult( this.inverse() );
         return new Vec3( r.x, r.y, r.z );
-    };
-
-    /**
-     * Multiples the quaternion by either a vector or quaternion
-     * argument.
-     * @memberof Quaternion
-     *
-     * @param {Vec3|Vec4|Quaternion} that - The vector or quaternion argument.
-     *
-     * @returns {Vec3|Quaternion} The multiplied result.
-     */
-    Quaternion.prototype.mult = function( that ) {
-        if ( that instanceof Quaternion ) {
-            return this.multQuaternion( that );
-        } else {
-            return this.multVector( that );
-        }
     };
 
     /**

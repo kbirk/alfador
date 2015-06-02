@@ -103,9 +103,9 @@ describe('Quaternion', function() {
                 up90 = Quaternion.rotationDegrees( 90, up ),
                 left90 = Quaternion.rotationDegrees( -90, left ),
                 forward90 = Quaternion.rotationDegrees( 90, forward ),
-                v0 = up90.mult( forward ).normalize(),
-                v1 = left90.mult( forward ).normalize(),
-                v2 = forward90.mult( up ).normalize();
+                v0 = up90.rotate( forward ).normalize(),
+                v1 = left90.rotate( forward ).normalize(),
+                v2 = forward90.rotate( up ).normalize();
             assert.equal( v0.equals( left, EPSILON ), true );
             assert.equal( v1.equals( up, EPSILON ), true );
             assert.equal( v2.equals( right, EPSILON ), true );
@@ -162,13 +162,16 @@ describe('Quaternion', function() {
                 rotQuaternionB = Quaternion.rotationRadians( angleB, axisB );
             assert.equal( rotMatrixA.mult( rotMatrixB ).equals( rotQuaternionA.mult( rotQuaternionB ).matrix(), EPSILON ), true );
         });
+    });
+
+    describe('#rotate', function() {
         it('should rotate supplied vectors', function() {
             var axis = Vec3.random(),
                 angle = Math.random(),
                 vec = Vec3.random(),
                 rotMatrix = Mat33.rotationRadians( angle, axis ),
                 rotQuaternion = Quaternion.rotationRadians( angle, axis );
-            assert.equal( rotMatrix.mult( vec ).equals( rotQuaternion.mult( vec ), EPSILON ), true );
+            assert.equal( rotMatrix.mult( vec ).equals( rotQuaternion.rotate( vec ), EPSILON ), true );
         });
     });
 

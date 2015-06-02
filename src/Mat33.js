@@ -12,15 +12,17 @@
      */
     function Mat33( that ) {
         if ( that ) {
-            if ( that instanceof Mat33 ) {
-                // copy data by value
-                this.data = that.data.slice( 0 );
-            } else if ( that.data && that.data.length === 16 ) {
-                // copy Mat44 data by value, account for index differences
-                this.data = [
-                    that.data[0], that.data[1], that.data[2],
-                    that.data[4], that.data[5], that.data[6],
-                    that.data[8], that.data[9], that.data[10] ];
+            if ( that.data instanceof Array ) {
+                if ( that.data.length === 9 ) {
+                    // copy Mat33 data by value
+                    this.data = that.data.slice( 0 );
+                } else if ( that.data.length === 16 ) {
+                    // copy Mat44 data by value, account for index differences
+                    this.data = [
+                        that.data[0], that.data[1], that.data[2],
+                        that.data[4], that.data[5], that.data[6],
+                        that.data[8], that.data[9], that.data[10] ];
+                }
             } else if ( that.length === 9 ) {
                 // copy array by value, use prototype to cast array buffers
                 this.data = Array.prototype.slice.call( that );
@@ -30,7 +32,6 @@
         } else {
             return Mat33.identity();
         }
-        return this;
     }
 
     /**
@@ -84,21 +85,21 @@
      * @returns {Mat33} The scale matrix.
      */
     Mat33.scale = function( scale ) {
-        if ( scale instanceof Array ) {
+        if ( typeof scale === "number" ) {
+            return new Mat33([
+                scale, 0, 0,
+                0, scale, 0,
+                0, 0, scale ]);
+        } else if ( scale instanceof Array ) {
             return new Mat33([
                 scale[0], 0, 0,
                 0, scale[1], 0,
                 0, 0, scale[2] ]);
-        } else if ( scale instanceof Vec3 ) {
-            return new Mat33([
-                scale.x, 0, 0,
-                0, scale.y, 0,
-                0, 0, scale.z ]);
         }
         return new Mat33([
-            scale, 0, 0,
-            0, scale, 0,
-            0, 0, scale ]);
+            scale.x, 0, 0,
+            0, scale.y, 0,
+            0, 0, scale.z ]);
     };
 
     /**
@@ -293,7 +294,8 @@
      */
     Mat33.prototype.multVector = function( that ) {
         // ensure 'that' is a Vec3
-        that = ( that instanceof Vec3 ) ? that : new Vec3( that );
+        // it is safe to only cast if Array since the .w of a Vec4 is not used
+        that = ( that instanceof Array ) ? new Vec3( that ) : that;
         return new Vec3({
             x: this.data[0] * that.x + this.data[3] * that.y + this.data[6] * that.z,
             y: this.data[1] * that.x + this.data[4] * that.y + this.data[7] * that.z,
@@ -332,7 +334,11 @@
         var mat = new Mat33(),
             i;
         // ensure 'that' is a Mat33
-        that = ( that instanceof Mat33 ) ? that : new Mat33( that );
+        // must check if Array or Mat33
+        if ( ( that.data && that.data.length === 16 ) ||
+            that instanceof Array ) {
+            that = new Mat33( that );
+        }
         for ( i=0; i<3; i++ ) {
             mat.data[i] = this.data[i] * that.data[0] + this.data[i+3] * that.data[1] + this.data[i+6] * that.data[2];
             mat.data[i+3] = this.data[i] * that.data[3] + this.data[i+3] * that.data[4] + this.data[i+6] * that.data[5];
@@ -351,18 +357,24 @@
      */
     Mat33.prototype.mult = function( that ) {
         if ( typeof that === "number" ) {
+            // scalar
             return this.multScalar( that );
         } else if ( that instanceof Array ) {
+            // array
             if ( that.length === 3 || that.length === 4 ) {
                 return this.multVector( that );
             } else {
                 return this.multMatrix( that );
             }
-        } else if ( that instanceof Vec3 || that instanceof Vec4 ) {
-            return this.multVector( that );
-        } else {
-            return this.multMatrix( that );
         }
+        // vector
+        if ( that.x !== undefined &&
+            that.y !== undefined &&
+            that.z !== undefined ) {
+            return this.multVector( that );
+        }
+        // matrix
+        return this.multMatrix( that );
     };
 
     /**

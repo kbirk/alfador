@@ -113,12 +113,18 @@ describe('Mat33', function() {
                 q = Mat33.random(),
                 r = p.add( q );
             assert.equal( r instanceof Mat33, true );
+            assert.equal( r.col(0).equals( p.col(0).add( q.col(0) ) ), true );
+            assert.equal( r.col(1).equals( p.col(1).add( q.col(1) ) ), true );
+            assert.equal( r.col(2).equals( p.col(2).add( q.col(2) ) ), true );
         });
         it('should return a Mat33 when passed a Mat44 argument', function() {
             var p = Mat33.random(),
                 q = Mat44.random(),
                 r = p.add( q );
             assert.equal( r instanceof Mat33, true );
+            assert.equal( r.col(0).equals( p.col(0).add( q.col(0) ) ), true );
+            assert.equal( r.col(1).equals( p.col(1).add( q.col(1) ) ), true );
+            assert.equal( r.col(2).equals( p.col(2).add( q.col(2) ) ), true );
         });
     });
 
@@ -128,12 +134,18 @@ describe('Mat33', function() {
                 q = Mat33.random(),
                 r = p.sub( q );
             assert.equal( r instanceof Mat33, true );
+            assert.equal( r.col(0).equals( p.col(0).sub( q.col(0) ) ), true );
+            assert.equal( r.col(1).equals( p.col(1).sub( q.col(1) ) ), true );
+            assert.equal( r.col(2).equals( p.col(2).sub( q.col(2) ) ), true );
         });
         it('should return a Mat33 when passed a Mat44 argument', function() {
             var p = Mat33.random(),
                 q = Mat44.random(),
                 r = p.sub( q );
             assert.equal( r instanceof Mat33, true );
+            assert.equal( r.col(0).equals( p.col(0).sub( q.col(0) ) ), true );
+            assert.equal( r.col(1).equals( p.col(1).sub( q.col(1) ) ), true );
+            assert.equal( r.col(2).equals( p.col(2).sub( q.col(2) ) ), true );
         });
     });
 
@@ -147,14 +159,18 @@ describe('Mat33', function() {
         it('should return a Mat33 when passed a Mat44 argument', function() {
             var p = Mat33.random(),
                 q = Mat44.random(),
-                r = p.mult( q );
+                r = p.mult( q ),
+                s = p.mult( new Mat33( q ) );
             assert.equal( r instanceof Mat33, true );
+            assert.equal( r.equals( s ), true );
         });
         it('should return a Vec3 when passed a Vec4 argument', function() {
             var p = Mat33.random(),
                 q = Vec4.random(),
-                r = p.mult( q );
+                r = p.mult( q ),
+                s = p.mult( new Vec3( q ) );
             assert.equal( r instanceof Vec3, true );
+            assert.equal( r.equals( s ), true );
         });
         it('should return a Vec3 when passed a Vec3 argument', function() {
             var p = Mat33.random(),
@@ -167,12 +183,14 @@ describe('Mat33', function() {
                 q = [ Math.random(), Math.random(), Math.random() ],
                 r = p.mult( q );
             assert.equal( r instanceof Vec3, true );
+            assert.equal( r.equals( p.mult( new Vec3( q ) ) ), true );
         });
         it('should return a Vec3 when passed an Array argument of length 4', function() {
             var p = Mat33.random(),
                 q = [ Math.random(), Math.random(), Math.random(), Math.random() ],
                 r = p.mult( q );
             assert.equal( r instanceof Vec3, true );
+            assert.equal( r.equals( p.mult( new Vec3( q ) ) ), true );
         });
         it('should return a Mat33 when passed an Array argument of length > 4', function() {
             var p = Mat33.random(),
@@ -181,6 +199,7 @@ describe('Mat33', function() {
                     Math.random(), Math.random(), Math.random() ],
                 r = p.mult( q );
             assert.equal( r instanceof Mat33, true );
+            assert.equal( r.equals( p.mult( new Mat33( q ) ) ), true );
         });
     });
 

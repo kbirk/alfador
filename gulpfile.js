@@ -43,8 +43,11 @@
     }
 
     function handleError( err ) {
-        console.log( err.toString() );
-        process.exit(1);
+        console.error( err.toString() );
+        setTimeout( function() {
+            // set delay for full mocha error message
+            process.exit( 1 );
+        });
     }
 
     gulp.task('clean', function () {
@@ -69,7 +72,7 @@
             .on( 'finish', function () {
                 return gulp.src( [ './test/*.js' ] )
                     .pipe( mocha( { reporter: 'list' } )
-                        .on( 'error', handleError) ) // print mocha error message
+                        .on( 'error', handleError ) ) // print mocha error message
                     .pipe( istanbul.writeReports() ); // Creating the reports after tests runned
             });
     });

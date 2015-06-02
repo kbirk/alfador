@@ -38,7 +38,6 @@ describe('Triangle', function() {
     describe('#random()', function() {
         it('should return a random triangle with a unit radius', function() {
             var t = Triangle.random();
-            console.log( t.radius() );
             assert( Math.abs( 1 - t.radius() ) < EPSILON );
         });
     });

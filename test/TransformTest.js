@@ -237,13 +237,8 @@ describe('Transform', function() {
                 b = Mat33.random(),
                 c = new Transform( b ),
                 d = new Mat44( b );
-            assert( a.mult( b ).equals( a.mult( c ), EPSILON ), true );
-            assert( a.mult( c ).equals( a.mult( d ), EPSILON ), true );
-        });
-        it('should return identity transform if argument is invalid', function() {
-            var a = new Transform( Mat44.random() ),
-                q = a.mult( 'incorrect' );
-            assert.equal( q.matrix().equals( Mat44.identity() ), true );
+            assert( a.mult( b ).equals( a.mult( c ), EPSILON ) );
+            assert( a.mult( c ).equals( a.mult( d ), EPSILON ) );
         });
         it('should return by value', function() {
             var a = new Transform( Mat44.random() ),

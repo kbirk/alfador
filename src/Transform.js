@@ -13,15 +13,19 @@
      */
     function Transform( that ) {
         that = that || {};
-        if ( that instanceof Transform ) {
-            // copy transform by value
+        if ( that._up &&
+            that._forward &&
+            that._left &&
+            that._origin &&
+            that._scale ) {
+            // copy Transform by value
             this._up = that.up();
             this._forward = that.forward();
             this._left = that.left();
             this._origin = that.origin();
             this._scale = that.scale();
-        } else if ( that instanceof Mat44 || that instanceof Mat33 ) {
-            // extract transform components from Mat44
+        } else if ( that.data && that.data instanceof Array ) {
+            // Mat33 or Mat44, extract transform components from Mat44
             that = that.decompose();
             this._up = that.up;
             this._forward = that.forward;
@@ -180,15 +184,13 @@
      * @returns {Transform} The resulting transform.
      */
     Transform.prototype.mult = function( that ) {
-        if ( that instanceof Transform ) {
-            return new Transform( this.matrix().mult( that.matrix() ) );
-        } else if ( that instanceof Mat33 ||
-            that instanceof Mat44 ||
-            that instanceof Array ) {
+        if ( that instanceof Array ||
+            that.data instanceof Array ) {
+            // matrix or array
             return new Transform( this.matrix().mult( that ) );
-        } else {
-            return Transform.identity();
         }
+        // transform
+        return new Transform( this.matrix().mult( that.matrix() ) );
     };
 
     /**
