@@ -149,6 +149,21 @@ describe('Mat44', function() {
                 r = p.mult( q );
             assert.equal( r instanceof Vec4, true );
         });
+        it('should return a Vec4 when passed an Array argument of length 4', function() {
+            var p = Mat44.random(),
+                q = [ Math.random(), Math.random(), Math.random(), Math.random() ],
+                r = p.mult( q );
+            assert.equal( r instanceof Vec4, true );
+        });
+        it('should return a Mat44 when passed an Array argument of length > 4', function() {
+            var p = Mat44.random(),
+                q = [ Math.random(), Math.random(), Math.random(), Math.random(),
+                    Math.random(), Math.random(), Math.random(), Math.random(),
+                    Math.random(), Math.random(), Math.random(), Math.random(),
+                    Math.random(), Math.random(), Math.random(), Math.random() ],
+                r = p.mult( q );
+            assert.equal( r instanceof Mat44, true );
+        });
     });
 
     describe('#add()', function() {

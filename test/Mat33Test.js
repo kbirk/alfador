@@ -162,11 +162,25 @@ describe('Mat33', function() {
                 r = p.mult( q );
             assert.equal( r instanceof Vec3, true );
         });
-        it('should return a Vec3 when passed an Array argument', function() {
+        it('should return a Vec3 when passed an Array argument of length 3', function() {
             var p = Mat33.random(),
                 q = [ Math.random(), Math.random(), Math.random() ],
                 r = p.mult( q );
             assert.equal( r instanceof Vec3, true );
+        });
+        it('should return a Vec3 when passed an Array argument of length 4', function() {
+            var p = Mat33.random(),
+                q = [ Math.random(), Math.random(), Math.random(), Math.random() ],
+                r = p.mult( q );
+            assert.equal( r instanceof Vec3, true );
+        });
+        it('should return a Mat33 when passed an Array argument of length > 4', function() {
+            var p = Mat33.random(),
+                q = [ Math.random(), Math.random(), Math.random(),
+                    Math.random(), Math.random(), Math.random(),
+                    Math.random(), Math.random(), Math.random() ],
+                r = p.mult( q );
+            assert.equal( r instanceof Mat33, true );
         });
     });
 

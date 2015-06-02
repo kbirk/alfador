@@ -287,7 +287,7 @@
      * Vec3 object.
      * @memberof Mat33
      *
-     * @param {Vec3} - The vector to be multiplied by the matrix.
+     * @param {Vec3|Vec4|Array} - The vector to be multiplied by the matrix.
      *
      * @returns {Vec3} The resulting vector.
      */
@@ -322,7 +322,7 @@
      * Mat33 object.
      * @memberof Mat33
      *
-     * @param {Mat33} - The matrix to be multiplied by the matrix.
+     * @param {Mat33|Mat44} - The matrix to be multiplied by the matrix.
      *
      * @returns {Mat33} The resulting matrix.
      */
@@ -343,15 +343,24 @@
      * Multiplies the provded argument by the matrix.
      * @memberof Mat33
      *
-     * @param {Vec3|Mat33|number} - The argument to be multiplied by the matrix.
+     * @param {Vec3|Vec4|Mat33|Mat44|Array|number} - The argument to be multiplied by the matrix.
      *
      * @returns {Mat33|Vec3} The resulting product.
      */
     Mat33.prototype.mult = function( that ) {
-        return ( typeof that === "number" ) ? this.multScalar( that )
-            : ( that instanceof Array ) ? this.multVector( new Vec3( that ) )
-                : ( that instanceof Vec3 || that instanceof Vec4 ) ? this.multVector( that )
-                    : this.multMatrix( that );
+        if ( typeof that === "number" ) {
+            return this.multScalar( that );
+        } else if ( that instanceof Array ) {
+            if ( that.length === 3 || that.length === 4 ) {
+                return this.multVector( that );
+            } else {
+                return this.multMatrix( that );
+            }
+        } else if ( that instanceof Vec3 || that instanceof Vec4 ) {
+            return this.multVector( that );
+        } else {
+            return this.multMatrix( that );
+        }
     };
 
     /**
