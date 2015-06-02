@@ -292,6 +292,8 @@
      * @returns {Vec3} The resulting vector.
      */
     Mat33.prototype.multVector = function( that ) {
+        // ensure 'that' is a Vec3
+        that = ( that instanceof Vec3 ) ? that : new Vec3( that );
         return new Vec3({
             x: this.data[0] * that.x + this.data[3] * that.y + this.data[6] * that.z,
             y: this.data[1] * that.x + this.data[4] * that.y + this.data[7] * that.z,
