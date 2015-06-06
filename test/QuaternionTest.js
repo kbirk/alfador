@@ -10,10 +10,11 @@ describe('Quaternion', function() {
 
     describe('#equals()', function() {
         it('should return false if any components do not match', function() {
-            var v = new Quaternion( Math.random(),
-                              Math.random(),
-                              Math.random(),
-                              Math.random() );
+            var v = new Quaternion(
+                Math.random(),
+                Math.random(),
+                Math.random(),
+                Math.random() );
             assert.equal( v.equals( v ), true );
             assert.equal( v.equals( new Quaternion( v.w, -v.x, v.y, v.z ) ), false );
             assert.equal( v.equals( new Quaternion( v.w, v.x, v.y+5, v.z ) ), false );
@@ -22,11 +23,20 @@ describe('Quaternion', function() {
             assert.equal( v.equals( new Quaternion( v.w, v.x, v.y, v.z ) ), true );
         });
         it('should return true if all components match', function() {
-            var v = new Quaternion( Math.random(),
-                              Math.random(),
-                              Math.random(),
-                              Math.random() );
+            var v = new Quaternion(
+                Math.random(),
+                Math.random(),
+                Math.random(),
+                Math.random() );
             assert.equal( v.equals( new Quaternion( v.w, v.x, v.y, v.z ) ), true );
+        });
+        it('should accept and array of input', function() {
+            var v = new Quaternion(
+                Math.random(),
+                Math.random(),
+                Math.random(),
+                Math.random() );
+            assert( v.equals( [ v.w, v.x, v.y, v.z ] ) );
         });
         it('should accept a second epsilon parameter, return true if each component is <= epsilon', function() {
             var r = Math.random(),
@@ -96,10 +106,10 @@ describe('Quaternion', function() {
 
     describe('#rotationDegrees()', function() {
         it('should return a rotation matrix, rotating counter-clockwise', function() {
-            var up =  new Vec3( 0, 1, 0 ),
-                left =  new Vec3( 1, 0, 0 ),
+            var up = new Vec3( 0, 1, 0 ),
+                left = new Vec3( 1, 0, 0 ),
                 right = new Vec3( -1, 0, 0 ),
-                forward =  new Vec3( 0, 0, 1 ),
+                forward = new Vec3( 0, 0, 1 ),
                 up90 = Quaternion.rotationDegrees( 90, up ),
                 left90 = Quaternion.rotationDegrees( -90, left ),
                 forward90 = Quaternion.rotationDegrees( 90, forward ),
@@ -115,20 +125,35 @@ describe('Quaternion', function() {
                 angle = Math.random();
             assert.equal( Mat33.rotationDegrees( angle, axis ).equals( Mat33() ), true );
         });
+        it('should accept an Array as axis argument', function() {
+            var up = [ 0, 1, 0 ],
+                left = [ 1, 0, 0 ],
+                right = [ -1, 0, 0 ],
+                forward = [ 0, 0, 1 ],
+                up90 = Quaternion.rotationDegrees( 90, up ),
+                left90 = Quaternion.rotationDegrees( -90, left ),
+                forward90 = Quaternion.rotationDegrees( 90, forward ),
+                v0 = up90.rotate( forward ).normalize(),
+                v1 = left90.rotate( forward ).normalize(),
+                v2 = forward90.rotate( up ).normalize();
+            assert.equal( v0.equals( left, EPSILON ), true );
+            assert.equal( v1.equals( up, EPSILON ), true );
+            assert.equal( v2.equals( right, EPSILON ), true );
+        });
     });
 
     describe('#rotationRadians()', function() {
         it('should return a rotation matrix, rotating counter-clockwise', function() {
-            var up =  new Vec3( 0, 1, 0 ),
-                left =  new Vec3( 1, 0, 0 ),
+            var up = new Vec3( 0, 1, 0 ),
+                left = new Vec3( 1, 0, 0 ),
                 right = new Vec3( -1, 0, 0 ),
-                forward =  new Vec3( 0, 0, 1 ),
-                up90 = Mat33.rotationRadians( 90 * Math.PI / 180, up ),
-                left90 = Mat33.rotationRadians( -90 * Math.PI / 180, left ),
-                forward90 = Mat33.rotationRadians( 90 * Math.PI / 180, forward ),
-                v0 = up90.mult( forward ).normalize(),
-                v1 = left90.mult( forward ).normalize(),
-                v2 = forward90.mult( up ).normalize();
+                forward = new Vec3( 0, 0, 1 ),
+                up90 = Quaternion.rotationRadians( 90 * Math.PI / 180, up ),
+                left90 = Quaternion.rotationRadians( -90 * Math.PI / 180, left ),
+                forward90 = Quaternion.rotationRadians( 90 * Math.PI / 180, forward ),
+                v0 = up90.rotate( forward ).normalize(),
+                v1 = left90.rotate( forward ).normalize(),
+                v2 = forward90.rotate( up ).normalize();
             assert.equal( v0.equals( left, EPSILON ), true );
             assert.equal( v1.equals( up, EPSILON ), true );
             assert.equal( v2.equals( right, EPSILON ), true );
@@ -137,6 +162,21 @@ describe('Quaternion', function() {
             var axis = new Vec3( 0, 0, 0 ),
                 angle = Math.random();
             assert.equal( Mat33.rotationRadians( angle, axis ).equals( Mat33() ), true );
+        });
+        it('should accept an Array as axis argument', function() {
+            var up = [ 0, 1, 0 ],
+                left = [ 1, 0, 0 ],
+                right = [ -1, 0, 0 ],
+                forward = [ 0, 0, 1 ],
+                up90 = Quaternion.rotationDegrees( 90, up ),
+                left90 = Quaternion.rotationDegrees( -90, left ),
+                forward90 = Quaternion.rotationDegrees( 90, forward ),
+                v0 = up90.rotate( forward ).normalize(),
+                v1 = left90.rotate( forward ).normalize(),
+                v2 = forward90.rotate( up ).normalize();
+            assert.equal( v0.equals( left, EPSILON ), true );
+            assert.equal( v1.equals( up, EPSILON ), true );
+            assert.equal( v2.equals( right, EPSILON ), true );
         });
     });
 
@@ -157,10 +197,29 @@ describe('Quaternion', function() {
                 axisB = Vec3.random(),
                 angleB = Math.random(),
                 rotMatrixA = Mat33.rotationRadians( angleA, axisA ),
-                rotQuaternionA = Quaternion.rotationRadians( angleA, axisA ),
                 rotMatrixB = Mat33.rotationRadians( angleB, axisB ),
-                rotQuaternionB = Quaternion.rotationRadians( angleB, axisB );
-            assert.equal( rotMatrixA.mult( rotMatrixB ).equals( rotQuaternionA.mult( rotQuaternionB ).matrix(), EPSILON ), true );
+                concatMatrix = rotMatrixA.mult( rotMatrixB ),
+                rotQuaternionA = Quaternion.rotationRadians( angleA, axisA ),
+                rotQuaternionB = Quaternion.rotationRadians( angleB, axisB ),
+                concatQuaternion = rotQuaternionA.mult( rotQuaternionB );
+            assert.equal( concatMatrix.equals( concatQuaternion.matrix(), EPSILON ), true );
+        });
+        it('should accept an Array argument', function() {
+            var axisA = Vec3.random(),
+                angleA = Math.random(),
+                axisB = Vec3.random(),
+                angleB = Math.random(),
+                rotMatrixA = Mat33.rotationRadians( angleA, axisA ),
+                rotMatrixB = Mat33.rotationRadians( angleB, axisB ),
+                concatMatrix = rotMatrixA.mult( rotMatrixB ),
+                rotQuaternionA = Quaternion.rotationRadians( angleA, axisA ),
+                rotQuaternionB = Quaternion.rotationRadians( angleB, axisB ),
+                concatQuaternion = rotQuaternionA.mult([
+                    rotQuaternionB.w,
+                    rotQuaternionB.x,
+                    rotQuaternionB.y,
+                    rotQuaternionB.z ]);
+            assert.equal( concatMatrix.equals( concatQuaternion.matrix(), EPSILON ), true );
         });
     });
 
@@ -172,6 +231,56 @@ describe('Quaternion', function() {
                 rotMatrix = Mat33.rotationRadians( angle, axis ),
                 rotQuaternion = Quaternion.rotationRadians( angle, axis );
             assert.equal( rotMatrix.mult( vec ).equals( rotQuaternion.rotate( vec ), EPSILON ), true );
+        });
+        it('should accept an Array argument', function() {
+            var axis = Vec3.random(),
+                angle = Math.random(),
+                vec = Vec3.random(),
+                rotMatrix = Mat33.rotationRadians( angle, axis ),
+                rotQuaternion = Quaternion.rotationRadians( angle, axis );
+            assert.equal( rotMatrix.mult( vec ).equals( rotQuaternion.rotate([ vec.x, vec.y, vec.z ]), EPSILON ), true );
+        });
+    });
+
+    describe('#rotate', function() {
+        it('should interpolate between two quaternions', function() {
+            var fromQuat = new Quaternion(),
+                toQuat = Quaternion.rotationDegrees( 90, [ 0, 0, 1 ] ),
+                vec = new Vec3( 0, 1, 0 ),
+                quarterRot = Mat33.rotationDegrees( 22.5, [ 0, 0, 1 ] ),
+                halfRot = Mat33.rotationDegrees( 45, [ 0, 0, 1 ] ),
+                threeQuarterRot = Mat33.rotationDegrees( 67.5, [ 0, 0, 1 ] ),
+                quarter = Quaternion.slerp( fromQuat, toQuat, 0.25 ).rotate( vec ),
+                half = Quaternion.slerp( fromQuat, toQuat, 0.5 ).rotate( vec ),
+                threeQuarter = Quaternion.slerp( fromQuat, toQuat, 0.75 ).rotate( vec );
+            assert( quarter.normalize().equals( quarterRot.mult( vec ).normalize(), EPSILON ) );
+            assert( half.normalize().equals( halfRot.mult( vec ).normalize(), EPSILON ) );
+            assert( threeQuarter.normalize().equals( threeQuarterRot.mult( vec ).normalize(), EPSILON ) );
+            assert( Quaternion.slerp( fromQuat, toQuat, 0 ).equals( fromQuat, EPSILON ) );
+            assert( Quaternion.slerp( fromQuat, toQuat, 1 ).equals( toQuat, EPSILON ) );
+            assert( Quaternion.slerp( fromQuat, fromQuat, undefined ).equals( fromQuat, EPSILON ) );
+        });
+        it('should accept Arrays as arguments', function() {
+            var fromQuat = new Quaternion(),
+                toQuat = Quaternion.rotationDegrees( 90, [ 0, 0, 1 ] ),
+                vec = new Vec3( 0, 1, 0 ),
+                quarterRot = Mat33.rotationDegrees( 22.5, [ 0, 0, 1 ] ),
+                halfRot = Mat33.rotationDegrees( 45, [ 0, 0, 1 ] ),
+                threeQuarterRot = Mat33.rotationDegrees( 67.5, [ 0, 0, 1 ] ),
+                quarter = Quaternion.slerp(
+                    [ fromQuat.w, fromQuat.x, fromQuat.y, fromQuat.z ],
+                    toQuat,
+                    0.25 ).rotate( vec ),
+                half = Quaternion.slerp(
+                    fromQuat,
+                    [ toQuat.w, toQuat.x, toQuat.y, toQuat.z ],
+                    0.5 ).rotate( vec ),
+                threeQuarter = Quaternion.slerp(
+                    [ fromQuat.w, fromQuat.x, fromQuat.y, fromQuat.z ],
+                    [ toQuat.w, toQuat.x, toQuat.y, toQuat.z ], 0.75 ).rotate( vec );
+            assert( quarter.normalize().equals( quarterRot.mult( vec ).normalize(), EPSILON ) );
+            assert( half.normalize().equals( halfRot.mult( vec ).normalize(), EPSILON ) );
+            assert( threeQuarter.normalize().equals( threeQuarterRot.mult( vec ).normalize(), EPSILON ) );
         });
     });
 

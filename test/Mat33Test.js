@@ -241,9 +241,9 @@ describe('Mat33', function() {
     describe('#rotationDegrees()', function() {
         it('should return a rotation matrix, rotating counter-clockwise', function() {
             var up =  new Vec3( 0, 1, 0 ),
-                left =  new Vec3( 1, 0, 0 ),
+                left = new Vec3( 1, 0, 0 ),
                 right = new Vec3( -1, 0, 0 ),
-                forward =  new Vec3( 0, 0, 1 ),
+                forward = new Vec3( 0, 0, 1 ),
                 up90 = Mat33.rotationDegrees( 90, up ),
                 left90 = Mat33.rotationDegrees( -90, left ),
                 forward90 = Mat33.rotationDegrees( 90, forward ),
@@ -271,9 +271,9 @@ describe('Mat33', function() {
     describe('#rotationRadians()', function() {
         it('should return a rotation matrix, rotating counter-clockwise', function() {
             var up =  new Vec3( 0, 1, 0 ),
-                left =  new Vec3( 1, 0, 0 ),
+                left = new Vec3( 1, 0, 0 ),
                 right = new Vec3( -1, 0, 0 ),
-                forward =  new Vec3( 0, 0, 1 ),
+                forward = new Vec3( 0, 0, 1 ),
                 up90 = Mat33.rotationRadians( 90 * Math.PI / 180, up ),
                 left90 = Mat33.rotationRadians( -90 * Math.PI / 180, left ),
                 forward90 = Mat33.rotationRadians( 90 * Math.PI / 180, forward ),

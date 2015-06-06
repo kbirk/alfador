@@ -116,12 +116,12 @@
      * @memberof Quaternion
      *
      * @param {number} angle - The angle of the rotation, in degrees.
-     * @param {Vec3} axis - The axis of the rotation.
+     * @param {Vec3|Array} axis - The axis of the rotation.
      *
      * @returns {Quaternion} The quaternion representing the rotation.
      */
     Quaternion.rotationDegrees = function( angle, axis ) {
-        return Quaternion.rotationRadians( angle*( Math.PI/180 ), axis );
+        return Quaternion.rotationRadians( angle * ( Math.PI/180 ), axis );
     };
 
     /**
@@ -130,17 +130,20 @@
      * @memberof Quaternion
      *
      * @param {number} angle - The angle of the rotation, in radians.
-     * @param {Vec3} axis - The axis of the rotation.
+     * @param {Vec3|Array} axis - The axis of the rotation.
      *
      * @returns {Quaternion} The quaternion representing the rotation.
      */
     Quaternion.rotationRadians = function( angle, axis ) {
+        if ( axis instanceof Array ) {
+            axis = new Vec3( axis );
+        }
         // normalize arguments
-        angle = ( angle > 0 ) ?  angle % (2*Math.PI) : angle % (-2*Math.PI);
         axis = axis.normalize();
         // set quaternion for the equivolent rotation
-        var sina = Math.sin( angle/2 ),
-            cosa = Math.cos( angle/2 );
+        var modAngle = ( angle > 0 ) ? angle % (2*Math.PI) : angle % (-2*Math.PI),
+            sina = Math.sin( modAngle/2 ),
+            cosa = Math.cos( modAngle/2 );
         return new Quaternion(
             cosa,
             axis.x * sina,
@@ -153,45 +156,51 @@
      * two provided quaternions for a given t value.
      * @memberof Quaternion
      *
-     * @param {Quaternion} from - The rotation at t = 0.
-     * @param {Quaternion} to - The rotation at t = 1.
+     * @param {Quaternion} fromRot - The rotation at t = 0.
+     * @param {Quaternion} toRot - The rotation at t = 1.
      * @param {number} t - The t value, from 0 to 1.
      *
      * @returns {Quaternion} The quaternion representing the interpolated rotation.
      */
-    Quaternion.slerp = function( from, to, t ) {
+    Quaternion.slerp = function( fromRot, toRot, t ) {
+        if ( fromRot instanceof Array ) {
+            fromRot = new Quaternion( fromRot );
+        }
+        if ( toRot instanceof Array ) {
+            toRot = new Quaternion( toRot );
+        }
     	// calculate angle between them.
-    	var cosHalfTheta = ( from.w * to.w ) +
-            ( from.x * to.x ) +
-            ( from.y * to.y ) +
-            ( from.z * to.z );
-    	// if from=to or from=-to then theta = 0 and we can return from
+    	var cosHalfTheta = ( fromRot.w * toRot.w ) +
+            ( fromRot.x * toRot.x ) +
+            ( fromRot.y * toRot.y ) +
+            ( fromRot.z * toRot.z );
+    	// if fromRot=toRot or fromRot=-toRot then theta = 0 and we can return from
     	if ( Math.abs( cosHalfTheta ) >= 1 ) {
             return new Quaternion(
-                from.w,
-                from.x,
-                from.y,
-                from.z );
+                fromRot.w,
+                fromRot.x,
+                fromRot.y,
+                fromRot.z );
     	}
     	// calculate temporary values.
     	var halfTheta = Math.acos( cosHalfTheta );
     	var sinHalfTheta = Math.sqrt( 1 - cosHalfTheta * cosHalfTheta );
     	// if theta = 180 degrees then result is not fully defined
-    	// we could rotate around any axis normal to 'from' or 'to'
+    	// we could rotate around any axis normal to 'fromRot' or 'toRot'
     	if ( Math.abs( sinHalfTheta ) < 0.001 ) {
             return new Quaternion(
-                from.w * 0.5 + to.w * 0.5,
-                from.x * 0.5 + to.x * 0.5,
-                from.y * 0.5 + to.y * 0.5,
-                from.z * 0.5 + to.z * 0.5 );
+                fromRot.w * 0.5 + toRot.w * 0.5,
+                fromRot.x * 0.5 + toRot.x * 0.5,
+                fromRot.y * 0.5 + toRot.y * 0.5,
+                fromRot.z * 0.5 + toRot.z * 0.5 );
     	}
     	var ratioA = Math.sin( ( 1 - t ) * halfTheta ) / sinHalfTheta;
     	var ratioB = Math.sin( t * halfTheta ) / sinHalfTheta;
         return new Quaternion(
-    	    from.w * ratioA + to.w * ratioB,
-        	from.x * ratioA + to.x * ratioB,
-    	    from.y * ratioA + to.y * ratioB,
-    	    from.z * ratioA + to.z * ratioB );
+    	    fromRot.w * ratioA + toRot.w * ratioB,
+        	fromRot.x * ratioA + toRot.x * ratioB,
+    	    fromRot.y * ratioA + toRot.y * ratioB,
+    	    fromRot.z * ratioA + toRot.z * ratioB );
     };
 
     /**
@@ -199,17 +208,21 @@
      * An optional epsilon value may be provided.
      * @memberof Quaternion
      *
-     * @param {Quaternion} - The vector to calculate the dot product with.
+     * @param {Quaternion|Array} - The vector to calculate the dot product with.
      * @param {number} - The epsilon value. Optional.
      *
      * @returns {boolean} Whether or not the vector components match.
      */
     Quaternion.prototype.equals = function( that, epsilon ) {
+        var w = that.w !== undefined ? that.w : that[0],
+            x = that.x !== undefined ? that.x : that[1],
+            y = that.y !== undefined ? that.y : that[2],
+            z = that.z !== undefined ? that.z : that[3];
         epsilon = epsilon === undefined ? 0 : epsilon;
-        return ( this.x === that.x || Math.abs( this.x - that.x ) <= epsilon ) &&
-            ( this.y === that.y || Math.abs( this.y - that.y ) <= epsilon ) &&
-            ( this.z === that.z || Math.abs( this.z - that.z ) <= epsilon ) &&
-            ( this.w === that.w || Math.abs( this.w - that.w ) <= epsilon );
+        return ( this.w === w || Math.abs( this.w - w ) <= epsilon ) &&
+            ( this.x === x || Math.abs( this.x - x ) <= epsilon ) &&
+            ( this.y === y || Math.abs( this.y - y ) <= epsilon ) &&
+            ( this.z === z || Math.abs( this.z - z ) <= epsilon );
     };
 
     /**

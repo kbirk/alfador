@@ -14,16 +14,16 @@
     function Mat44( that ) {
         if ( that ) {
             if ( that.data instanceof Array ) {
-                if ( that.data.length === 9 ) {
+                if ( that.data.length === 16 ) {
+                    // copy Mat44 data by value
+                    this.data = that.data.slice( 0 );
+                } else {
                     // copy Mat33 data by value, account for index differences
                     this.data = [
                         that.data[0], that.data[1], that.data[2], 0,
                         that.data[3], that.data[4], that.data[5], 0,
                         that.data[6], that.data[7], that.data[8], 0,
                         0, 0, 0, 1 ];
-                } else if ( that.data.length === 16 ) {
-                    // copy Mat44 data by value
-                    this.data = that.data.slice( 0 );
                 }
             } else if ( that.length === 16 ) {
                  // copy array by value, use prototype to cast array buffers

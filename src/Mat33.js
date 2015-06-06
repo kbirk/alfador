@@ -16,7 +16,7 @@
                 if ( that.data.length === 9 ) {
                     // copy Mat33 data by value
                     this.data = that.data.slice( 0 );
-                } else if ( that.data.length === 16 ) {
+                } else {
                     // copy Mat44 data by value, account for index differences
                     this.data = [
                         that.data[0], that.data[1], that.data[2],
@@ -136,7 +136,7 @@
             x = normAxis.x,
             y = normAxis.y,
             z = normAxis.z,
-            modAngle = ( angle > 0 ) ?  angle % (2*Math.PI) : angle % (-2*Math.PI),
+            modAngle = ( angle > 0 ) ? angle % (2*Math.PI) : angle % (-2*Math.PI),
             s = Math.sin( modAngle ),
             c = Math.cos( modAngle ),
             xx = x * x,
