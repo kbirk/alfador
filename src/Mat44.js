@@ -138,8 +138,8 @@
      * Returns a rotation matrix defined by an axis and an angle.
      * @memberof Mat44
      *
-     * @params {number} angle - The angle of the rotation, in degrees.
-     * @params {Vec3} axis - The axis of the rotation.
+     * @param {number} angle - The angle of the rotation, in degrees.
+     * @param {Vec3} axis - The axis of the rotation.
      *
      * @returns {Mat44} The rotation matrix.
      */
@@ -151,8 +151,8 @@
      * Returns a rotation matrix defined by an axis and an angle.
      * @memberof Mat44
      *
-     * @params {number} angle - The angle of the rotation, in radians.
-     * @params {Vec3} axis - The axis of the rotation.
+     * @param {number} angle - The angle of the rotation, in radians.
+     * @param {Vec3} axis - The axis of the rotation.
      *
      * @returns {Mat44} The rotation matrix.
      */
@@ -165,8 +165,8 @@
      * another.
      * @memberof Mat44
      *
-     * @params {Vec3} from - The starting direction.
-     * @params {Vec3} to - The ending direction.
+     * @param {Vec3} from - The starting direction.
+     * @param {Vec3} to - The ending direction.
      *
      * @returns {Mat44} The matrix representing the rotation.
      */
@@ -409,12 +409,12 @@
     /**
      * Returns an othrographic projection matrix.
      *
-     * @params {number} xMin - The minimum x extent of the projection.
-     * @params {number} xMax - The maximum x extent of the projection.
-     * @params {number} xMin - The minimum y extent of the projection.
-     * @params {number} xMax - The maximum y extent of the projection.
-     * @params {number} xMin - The minimum z extent of the projection.
-     * @params {number} xMin - The maximum z extent of the projection.
+     * @param {number} xMin - The minimum x extent of the projection.
+     * @param {number} xMax - The maximum x extent of the projection.
+     * @param {number} xMin - The minimum y extent of the projection.
+     * @param {number} xMax - The maximum y extent of the projection.
+     * @param {number} xMin - The minimum z extent of the projection.
+     * @param {number} xMin - The maximum z extent of the projection.
      *
      * @returns {Mat44} The orthographic projection matrix.
      */
@@ -432,10 +432,10 @@
     /**
      * Returns a perspective projection matrix.
      *
-     * @params {number} fov - The field of view.
-     * @params {number} aspect - The aspect ratio.
-     * @params {number} zMin - The minimum y extent of the frustum.
-     * @params {number} zMax - The maximum y extent of the frustum.
+     * @param {number} fov - The field of view.
+     * @param {number} aspect - The aspect ratio.
+     * @param {number} zMin - The minimum y extent of the frustum.
+     * @param {number} zMax - The maximum y extent of the frustum.
      *
      * @returns {Mat44} The perspective projection matrix.
      */

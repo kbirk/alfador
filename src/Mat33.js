@@ -106,8 +106,8 @@
      * Returns a rotation matrix defined by an axis and an angle.
      * @memberof Mat33
      *
-     * @params {number} angle - The angle of the rotation, in degrees.
-     * @params {Vec3} axis - The axis of the rotation.
+     * @param {number} angle - The angle of the rotation, in degrees.
+     * @param {Vec3} axis - The axis of the rotation.
      *
      * @returns {Mat33} The rotation matrix.
      */
@@ -119,8 +119,8 @@
      * Returns a rotation matrix defined by an axis and an angle.
      * @memberof Mat33
      *
-     * @params {number} angle - The angle of the rotation, in radians.
-     * @params {Vec3} axis - The axis of the rotation.
+     * @param {number} angle - The angle of the rotation, in radians.
+     * @param {Vec3} axis - The axis of the rotation.
      *
      * @returns {Mat33} The rotation matrix.
      */
@@ -161,8 +161,8 @@
      * another.
      * @memberof Mat33
      *
-     * @params {Vec3} from - The starting direction.
-     * @params {Vec3} to - The ending direction.
+     * @param {Vec3} from - The starting direction.
+     * @param {Vec3} to - The ending direction.
      *
      * @returns {Mat33} The matrix representing the rotation.
      */

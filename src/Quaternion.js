@@ -104,9 +104,10 @@
             yz = this.y*this.z,
             yw = this.y*this.w,
             zw = this.z*this.w;
-        return new Mat33([ 1 - 2*yy - 2*zz, 2*xy + 2*zw, 2*xz - 2*yw,
-                           2*xy - 2*zw, 1 - 2*xx - 2*zz, 2*yz + 2*xw,
-                           2*xz + 2*yw, 2*yz - 2*xw, 1 - 2*xx - 2*yy ]);
+        return new Mat33([
+            1 - 2*yy - 2*zz, 2*xy + 2*zw, 2*xz - 2*yw,
+            2*xy - 2*zw, 1 - 2*xx - 2*zz, 2*yz + 2*xw,
+            2*xz + 2*yw, 2*yz - 2*xw, 1 - 2*xx - 2*yy ]);
     };
 
     /**
@@ -114,8 +115,8 @@
      * and an angle.
      * @memberof Quaternion
      *
-     * @params {number} angle - The angle of the rotation, in degrees.
-     * @params {Vec3} axis - The axis of the rotation.
+     * @param {number} angle - The angle of the rotation, in degrees.
+     * @param {Vec3} axis - The axis of the rotation.
      *
      * @returns {Quaternion} The quaternion representing the rotation.
      */
@@ -128,8 +129,8 @@
      * and an angle.
      * @memberof Quaternion
      *
-     * @params {number} angle - The angle of the rotation, in radians.
-     * @params {Vec3} axis - The axis of the rotation.
+     * @param {number} angle - The angle of the rotation, in radians.
+     * @param {Vec3} axis - The axis of the rotation.
      *
      * @returns {Quaternion} The quaternion representing the rotation.
      */
@@ -145,6 +146,52 @@
             axis.x * sina,
             axis.y * sina,
             axis.z * sina ).normalize();
+    };
+
+    /**
+     * Returns a quaternion that has been spherically interpolated between
+     * two provided quaternions for a given t value.
+     * @memberof Quaternion
+     *
+     * @param {Quaternion} from - The rotation at t = 0.
+     * @param {Quaternion} to - The rotation at t = 1.
+     * @param {number} t - The t value, from 0 to 1.
+     *
+     * @returns {Quaternion} The quaternion representing the interpolated rotation.
+     */
+    Quaternion.slerp = function( from, to, t ) {
+    	// calculate angle between them.
+    	var cosHalfTheta = ( from.w * to.w ) +
+            ( from.x * to.x ) +
+            ( from.y * to.y ) +
+            ( from.z * to.z );
+    	// if from=to or from=-to then theta = 0 and we can return from
+    	if ( Math.abs( cosHalfTheta ) >= 1 ) {
+            return new Quaternion(
+                from.w,
+                from.x,
+                from.y,
+                from.z );
+    	}
+    	// calculate temporary values.
+    	var halfTheta = Math.acos( cosHalfTheta );
+    	var sinHalfTheta = Math.sqrt( 1 - cosHalfTheta * cosHalfTheta );
+    	// if theta = 180 degrees then result is not fully defined
+    	// we could rotate around any axis normal to 'from' or 'to'
+    	if ( Math.abs( sinHalfTheta ) < 0.001 ) {
+            return new Quaternion(
+                from.w * 0.5 + to.w * 0.5,
+                from.x * 0.5 + to.x * 0.5,
+                from.y * 0.5 + to.y * 0.5,
+                from.z * 0.5 + to.z * 0.5 );
+    	}
+    	var ratioA = Math.sin( ( 1 - t ) * halfTheta ) / sinHalfTheta;
+    	var ratioB = Math.sin( t * halfTheta ) / sinHalfTheta;
+        return new Quaternion(
+    	    from.w * ratioA + to.w * ratioB,
+        	from.x * ratioA + to.x * ratioB,
+    	    from.y * ratioA + to.y * ratioB,
+    	    from.z * ratioA + to.z * ratioB );
     };
 
     /**
