@@ -180,7 +180,7 @@
         */
         var EPSILON = 0.000001,
             from = new Vec3( fromVec ).normalize(),
-            to   = new Vec3( toVec ).normalize(),
+            to = new Vec3( toVec ).normalize(),
             e = from.dot( to ),
             f = Math.abs( e ),
             that = new Mat33(),

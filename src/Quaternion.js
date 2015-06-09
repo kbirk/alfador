@@ -187,7 +187,8 @@
     	var sinHalfTheta = Math.sqrt( 1 - cosHalfTheta * cosHalfTheta );
     	// if theta = 180 degrees then result is not fully defined
     	// we could rotate around any axis normal to 'fromRot' or 'toRot'
-    	if ( Math.abs( sinHalfTheta ) < 0.001 ) {
+    	if ( Math.abs( sinHalfTheta ) < 0.0001 ) {
+            console.log( "Thera equals 180 degrees, rotation is not fully defined. for ");
             return new Quaternion(
                 fromRot.w * 0.5 + toRot.w * 0.5,
                 fromRot.x * 0.5 + toRot.x * 0.5,
@@ -201,6 +202,7 @@
         	fromRot.x * ratioA + toRot.x * ratioB,
     	    fromRot.y * ratioA + toRot.y * ratioB,
     	    fromRot.z * ratioA + toRot.z * ratioB );
+        */
     };
 
     /**

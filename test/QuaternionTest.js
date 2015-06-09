@@ -242,7 +242,7 @@ describe('Quaternion', function() {
         });
     });
 
-    describe('#rotate', function() {
+    describe('#slerp', function() {
         it('should interpolate between two quaternions', function() {
             var fromQuat = new Quaternion(),
                 toQuat = Quaternion.rotationDegrees( 90, [ 0, 0, 1 ] ),
