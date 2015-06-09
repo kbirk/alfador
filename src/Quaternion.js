@@ -55,6 +55,16 @@
     };
 
     /**
+     * Returns a new Quaternion with each component negated.
+     * @memberof Quaternion
+     *
+     * @returns {Quaternion} The negated quaternion.
+     */
+     Quaternion.prototype.negate = function() {
+        return new Quaternion( -this.w, -this.x, -this.y, -this.z );
+    };
+
+    /**
      * Concatenates the rotations of the two quaternions, returning
      * a new Quaternion object.
      * @memberof Quaternion
@@ -169,39 +179,72 @@
         if ( toRot instanceof Array ) {
             toRot = new Quaternion( toRot );
         }
-    	// calculate angle between them.
-    	var cosHalfTheta = ( fromRot.w * toRot.w ) +
+        // calculate angle between
+        var cosHalfTheta = ( fromRot.w * toRot.w ) +
             ( fromRot.x * toRot.x ) +
             ( fromRot.y * toRot.y ) +
             ( fromRot.z * toRot.z );
-    	// if fromRot=toRot or fromRot=-toRot then theta = 0 and we can return from
-    	if ( Math.abs( cosHalfTheta ) >= 1 ) {
+        // if fromRot=toRot or fromRot=-toRot then theta = 0 and we can return from
+        if ( Math.abs( cosHalfTheta ) >= 1 ) {
             return new Quaternion(
                 fromRot.w,
                 fromRot.x,
                 fromRot.y,
                 fromRot.z );
-    	}
-    	// calculate temporary values.
-    	var halfTheta = Math.acos( cosHalfTheta );
-    	var sinHalfTheta = Math.sqrt( 1 - cosHalfTheta * cosHalfTheta );
-    	// if theta = 180 degrees then result is not fully defined
-    	// we could rotate around any axis normal to 'fromRot' or 'toRot'
-    	if ( Math.abs( sinHalfTheta ) < 0.0001 ) {
-            console.log( "Thera equals 180 degrees, rotation is not fully defined. for ");
-            return new Quaternion(
-                fromRot.w * 0.5 + toRot.w * 0.5,
-                fromRot.x * 0.5 + toRot.x * 0.5,
-                fromRot.y * 0.5 + toRot.y * 0.5,
-                fromRot.z * 0.5 + toRot.z * 0.5 );
-    	}
-    	var ratioA = Math.sin( ( 1 - t ) * halfTheta ) / sinHalfTheta;
-    	var ratioB = Math.sin( t * halfTheta ) / sinHalfTheta;
+        }
+        // cosHalfTheta musty be positive to return the shortest angle
+        if ( cosHalfTheta < 0 ) {
+            fromRot = fromRot.negate();
+            cosHalfTheta = -cosHalfTheta;
+        }
+        var halfTheta = Math.acos( cosHalfTheta );
+        var sinHalfTheta = Math.sqrt( 1 - cosHalfTheta * cosHalfTheta );
+
+        var scaleFrom = Math.sin( ( 1.0 - t ) * halfTheta ) / sinHalfTheta;
+        var scaleTo = Math.sin( t * halfTheta ) / sinHalfTheta;
         return new Quaternion(
-    	    fromRot.w * ratioA + toRot.w * ratioB,
-        	fromRot.x * ratioA + toRot.x * ratioB,
-    	    fromRot.y * ratioA + toRot.y * ratioB,
-    	    fromRot.z * ratioA + toRot.z * ratioB );
+            fromRot.w * scaleFrom + toRot.w * scaleTo,
+            fromRot.x * scaleFrom + toRot.x * scaleTo,
+            fromRot.y * scaleFrom + toRot.y * scaleTo,
+            fromRot.z * scaleFrom + toRot.z * scaleTo );
+        /*
+        // calculate angle between
+        var cosHalfTheta = ( fromRot.w * toRot.w ) +
+            ( fromRot.x * toRot.x ) +
+            ( fromRot.y * toRot.y ) +
+            ( fromRot.z * toRot.z );
+        // cosHalfTheta musty be positive to return the shortest angle
+        if ( cosHalfTheta < 0 ) {
+            fromRot = fromRot.negate();
+            cosHalfTheta = -cosHalfTheta;
+        }
+        // if fromRot=toRot or fromRot=-toRot then theta = 0 and we can return from
+        if ( Math.abs( cosHalfTheta ) >= 1 ) {
+            return new Quaternion(
+                fromRot.w,
+                fromRot.x,
+                fromRot.y,
+                fromRot.z );
+        }
+        // calculate temporary values.
+        var halfTheta = Math.acos( cosHalfTheta );
+        var sinHalfTheta = Math.sqrt( 1 - cosHalfTheta * cosHalfTheta );
+        // if theta = 180 degrees then result is not fully defined
+        // we could rotate around any axis normal to 'fromRot' or 'toRot'
+        if ( Math.abs( sinHalfTheta ) < 0.0001 ) {
+            return new Quaternion(
+                0.5 * ( fromRot.w + toRot.w ),
+                0.5 * ( fromRot.x + toRot.x ),
+                0.5 * ( fromRot.y + toRot.y ),
+                0.5 * ( fromRot.z + toRot.z ) );
+        }
+        var ratioA = Math.sin( ( 1 - t ) * halfTheta ) / sinHalfTheta;
+        var ratioB = Math.sin( t * halfTheta ) / sinHalfTheta;
+        return new Quaternion(
+            fromRot.w * ratioA + toRot.w * ratioB,
+            fromRot.x * ratioA + toRot.x * ratioB,
+            fromRot.y * ratioA + toRot.y * ratioB,
+            fromRot.z * ratioA + toRot.z * ratioB );
         */
     };
 

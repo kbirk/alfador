@@ -104,6 +104,13 @@ describe('Quaternion', function() {
         });
     });
 
+    describe('#negate', function() {
+        it('should return a Quaternion with each component negated', function() {
+            var q = Quaternion.random();
+            assert( q.negate().equals( new Quaternion( -q.w, -q.x, -q.y, -q.z ) ) );
+        });
+    });
+
     describe('#rotationDegrees()', function() {
         it('should return a rotation matrix, rotating counter-clockwise', function() {
             var up = new Vec3( 0, 1, 0 ),
@@ -244,21 +251,23 @@ describe('Quaternion', function() {
 
     describe('#slerp', function() {
         it('should interpolate between two quaternions', function() {
-            var fromQuat = new Quaternion(),
-                toQuat = Quaternion.rotationDegrees( 90, [ 0, 0, 1 ] ),
+            var fromQuat = Quaternion.rotationDegrees( 0, [ 0, 0, 1 ] ),
+                toQuat0 = Quaternion.rotationDegrees( 90, [ 0, 0, 1 ] ),
+                toQuat1 = Quaternion.rotationDegrees( 180, [ 0, 0, 1 ] ),
                 vec = new Vec3( 0, 1, 0 ),
                 quarterRot = Mat33.rotationDegrees( 22.5, [ 0, 0, 1 ] ),
                 halfRot = Mat33.rotationDegrees( 45, [ 0, 0, 1 ] ),
                 threeQuarterRot = Mat33.rotationDegrees( 67.5, [ 0, 0, 1 ] ),
-                quarter = Quaternion.slerp( fromQuat, toQuat, 0.25 ).rotate( vec ),
-                half = Quaternion.slerp( fromQuat, toQuat, 0.5 ).rotate( vec ),
-                threeQuarter = Quaternion.slerp( fromQuat, toQuat, 0.75 ).rotate( vec );
+                quarter = Quaternion.slerp( fromQuat, toQuat0, 0.25 ).rotate( vec ),
+                half = Quaternion.slerp( fromQuat, toQuat0, 0.5 ).rotate( vec ),
+                threeQuarter = Quaternion.slerp( fromQuat, toQuat0, 0.75 ).rotate( vec );
             assert( quarter.normalize().equals( quarterRot.mult( vec ).normalize(), EPSILON ) );
             assert( half.normalize().equals( halfRot.mult( vec ).normalize(), EPSILON ) );
             assert( threeQuarter.normalize().equals( threeQuarterRot.mult( vec ).normalize(), EPSILON ) );
-            assert( Quaternion.slerp( fromQuat, toQuat, 0 ).equals( fromQuat, EPSILON ) );
-            assert( Quaternion.slerp( fromQuat, toQuat, 1 ).equals( toQuat, EPSILON ) );
-            assert( Quaternion.slerp( fromQuat, fromQuat, undefined ).equals( fromQuat, EPSILON ) );
+            assert( Quaternion.slerp( fromQuat, toQuat0, 0 ).equals( fromQuat, EPSILON ) );
+            assert( Quaternion.slerp( fromQuat, toQuat0, 1 ).equals( toQuat0, EPSILON ) );
+            assert( Quaternion.slerp( fromQuat, toQuat1, 0 ).equals( fromQuat, EPSILON ) );
+            assert( Quaternion.slerp( fromQuat, toQuat1, 1 ).equals( toQuat1, EPSILON ) );
         });
         it('should accept Arrays as arguments', function() {
             var fromQuat = new Quaternion(),
