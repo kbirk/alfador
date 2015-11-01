@@ -10,10 +10,11 @@ describe('Vec4', function() {
 
     describe('#equals()', function() {
         it('should return false if any components do not match', function() {
-            var v = new Vec4( Math.random(),
-                              Math.random(),
-                              Math.random(),
-                              Math.random() );
+            var v = new Vec4(
+                Math.random(),
+                Math.random(),
+                Math.random(),
+                Math.random() );
             assert.equal( v.equals( v ), true );
             assert.equal( v.equals( new Vec4( -v.x, v.y, v.z, v.w ) ), false );
             assert.equal( v.equals( new Vec4( v.x, v.y+5, v.z, v.w ) ), false );
@@ -22,17 +23,19 @@ describe('Vec4', function() {
             assert.equal( v.equals( new Vec4( v.x, v.y, v.z, v.w ) ), true );
         });
         it('should return true if all components match', function() {
-            var v = new Vec4( Math.random(),
-                              Math.random(),
-                              Math.random(),
-                              Math.random() );
+            var v = new Vec4(
+                Math.random(),
+                Math.random(),
+                Math.random(),
+                Math.random() );
             assert.equal( v.equals( new Vec4( v.x, v.y, v.z, v.w ) ), true );
         });
         it('should accept and array of input', function() {
-            var v = new Vec4( Math.random(),
-                              Math.random(),
-                              Math.random(),
-                              Math.random() );
+            var v = new Vec4(
+                Math.random(),
+                Math.random(),
+                Math.random(),
+                Math.random() );
             assert.equal( v.equals( [ v.x, v.y, v.z, v.w ] ), true );
         });
         it('should accept a second epsilon parameter, return true if each component is <= epsilon', function() {

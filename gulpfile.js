@@ -10,6 +10,7 @@
         return b.bundle()
             .on( 'error', function( e ) {
                 console.log( e );
+                this.emit( 'end' );
             })
             .pipe( source( output ) )
             .pipe( gulp.dest( 'build' ) );
@@ -22,6 +23,7 @@
         return b.bundle()
             .on( 'error', function( e ) {
                 console.log( e );
+                this.emit( 'end' );
             })
             .pipe( source( output ) )
             .pipe( buffer() )

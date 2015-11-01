@@ -18,7 +18,6 @@ describe('Mat33', function() {
                 a2 = Math.random(), b2 = Math.random(), c2 = Math.random(),
                 p = new Mat33([ a0, a1, a2, b0, b1, b2, c0, c1, c2 ]),
                 q;
-
             for ( i=0; i<p.data.length; i++ ) {
                 q = new Mat33([ a0, a1, a2, b0, b1, b2, c0, c1, c2 ]);
                 q.data[i] = q.data[i] + 1;
@@ -31,17 +30,18 @@ describe('Mat33', function() {
                 a2 = Math.random(), b2 = Math.random(), c2 = Math.random(),
                 p = new Mat33([ a0, a1, a2, b0, b1, b2, c0, c1, c2 ]),
                 q = new Mat33([ a0, a1, a2, b0, b1, b2, c0, c1, c2 ]);
-
             assert.equal( p.equals( q ), true );
         });
         it('should accept a second epsilon parameter, return true if each component is <= epsilon', function() {
             var r = Math.random(),
-                m = new Mat33([ r, r, r,
-                                r, r, r,
-                                r, r, r ]);
-            assert.equal( m.equals( new Mat33([ r/2, r/2, r/2,
-                                                r/2, r/2, r/2,
-                                                r/2, r/2, r/2 ]), r/2 ), true );
+                m = new Mat33([
+                    r, r, r,
+                    r, r, r,
+                    r, r, r ]);
+            assert.equal( m.equals( new Mat33([
+                r/2, r/2, r/2,
+                r/2, r/2, r/2,
+                r/2, r/2, r/2 ]), r/2 ), true );
         });
     });
 
@@ -62,9 +62,10 @@ describe('Mat33', function() {
         it('should return a truncated deep copy when supplied another Mat44', function() {
             var p = Mat44.random(),
                 q = new Mat33( p ),
-                r = new Mat33([ p.data[0], p.data[1], p.data[2],
-                                p.data[4], p.data[5], p.data[6],
-                                p.data[8], p.data[9], p.data[10] ]);
+                r = new Mat33([
+                    p.data[0], p.data[1], p.data[2],
+                    p.data[4], p.data[5], p.data[6],
+                    p.data[8], p.data[9], p.data[10] ]);
             assert.equal( r.equals( q ), true );
         });
         it('should return a Mat33 from an array of length 9', function() {
@@ -303,7 +304,6 @@ describe('Mat33', function() {
                 cc = new Vec3( 1, 0, -1 ).normalize(),
                 cd = new Vec3( 1, 0, 0 ).normalize(),
                 other;
-
             assert.equal( rs.equals( s, EPSILON ), true );
             assert.equal( sr.equals( r, EPSILON ), true );
 
@@ -324,9 +324,10 @@ describe('Mat33', function() {
     describe('#transpose()', function() {
         it('should return a transposed copy of the matrix', function() {
             var a = Mat33.random(),
-                b = new Mat33([ a.data[0], a.data[3], a.data[6],
-                                a.data[1], a.data[4], a.data[7],
-                                a.data[2], a.data[5] ,a.data[8] ]);
+                b = new Mat33([
+                    a.data[0], a.data[3], a.data[6],
+                    a.data[1], a.data[4], a.data[7],
+                    a.data[2], a.data[5] ,a.data[8] ]);
             assert.equal( a.transpose().equals( b ), true );
         });
 
@@ -348,7 +349,6 @@ describe('Mat33', function() {
         it('should return an inverse copy of the matrix', function() {
             var identity = Mat33.identity(),
                 a = new Mat33().inverse( Vec3.random(), Vec3.random() );
-
             assert.equal( a.inverse().mult( a ).equals( identity ), true );
             assert.equal( a.mult( a.inverse() ).equals( identity ), true );
         });

@@ -407,25 +407,25 @@
     };
 
     /**
-     * Returns an othrographic projection matrix.
+     * Returns an orthographic projection matrix.
      *
-     * @param {number} xMin - The minimum x extent of the projection.
-     * @param {number} xMax - The maximum x extent of the projection.
-     * @param {number} xMin - The minimum y extent of the projection.
-     * @param {number} xMax - The maximum y extent of the projection.
-     * @param {number} xMin - The minimum z extent of the projection.
-     * @param {number} xMin - The maximum z extent of the projection.
+     * @param {number} left - The minimum x extent of the projection.
+     * @param {number} right - The maximum x extent of the projection.
+     * @param {number} bottom - The minimum y extent of the projection.
+     * @param {number} top - The maximum y extent of the projection.
+     * @param {number} near - The minimum z extent of the projection.
+     * @param {number} far - The maximum z extent of the projection.
      *
      * @returns {Mat44} The orthographic projection matrix.
      */
-    Mat44.ortho = function( xMin, xMax, yMin, yMax, zMin, zMax ) {
+    Mat44.ortho = function( left, right, bottom, top, near, far ) {
         var mat = Mat44.identity();
-        mat.data[0] = 2 / (xMax - xMin);
-        mat.data[5] = 2 / (yMax - yMin);
-        mat.data[10] = -2 / (zMax - zMin);
-        mat.data[12] = -((xMax + xMin)/(xMax - xMin));
-        mat.data[13] = -((yMax + yMin)/(yMax - yMin));
-        mat.data[14] = -((zMax + zMin)/(zMax - zMin));
+        mat.data[0] = 2 / ( right - left );
+        mat.data[5] = 2 / ( top - bottom );
+        mat.data[10] = -2 / ( far - near );
+        mat.data[12] = -( ( right + left ) / ( right - left ) );
+        mat.data[13] = -( ( top + bottom ) / ( top - bottom ) );
+        mat.data[14] = -( ( far + near ) / ( far - near ) );
         return mat;
     };
 

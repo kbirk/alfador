@@ -4,30 +4,34 @@ var EPSILON = 0.00001,
     assert = require( 'assert' ),
     Vec2 = require( '../src/Vec2' ),
     Vec3 = require( '../src/Vec3' ),
-    Vec4 = require( '../src/Vec4' );
+    Vec4 = require( '../src/Vec4' ),
+    Mat33 = require( '../src/Mat33' );
 
 describe('Vec3', function() {
 
     describe('#equals()', function() {
         it('should return false if any components do not match', function() {
-            var v = new Vec3( Math.random(),
-                              Math.random(),
-                              Math.random() );
+            var v = new Vec3(
+                Math.random(),
+                Math.random(),
+                Math.random() );
             assert.equal( v.equals( v ), true );
             assert.equal( v.equals( new Vec3( -v.x, v.y, v.z ) ), false );
             assert.equal( v.equals( new Vec3( v.x, v.y+5, v.z ) ), false );
             assert.equal( v.equals( new Vec3( v.x, v.y, v.z-1.2345 ) ), false );
         });
         it('should return true if all components match', function() {
-            var v = new Vec3( Math.random(),
-                              Math.random(),
-                              Math.random() );
+            var v = new Vec3(
+                Math.random(),
+                Math.random(),
+                Math.random() );
             assert.equal( v.equals( new Vec3( v.x, v.y, v.z) ), true );
         });
         it('should accept an array of input', function() {
-            var v = new Vec3( Math.random(),
-                              Math.random(),
-                              Math.random() );
+            var v = new Vec3(
+                Math.random(),
+                Math.random(),
+                Math.random() );
             assert.equal( v.equals( [ v.x, v.y, v.z ] ), true );
         });
         it('should accept a second epsilon parameter, return true if each component is <= epsilon', function() {
@@ -164,17 +168,19 @@ describe('Vec3', function() {
         it('should return the cross product from a VecN argument', function() {
             var v0 = Vec3.random(),
                 v1 = Vec3.random(),
-                c = new Vec3( ( v0.y * v1.z ) - ( v1.y * v0.z ),
-                              (-v0.x * v1.z ) + ( v1.x * v0.z ),
-                              ( v0.x * v1.y ) - ( v1.x * v0.y ) );
+                c = new Vec3(
+                    ( v0.y * v1.z ) - ( v1.y * v0.z ),
+                    (-v0.x * v1.z ) + ( v1.x * v0.z ),
+                    ( v0.x * v1.y ) - ( v1.x * v0.y ) );
             assert.equal( v0.cross( v1 ).equals( c ), true );
         });
         it('should return the cross product from an Array argument', function() {
             var v0 = Vec3.random(),
                 v1 = [ Math.random(), Math.random(), Math.random() ],
-                c = new Vec3( ( v0.y * v1[2] ) - ( v1[1] * v0.z ),
-                              (-v0.x * v1[2] ) + ( v1[0] * v0.z ),
-                              ( v0.x * v1[1] ) - ( v1[0] * v0.y ) );
+                c = new Vec3(
+                    ( v0.y * v1[2] ) - ( v1[1] * v0.z ),
+                    (-v0.x * v1[2] ) + ( v1[0] * v0.z ),
+                    ( v0.x * v1[1] ) - ( v1[0] * v0.y ) );
             assert.equal( v0.cross( v1 ).equals( c ), true );
         });
     });
@@ -219,6 +225,100 @@ describe('Vec3', function() {
         it('should return a zero vector if the original length is zero', function() {
             var v = new Vec3( 0, 0, 0 );
             assert.equal( v.normalize().equals( new Vec3( 0, 0, 0 ) ), true );
+        });
+    });
+
+    describe('#unsignedAngleRadians', function() {
+        it('should the unsigned angle in radians', function() {
+            var n = Vec3.random();
+            var rotation = Mat33.rotationFromTo( [ 0, 0, 1 ], n );
+            var a = rotation.mult([ 1, 0, 0 ]);
+            var b = rotation.mult([ 1, 1, 0 ]);
+            var c = rotation.mult([ 0, 1, 0 ]);
+            var d = rotation.mult([ -1, 1, 0 ]);
+            var e = rotation.mult([ -1, 0, 0 ]);
+            var f = rotation.mult([ -1, -1, 0 ]);
+            var g = rotation.mult([ 0, -1, 0 ]);
+            var h = rotation.mult([ 1, -1, 0 ]);
+            assert( Math.abs( a.unsignedAngleRadians( b, n ) - Math.PI/4 ) < EPSILON );
+            assert( Math.abs( a.unsignedAngleRadians( c, n ) - Math.PI/2 ) < EPSILON );
+            assert( Math.abs( a.unsignedAngleRadians( d, n ) - Math.PI*0.75 ) < EPSILON );
+            assert( Math.abs( a.unsignedAngleRadians( e, n ) - Math.PI ) < EPSILON );
+            assert( Math.abs( a.unsignedAngleRadians( f, n ) - ( Math.PI + Math.PI/4 ) ) < EPSILON );
+            assert( Math.abs( a.unsignedAngleRadians( g, n ) - ( Math.PI + Math.PI/2 ) ) < EPSILON );
+            assert( Math.abs( a.unsignedAngleRadians( h, n ) - ( Math.PI + Math.PI*0.75 ) ) < EPSILON );
+        });
+        it('should return an angle in the range 0 to 2PI', function() {
+            var a = new Vec3( 1, 0, 0 );
+            var b = new Vec3( 1, 0.0001, 0 );
+            var c = new Vec3( 1, -0.0001, 0 );
+            var d = new Vec3( -1, -0.0001, 0 );
+            var n = [ 0, 0, 1 ];
+            assert( a.unsignedAngleRadians( b, n ) < 0.001 );
+            assert( Math.abs( a.unsignedAngleRadians( c, n ) - Math.PI*2 ) < 0.001 );
+            assert( Math.abs( a.unsignedAngleRadians( d, n ) - Math.PI ) < 0.001 );
+        });
+        it('should measure the rotation counter-clockwise', function() {
+            var a = new Vec3( 1, 0, 0 );
+            var b = new Vec3( 1, 1, 0 );
+            var c = new Vec3( 0, -1, 0 );
+            var n = new Vec3( 0, 0, 1 );
+            assert( Math.abs( a.unsignedAngleRadians( b, n ) - Math.PI/4 ) < EPSILON );
+            assert( Math.abs( a.unsignedAngleRadians( c, n ) - Math.PI*1.5 ) < EPSILON );
+        });
+        it('should use a.cross(b) as the reference vector if no normal is supplied', function() {
+            var a = new Vec3( 1, 0, 0 );
+            var b = new Vec3( 1, 1, 0 );
+            var c = new Vec3( 0, -1, 0 );
+            assert( Math.abs( a.unsignedAngleRadians( b, [ 0, 0, 1 ] ) - a.unsignedAngleRadians( b ) ) < EPSILON );
+            assert( Math.abs( a.unsignedAngleRadians( c, [ 0, 0, -1 ] ) - a.unsignedAngleRadians( c ) ) < EPSILON );
+        });
+    });
+
+    describe('#unsignedAngleDegrees', function() {
+        it('should the unsigned angle in degrees', function() {
+            var n = Vec3.random();
+            var rotation = Mat33.rotationFromTo( [ 0, 0, 1 ], n );
+            var a = rotation.mult([ 1, 0, 0 ]);
+            var b = rotation.mult([ 1, 1, 0 ]);
+            var c = rotation.mult([ 0, 1, 0 ]);
+            var d = rotation.mult([ -1, 1, 0 ]);
+            var e = rotation.mult([ -1, 0, 0 ]);
+            var f = rotation.mult([ -1, -1, 0 ]);
+            var g = rotation.mult([ 0, -1, 0 ]);
+            var h = rotation.mult([ 1, -1, 0 ]);
+            assert( Math.abs( a.unsignedAngleDegrees( [ b.x, b.y, b.z ], n ) - 45 ) < EPSILON );
+            assert( Math.abs( a.unsignedAngleDegrees( c, n ) - 90 ) < EPSILON );
+            assert( Math.abs( a.unsignedAngleDegrees( d, n ) - 135 ) < EPSILON );
+            assert( Math.abs( a.unsignedAngleDegrees( e, n ) - 180 ) < EPSILON );
+            assert( Math.abs( a.unsignedAngleDegrees( f, n ) - 225 ) < EPSILON );
+            assert( Math.abs( a.unsignedAngleDegrees( g, n ) - 270 ) < EPSILON );
+            assert( Math.abs( a.unsignedAngleDegrees( h, n ) - 315 ) < EPSILON );
+        });
+        it('should return an angle in the range 0 to 2PI', function() {
+            var a = new Vec3( 1, 0, 0 );
+            var b = new Vec3( 1, 0.0001, 0 );
+            var c = new Vec3( 1, -0.0001, 0 );
+            var d = new Vec3( -1, -0.0001, 0 );
+            var n = [ 0, 0, 1 ];
+            assert( a.unsignedAngleDegrees( b, n ) < 0.01 );
+            assert( Math.abs( a.unsignedAngleDegrees( c, n ) - 360 ) < 0.01 );
+            assert( Math.abs( a.unsignedAngleDegrees( d, n ) - 180 ) < 0.01 );
+        });
+        it('should measure the rotation counter-clockwise', function() {
+            var a = new Vec3( 1, 0, 0 );
+            var b = new Vec3( 1, 1, 0 );
+            var c = new Vec3( 0, -1, 0 );
+            var n = new Vec3( 0, 0, 1 );
+            assert( Math.abs( a.unsignedAngleDegrees( b, n ) - 45 ) < EPSILON );
+            assert( Math.abs( a.unsignedAngleDegrees( c, n ) - 270 ) < EPSILON );
+        });
+        it('should use a.cross(b) as the reference vector if no normal is supplied', function() {
+            var a = new Vec3( 1, 0, 0 );
+            var b = new Vec3( 1, 1, 0 );
+            var c = new Vec3( 0, -1, 0 );
+            assert( Math.abs( a.unsignedAngleDegrees( b, [ 0, 0, 1 ] ) - a.unsignedAngleDegrees( b ) ) < EPSILON );
+            assert( Math.abs( a.unsignedAngleDegrees( c, [ 0, 0, -1 ] ) - a.unsignedAngleDegrees( c ) ) < EPSILON );
         });
     });
 

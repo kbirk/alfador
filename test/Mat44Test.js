@@ -36,14 +36,16 @@ describe('Mat44', function() {
         });
         it('should accept a second epsilon parameter, return true if each component is <= epsilon', function() {
             var r = Math.random(),
-                m = new Mat44([ r, r, r, r,
-                                r, r, r, r,
-                                r, r, r, r,
-                                r, r, r, r ]);
-            assert.equal( m.equals( new Mat44([ r/2, r/2, r/2, r/2,
-                                                r/2, r/2, r/2, r/2,
-                                                r/2, r/2, r/2, r/2,
-                                                r/2, r/2, r/2, r/2 ]), r/2 ), true );
+                m = new Mat44([
+                    r, r, r, r,
+                    r, r, r, r,
+                    r, r, r, r,
+                    r, r, r, r ]);
+            assert.equal( m.equals( new Mat44([
+                r/2, r/2, r/2, r/2,
+                r/2, r/2, r/2, r/2,
+                r/2, r/2, r/2, r/2,
+                r/2, r/2, r/2, r/2 ]), r/2 ), true );
         });
     });
 
@@ -64,10 +66,11 @@ describe('Mat44', function() {
         it('should return a filled deep copy when supplied another Mat33', function() {
             var p = Mat33.random(),
                 q = new Mat44( p ),
-                r = new Mat44([ p.data[0], p.data[1], p.data[2], 0,
-                                p.data[3], p.data[4], p.data[5], 0,
-                                p.data[6], p.data[7], p.data[8], 0,
-                                0, 0, 0, 1 ]);
+                r = new Mat44([
+                    p.data[0], p.data[1], p.data[2], 0,
+                    p.data[3], p.data[4], p.data[5], 0,
+                    p.data[6], p.data[7], p.data[8], 0,
+                    0, 0, 0, 1 ]);
             assert.equal( q.equals( r ), true );
         });
         it('should return a Mat44 from an array of length 9', function() {
@@ -243,10 +246,11 @@ describe('Mat44', function() {
         it('should return a scale matrix', function() {
             var r = Math.random(),
                 p = Mat44.scale( r ),
-                q = new Mat44([ r, 0, 0, 0,
-                                0, r, 0, 0,
-                                0, 0, r, 0,
-                                0, 0, 0, 1 ]);
+                q = new Mat44([
+                    r, 0, 0, 0,
+                    0, r, 0, 0,
+                    0, 0, r, 0,
+                    0, 0, 0, 1 ]);
             assert.equal( p.equals( q ), true );
         });
         it('should accept scalar, Vec3, and Array arguments', function() {
@@ -262,10 +266,11 @@ describe('Mat44', function() {
         it('should return a translation matrix', function() {
             var r = Vec3.random(),
                 p = Mat44.translation( r ),
-                q = new Mat44([ 1, 0, 0, 0,
-                                0, 1, 0, 0,
-                                0, 0, 1, 0,
-                                r.x, r.y, r.z, 1 ]);
+                q = new Mat44([
+                    1, 0, 0, 0,
+                    0, 1, 0, 0,
+                    0, 0, 1, 0,
+                    r.x, r.y, r.z, 1 ]);
             assert.equal( p.equals( q ), true );
         });
         it('should accept Vec3 and Array arguments', function() {
@@ -358,10 +363,11 @@ describe('Mat44', function() {
     describe('#transpose()', function() {
         it('should return a transposed copy of the matrix', function() {
             var a = Mat44.random(),
-                b = new Mat44([ a.data[0], a.data[4], a.data[8], a.data[12],
-                                a.data[1], a.data[5], a.data[9], a.data[13],
-                                a.data[2], a.data[6], a.data[10], a.data[14],
-                                a.data[3], a.data[7], a.data[11], a.data[15] ]);
+                b = new Mat44([
+                    a.data[0], a.data[4], a.data[8], a.data[12],
+                    a.data[1], a.data[5], a.data[9], a.data[13],
+                    a.data[2], a.data[6], a.data[10], a.data[14],
+                    a.data[3], a.data[7], a.data[11], a.data[15] ]);
             assert.equal( a.transpose().equals( b ), true );
         });
 
@@ -383,7 +389,6 @@ describe('Mat44', function() {
         it('should return an inverse copy of the matrix', function() {
             var identity = Mat44.identity(),
                 a = new Mat44().inverse( Vec3.random(), Vec3.random() );
-
             assert.equal( a.inverse().mult( a ).equals( identity ), true );
             assert.equal( a.mult( a.inverse() ).equals( identity ), true );
         });

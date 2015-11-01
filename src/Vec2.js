@@ -127,7 +127,7 @@
         if ( that instanceof Array ) {
             return ( this.x * that[1] ) - ( this.y * that[0] );
         }
-         return ( this.x * that.y ) - ( this.y * that.x );
+        return ( this.x * that.y ) - ( this.y * that.x );
     };
 
     /**
@@ -189,6 +189,36 @@
                 this.y / mag );
         }
         return new Vec2();
+    };
+
+    /**
+     * Returns the unsigned angle between this angle and the argument in radians.
+     * @memberof Vec2
+     *
+     * @param {Vec2|Vec3|Vec4|Array} that - The vector to measure the angle from.
+     *
+     * @returns {number} The unsigned angle in radians.
+     */
+    Vec2.prototype.unsignedAngleRadians = function( that ) {
+        var x = that.x !== undefined ? that.x : that[0];
+        var y = that.y !== undefined ? that.y : that[1];
+        var angle = Math.atan2( y, x ) - Math.atan2( this.y, this.x );
+        if (angle < 0) {
+            angle += 2 * Math.PI;
+        }
+        return angle;
+    };
+
+    /**
+     * Returns the unsigned angle between this angle and the argument in degrees.
+     * @memberof Vec2
+     *
+     * @param {Vec2|Vec3|Vec4|Array} that - The vector to measure the angle from.
+     *
+     * @returns {number} The unsigned angle in degrees.
+     */
+    Vec2.prototype.unsignedAngleDegrees = function( that ) {
+        return this.unsignedAngleRadians( that ) * ( 180 / Math.PI );
     };
 
     /**

@@ -269,6 +269,11 @@ describe('Quaternion', function() {
             assert( Quaternion.slerp( fromQuat, toQuat1, 0 ).equals( fromQuat, EPSILON ) );
             assert( Quaternion.slerp( fromQuat, toQuat1, 1 ).equals( toQuat1, EPSILON ) );
         });
+        it('should return the same vector if both vectors are identical', function() {
+            var fromQuat = Quaternion.rotationDegrees( 0, [ 0, 0, 1 ] ),
+                toQuat = Quaternion.rotationDegrees( 0, [ 0, 0, 1 ] );
+            assert( Quaternion.slerp( fromQuat, toQuat, 0 ).equals( fromQuat ) );
+        });
         it('should accept Arrays as arguments', function() {
             var fromQuat = new Quaternion(),
                 toQuat = Quaternion.rotationDegrees( 90, [ 0, 0, 1 ] ),

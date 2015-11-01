@@ -202,6 +202,51 @@
     };
 
     /**
+     * Returns the unsigned angle between this angle and the argument in radians.
+     * @memberof Vec3
+     *
+     * @param {Vec3|Vec4|Array} that - The vector to measure the angle from.
+     * @param {Vec3|Vec4|Array} normal - The reference vector to measure the
+     *                              direction of the angle. If not provided will
+     *                              use a.cross( b ). (Optional)
+     *
+     * @returns {number} The unsigned angle in radians.
+     */
+    Vec3.prototype.unsignedAngleRadians = function( that, normal ) {
+        var a = this.normalize();
+        var b = new Vec3( that ).normalize();
+        var dot = a.dot( b );
+        var ndot = Math.max( -1, Math.min( 1, dot ) );
+        var angle = Math.acos( ndot );
+        var cross = a.cross( b );
+        var n = new Vec3( normal || cross );
+
+        //var cross = this.cross( that );
+        //var angle = Math.atan2( cross.length(), this.dot( that ) );
+
+        if ( n.dot( cross ) < 0 ) {
+            if ( angle >= Math.PI * 0.5 ) {
+                angle = Math.PI + Math.PI - angle;
+            } else {
+                angle = 2 * Math.PI - angle;
+            }
+        }
+        return angle;
+    };
+
+    /**
+     * Returns the unsigned angle between this angle and the argument in degrees.
+     * @memberof Vec3
+     *
+     * @param {Vec3|Vec4|Array} that - The vector to measure the angle from.
+     *
+     * @returns {number} The unsigned angle in degrees.
+     */
+    Vec3.prototype.unsignedAngleDegrees = function( that, normal ) {
+        return this.unsignedAngleRadians( that, normal ) * ( 180 / Math.PI );
+    };
+
+    /**
      * Returns a random Vec3 of unit length.
      * @memberof Vec3
      *
