@@ -5,7 +5,35 @@ var EPSILON = 0.00001,
     Vec3 = require( '../src/Vec3' ),
     Triangle = require( '../src/Triangle' );
 
+var _log, _warn, _error;
+
+function muteConsole() {
+    _log = console.log;
+    _warn = console.warn;
+    _error = console.error;
+    console.log = function() {};
+    console.warn = function() {};
+    console.error = function() {};
+}
+
+function unmuteConsole() {
+    console.log = _log;
+    console.warn = _warn;
+    console.error = _error;
+    _log = null;
+    _warn= null;
+    _error = null;
+}
+
 describe('Triangle', function() {
+
+    beforeEach( function() {
+        muteConsole();
+    });
+
+    afterEach( function() {
+        unmuteConsole();
+    });
 
     describe('#equals()', function() {
         it('should return false if any components do not match', function() {
@@ -96,7 +124,157 @@ describe('Triangle', function() {
                 normal = ab.cross( ac ).normalize();
             assert( normal.equals( t.normal() ) );
         });
-        it('should cache the normal if the triangle positions are unchanged', function() {
+    });
+
+    describe('#area()', function() {
+        it('should return the area of the triangle', function() {
+            var t = new Triangle(
+                [ 0, 0, 0 ],
+                [ 2, 0, 0 ],
+                [ 2, 2, 0 ]
+            );
+            assert( t.area() === 2.0 );
+        });
+    });
+
+    describe('#isInside()', function() {
+        it('should return bool if point is contained in the triangle', function() {
+            var t = new Triangle(
+                [ 0, 0, 0 ],
+                [ 2, 0, 0 ],
+                [ 2, 2, 0 ]
+            );
+            var p0 = [ 1.0, 0.8, 0.0 ];
+            var p1 = [ 3.0, 0.0, 0.0 ];
+            var p2 = [ 3.0, 3.0, 0.0 ];
+            assert( t.isInside( p0 ) );
+            assert( !t.isInside( p1 ) );
+            assert( !t.isInside( p2 ) );
+        });
+        it('should only return true if the point is co-planar with the triangle', function() {
+            var t = new Triangle(
+                [ 0, 0, 0 ],
+                [ 2, 0, 0 ],
+                [ 2, 2, 0 ]
+            );
+            var p = [ 1.0, 0.8, 10.0 ];
+            assert( !t.isInside( p ) );
+        });
+        it('should return true if p === a', function() {
+            var t = new Triangle(
+                [ 0, 0, 0 ],
+                [ 2, 0, 0 ],
+                [ 2, 2, 0 ]
+            );
+            assert( t.isInside([ 0, 0, 0 ]) );
+        })
+        ;it('should return true if p === b', function() {
+            var t = new Triangle(
+                [ 0, 0, 0 ],
+                [ 2, 0, 0 ],
+                [ 2, 2, 0 ]
+            );
+            assert( t.isInside([ 2, 0, 0 ]) );
+        });
+        it('should return true if p === c', function() {
+            var t = new Triangle(
+                [ 0, 0, 0 ],
+                [ 2, 0, 0 ],
+                [ 2, 2, 0 ]
+            );
+            assert( t.isInside([ 2, 2, 0 ]) );
+        });
+    });
+
+    describe('#intersect()', function() {
+        it('should return false if no intersection takes place', function() {
+            var t = new Triangle(
+                [ 0, 0, 0 ],
+                [ 2, 0, 0 ],
+                [ 2, 2, 0 ]
+            );
+            var o = [ 0, 0, 10 ];
+            var d = [ 3, 3, -1 ];
+            assert( t.intersect( o, d, true, true ) === false );
+        });
+        it('should return an intersection object if one takes place', function() {
+            var t = new Triangle(
+                [ 0, 0, 0 ],
+                [ 2, 0, 0 ],
+                [ 2, 2, 0 ]
+            );
+            var o = [ 1, 0.5, 10 ];
+            var d = [ 0, 0, -1 ];
+            assert( t.intersect( o, d, true, true ) !== false );
+        });
+        it('should provide interface for ignoring behind the point of origin', function() {
+            var t = new Triangle(
+                [ 0, 0, 0 ],
+                [ 2, 0, 0 ],
+                [ 2, 2, 0 ]
+            );
+            var o = [ 1, 0.5, 10 ];
+            var d = [ 0, 0, 1 ];
+            // ignore
+            assert( t.intersect( o, d, true, true ) === false );
+            assert( t.intersect( o, d, true, false ) === false );
+            // don't ignore
+            assert( t.intersect( o, d, false, true ) !== false );
+            assert( t.intersect( o, d, false, false ) !== false );
+        });
+        it('should provide interface for ignoring triangles facing opposite the direction of intersection', function() {
+            var t = new Triangle(
+                [ 0, 0, 0 ],
+                [ 2, 0, 0 ],
+                [ 2, 2, 0 ]
+            );
+            var o = [ 1, 0.5, -10 ];
+            var d = [ 0, 0, 1 ];
+            // ignore
+            assert( t.intersect( o, d, true, true ) === false );
+            assert( t.intersect( o, d, false, true ) === false );
+            // don't ignore
+            assert( t.intersect( o, d, true, false ) !== false );
+            assert( t.intersect( o, d, false, false ) !== false );
+        });
+        it('should always return false to directions perpendicular to the normal', function() {
+            var t = new Triangle(
+                [ 0, 0, 0 ],
+                [ 2, 0, 0 ],
+                [ 2, 2, 0 ]
+            );
+            var o = [ 0, 0, 0 ];
+            var d = [ 3, 3, 0 ];
+            assert( t.intersect( o, d, true, true ) === false );
+            assert( t.intersect( o, d, true, false ) === false );
+            assert( t.intersect( o, d, false, true ) === false );
+            assert( t.intersect( o, d, false, false ) === false );
+        });
+    });
+
+    describe('#closestPoint()', function() {
+        it('should return the closest point on the triangle to the provided', function() {
+            var t = new Triangle(
+                [ 0, 0, 0 ],
+                [ 2, 0, 0 ],
+                [ 2, 2, 0 ]
+            );
+            assert( t.closestPoint([ 0, 0, 0 ]).equals([ 0, 0, 0 ]) );
+            assert( t.closestPoint([ 3, 0, 0 ]).equals([ 2, 0, 0 ]) );
+            assert( t.closestPoint([ 3, 3, 0 ]).equals([ 2, 2, 0 ]) );
+            t = Triangle.random();
+            var ab = t.b.sub( t.a );
+            var bc = t.c.sub( t.b );
+            var ca = t.a.sub( t.c );
+            var abm = t.a.add( ab.normalize().mult( ab.length() / 2 ) );
+            var bcm = t.b.add( bc.normalize().mult( bc.length() / 2 ) );
+            var cam = t.c.add( ca.normalize().mult( ca.length() / 2 ) );
+            var abp = ab.cross( t.normal() ).normalize();
+            var bcp = bc.cross( t.normal() ).normalize();
+            var cap = ca.cross( t.normal() ).normalize();
+            assert( t.closestPoint( abm.add( abp ) ).equals( abm, EPSILON ) );
+            assert( t.closestPoint( bcm.add( bcp ) ).equals( bcm, EPSILON ) );
+            assert( t.closestPoint( cam.add( cap ) ).equals( cam, EPSILON ) );
         });
     });
 
@@ -113,8 +291,6 @@ describe('Triangle', function() {
                 t = new Triangle([ a, b, c ]);
             assert( Math.abs( radius - t.radius() ) < EPSILON );
         });
-        it('should cache the radius if the triangle positions are unchanged', function() {
-        });
     });
 
     describe('#centroid()', function() {
@@ -125,8 +301,6 @@ describe('Triangle', function() {
                 t = new Triangle([ a, b, c ]),
                 centroid = a.add( b ).add( c ).div( 3 );
             assert( centroid.equals( t.centroid() ) );
-        });
-        it('should cache the centroid if the triangle positions are unchanged', function() {
         });
     });
 

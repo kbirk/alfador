@@ -2,8 +2,7 @@
 
     "use strict";
 
-    var Vec3 = require( './Vec3' ),
-        Vec4 = require( './Vec4' );
+    var Vec3 = require( './Vec3' );
 
     /**
      * Instantiates a Mat33 object.
