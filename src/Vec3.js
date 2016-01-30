@@ -202,7 +202,21 @@
     };
 
     /**
-     * Returns the unsigned angle between this angle and the argument in radians.
+     * Given a plane normal, returns the projection of the vector onto the plane.
+     * @memberof Vec3
+     *
+     * @param {Vec3|Vec4|Array} normal - The plane normal.
+     *
+     * @returns {number} The unsigned angle in radians.
+     */
+    Vec3.prototype.projectOntoPlane =  function( n ) {
+        var dist = this.dot( n );
+        return this.sub( n.mult( dist ) );
+    };
+
+    /**
+     * Returns the unsigned angle between this angle and the argument, projected
+     * onto a plane, in radians.
      * @memberof Vec3
      *
      * @param {Vec3|Vec4|Array} that - The vector to measure the angle from.
@@ -213,16 +227,20 @@
      * @returns {number} The unsigned angle in radians.
      */
     Vec3.prototype.unsignedAngleRadians = function( that, normal ) {
-        var a = this.normalize();
-        var b = new Vec3( that ).normalize();
-        var dot = a.dot( b );
-        var ndot = Math.max( -1, Math.min( 1, dot ) );
-        var angle = Math.acos( ndot );
+        var a = this;
+        var b = new Vec3( that );
         var cross = a.cross( b );
         var n = new Vec3( normal || cross );
+        var pa = a.projectOntoPlane( n ).normalize();
+        var pb = b.projectOntoPlane( n ).normalize();
+        var dot = pa.dot( pb );
+        var ndot = Math.max( -1, Math.min( 1, dot ) );
 
-        //var cross = this.cross( that );
-        //var angle = Math.atan2( cross.length(), this.dot( that ) );
+        // faster, less robuest
+        var angle = Math.acos( ndot );
+
+        // slower, but more robust
+        //var angle = Math.atan2( pa.cross( pb ).length(), dot );
 
         if ( n.dot( cross ) < 0 ) {
             if ( angle >= Math.PI * 0.5 ) {
@@ -235,7 +253,8 @@
     };
 
     /**
-     * Returns the unsigned angle between this angle and the argument in degrees.
+     * Returns the unsigned angle between this angle and the argument, projected
+     * onto a plane, in degrees.
      * @memberof Vec3
      *
      * @param {Vec3|Vec4|Array} that - The vector to measure the angle from.
