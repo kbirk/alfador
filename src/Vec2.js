@@ -1,6 +1,6 @@
 (function() {
 
-    "use strict";
+    'use strict';
 
     /**
      * Instantiates a Vec2 object.
@@ -240,7 +240,7 @@
      * @returns {String} The string representation of the vector.
      */
     Vec2.prototype.toString = function() {
-        return this.x + ", " + this.y;
+        return this.x + ', ' + this.y;
     };
 
     /**

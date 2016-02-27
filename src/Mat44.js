@@ -1,6 +1,6 @@
 (function() {
 
-    "use strict";
+    'use strict';
 
     var Vec3 = require( './Vec3' ),
         Vec4 = require( './Vec4' ),
@@ -91,7 +91,7 @@
      * @returns {Mat44} The scale matrix.
      */
     Mat44.scale = function( scale ) {
-        if ( typeof scale === "number" ) {
+        if ( typeof scale === 'number' ) {
             return new Mat44([
                 scale, 0, 0, 0,
                 0, scale, 0, 0,
@@ -335,7 +335,7 @@
      * @returns {Mat44|Vec4} The resulting product.
      */
     Mat44.prototype.mult = function( that ) {
-        if ( typeof that === "number" ) {
+        if ( typeof that === 'number' ) {
             // scalar
             return this.multScalar( that );
         } else if ( that instanceof Array ) {
@@ -632,10 +632,10 @@
      * @returns {String} The string representation of the matrix.
      */
     Mat44.prototype.toString = function() {
-        return this.data[0] +", "+ this.data[4] +", "+ this.data[8] +", "+ this.data[12] +",\n" +
-            this.data[1] +", "+ this.data[5] +", "+ this.data[9] +", "+ this.data[13] +",\n" +
-            this.data[2] +", "+ this.data[6] +", "+ this.data[10] +", "+ this.data[14] +",\n" +
-            this.data[3] +", "+ this.data[7] +", "+ this.data[11] +", "+ this.data[15];
+        return this.data[0] +', '+ this.data[4] +', '+ this.data[8] +', '+ this.data[12] +',\n' +
+            this.data[1] +', '+ this.data[5] +', '+ this.data[9] +', '+ this.data[13] +',\n' +
+            this.data[2] +', '+ this.data[6] +', '+ this.data[10] +', '+ this.data[14] +',\n' +
+            this.data[3] +', '+ this.data[7] +', '+ this.data[11] +', '+ this.data[15];
     };
 
     /**

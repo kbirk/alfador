@@ -1,6 +1,6 @@
 (function() {
 
-    "use strict";
+    'use strict';
 
     /**
      * Instantiates a Vec3 object.
@@ -285,7 +285,7 @@
      * @returns {String} The string representation of the vector.
      */
     Vec3.prototype.toString = function() {
-        return this.x + ", " + this.y + ", " + this.z;
+        return this.x + ', ' + this.y + ', ' + this.z;
     };
 
     /**

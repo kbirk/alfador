@@ -1,6 +1,6 @@
 (function() {
 
-    "use strict";
+    'use strict';
 
     var Vec3 = require( './Vec3' );
 
@@ -20,7 +20,8 @@
                     this.data = [
                         that.data[0], that.data[1], that.data[2],
                         that.data[4], that.data[5], that.data[6],
-                        that.data[8], that.data[9], that.data[10] ];
+                        that.data[8], that.data[9], that.data[10]
+                    ];
                 }
             } else if ( that.length === 9 ) {
                 // copy array by value, use prototype to cast array buffers
@@ -70,9 +71,11 @@
      * @returns {Mat33} The identiy matrix.
      */
     Mat33.identity = function() {
-        return new Mat33([ 1, 0, 0,
+        return new Mat33([
+            1, 0, 0,
             0, 1, 0,
-            0, 0, 1 ]);
+            0, 0, 1
+        ]);
     };
 
     /**
@@ -84,21 +87,24 @@
      * @returns {Mat33} The scale matrix.
      */
     Mat33.scale = function( scale ) {
-        if ( typeof scale === "number" ) {
+        if ( typeof scale === 'number' ) {
             return new Mat33([
                 scale, 0, 0,
                 0, scale, 0,
-                0, 0, scale ]);
+                0, 0, scale
+            ]);
         } else if ( scale instanceof Array ) {
             return new Mat33([
                 scale[0], 0, 0,
                 0, scale[1], 0,
-                0, 0, scale[2] ]);
+                0, 0, scale[2]
+            ]);
         }
         return new Mat33([
             scale.x, 0, 0,
             0, scale.y, 0,
-            0, 0, scale.z ]);
+            0, 0, scale.z
+        ]);
     };
 
     /**
@@ -188,7 +194,7 @@
             ux, uz,
             c1, c2, c3;
         if ( f > ( 1.0-EPSILON ) ) {
-            // "from" and "to" almost parallel
+            // 'from' and 'to' almost parallel
             // nearly orthogonal
             fx = Math.abs( from.x );
             fy = Math.abs( from.y );
@@ -225,7 +231,7 @@
             that.data[4] += 1.0;
             that.data[8] += 1.0;
         } else {
-            // the most common case, unless "from"="to", or "to"=-"from"
+            // the most common case, unless 'from'='to', or 'to'=-'from'
             v = from.cross( to );
             u = 1.0 / ( 1.0 + e );    // optimization by Gottfried Chen
             ux = u * v.x;
@@ -355,7 +361,7 @@
      * @returns {Mat33|Vec3} The resulting product.
      */
     Mat33.prototype.mult = function( that ) {
-        if ( typeof that === "number" ) {
+        if ( typeof that === 'number' ) {
             // scalar
             return this.multScalar( that );
         } else if ( that instanceof Array ) {
@@ -501,9 +507,9 @@
      * @returns {String} The string representation of the matrix.
      */
     Mat33.prototype.toString = function() {
-        return this.data[0] +", "+ this.data[3] +", "+ this.data[6] +",\n" +
-            this.data[1] +", "+ this.data[4] +", "+ this.data[7] +",\n" +
-            this.data[2] +", "+ this.data[5] +", "+ this.data[8];
+        return this.data[0] +', '+ this.data[3] +', '+ this.data[6] +',\n' +
+            this.data[1] +', '+ this.data[4] +', '+ this.data[7] +',\n' +
+            this.data[2] +', '+ this.data[5] +', '+ this.data[8];
     };
 
     /**

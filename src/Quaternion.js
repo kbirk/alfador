@@ -1,6 +1,6 @@
 (function() {
 
-    "use strict";
+    'use strict';
 
     var Vec3 = require('./Vec3'),
         Mat33 = require('./Mat33');
@@ -291,7 +291,7 @@
      * @returns {String} The string representation of the quaternion.
      */
     Quaternion.prototype.toString = function() {
-        return this.x + ", " + this.y + ", " + this.z + ", " + this.w;
+        return this.x + ', ' + this.y + ', ' + this.z + ', ' + this.w;
     };
 
     /**

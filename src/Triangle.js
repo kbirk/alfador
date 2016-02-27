@@ -1,6 +1,6 @@
 (function () {
 
-    "use strict";
+    'use strict';
 
     var Vec3 = require('./Vec3');
 
@@ -247,8 +247,8 @@
      * @returns {String} The string representation of the vector.
      */
     Triangle.prototype.toString = function() {
-        return this.a.toString() + ", " +
-            this.b.toString() + ", " +
+        return this.a.toString() + ', ' +
+            this.b.toString() + ', ' +
             this.c.toString();
     };
 

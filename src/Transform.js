@@ -1,6 +1,6 @@
 (function() {
 
-    "use strict";
+    'use strict';
 
     var Vec3 = require( './Vec3' ),
         Mat33 = require( './Mat33' ),
@@ -165,7 +165,7 @@
      */
     Transform.prototype.scale = function( scale ) {
         if ( scale ) {
-            if ( typeof scale === "number" ) {
+            if ( typeof scale === 'number' ) {
                 this._scale = new Vec3( scale, scale, scale );
             } else {
                 this._scale = new Vec3( scale );
