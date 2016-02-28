@@ -2,6 +2,8 @@
 
     'use strict';
 
+    var EPSILON = require('./Epsilon');
+
     /**
      * Instantiates a Vec3 object.
      * @class Vec3
@@ -28,7 +30,6 @@
                 this.z = 0.0;
                 break;
         }
-        return this;
     }
 
     /**
@@ -149,7 +150,12 @@
      */
     Vec3.prototype.length = function( length ) {
         if ( length === undefined ) {
-            return Math.sqrt( this.dot( this ) );
+            var len = this.dot( this );
+            if ( Math.abs( len - 1.0 ) < EPSILON ) {
+                return len;
+            } else {
+                return Math.sqrt( len );
+            }
         }
         return this.normalize().mult( length );
     };
@@ -234,13 +240,13 @@
         var pa = a.projectOntoPlane( n ).normalize();
         var pb = b.projectOntoPlane( n ).normalize();
         var dot = pa.dot( pb );
-        var ndot = Math.max( -1, Math.min( 1, dot ) );
 
         // faster, less robuest
-        var angle = Math.acos( ndot );
+        //var ndot = Math.max( -1, Math.min( 1, dot ) );
+        //var angle = Math.acos( ndot );
 
         // slower, but more robust
-        //var angle = Math.atan2( pa.cross( pb ).length(), dot );
+        var angle = Math.atan2( pa.cross( pb ).length(), dot );
 
         if ( n.dot( cross ) < 0 ) {
             if ( angle >= Math.PI * 0.5 ) {

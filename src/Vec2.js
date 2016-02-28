@@ -2,6 +2,8 @@
 
     'use strict';
 
+    var EPSILON = require('./Epsilon');
+
     /**
      * Instantiates a Vec2 object.
      * @class Vec2
@@ -25,7 +27,6 @@
                 this.y = 0;
                 break;
         }
-        return this;
     }
 
     /**
@@ -142,7 +143,12 @@
      */
     Vec2.prototype.length = function( length ) {
         if ( length === undefined ) {
-            return Math.sqrt( this.dot( this ) );
+            var len = this.dot( this );
+            if ( Math.abs( len - 1.0 ) < EPSILON ) {
+                return len;
+            } else {
+                return Math.sqrt( len );
+            }
         }
         return this.normalize().mult( length );
     };
