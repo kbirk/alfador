@@ -2,12 +2,12 @@
 
     'use strict';
 
-    var EPSILON = 0.000001,
-        assert = require( 'assert' ),
-        Mat33 = require( '../src/Mat33' ),
-        Mat44 = require( '../src/Mat44' ),
-        Vec3 = require( '../src/Vec3' ),
-        Transform = require( '../src/Transform' );
+    var assert = require('assert');
+    var Mat33 = require('../src/Mat33');
+    var Mat44 = require('../src/Mat44');
+    var Vec3 = require('../src/Vec3');
+    var Transform = require('../src/Transform');
+    var EPSILON = require('../src/Epsilon');
 
     describe('Transform', function() {
 

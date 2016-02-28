@@ -2,11 +2,11 @@
 
     'use strict';
 
-    var EPSILON = 0.00001,
-        assert = require( 'assert' ),
-        Vec2 = require( '../src/Vec2' ),
-        Vec3 = require( '../src/Vec3' ),
-        Vec4 = require( '../src/Vec4' );
+    var assert = require('assert');
+    var Vec2 = require('../src/Vec2');
+    var Vec3 = require('../src/Vec3');
+    var Vec4 = require('../src/Vec4');
+    var EPSILON = require('../src/Epsilon');
 
     describe('Vec4', function() {
 

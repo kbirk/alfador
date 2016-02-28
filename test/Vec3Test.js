@@ -2,12 +2,12 @@
 
     'use strict';
 
-    var EPSILON = 0.00001,
-        assert = require( 'assert' ),
-        Vec2 = require( '../src/Vec2' ),
-        Vec3 = require( '../src/Vec3' ),
-        Vec4 = require( '../src/Vec4' ),
-        Mat33 = require( '../src/Mat33' );
+    var assert = require('assert');
+    var Vec2 = require('../src/Vec2');
+    var Vec3 = require('../src/Vec3');
+    var Vec4 = require('../src/Vec4');
+    var Mat33 = require('../src/Mat33');
+    var EPSILON = require('../src/Epsilon');
 
     describe('Vec3', function() {
 
@@ -193,7 +193,7 @@
                     r = Math.random(),
                     v1 = new Vec3( r, 0, 0 ),
                     v2 = Vec3.random().normalize();
-                assert.equal( v0.length() - 1.73205 < EPSILON , true );
+                assert.equal( v0.length() - Math.sqrt(3) < EPSILON , true );
                 assert.equal( v1.length() - r < EPSILON , true );
                 assert.equal( v2.length() - 1.0 < EPSILON, true );
             });

@@ -2,13 +2,13 @@
 
     'use strict';
 
-    var EPSILON = 0.00001,
-        assert = require( 'assert' ),
-        Mat33 = require( '../src/Mat33' ),
-        Mat44 = require( '../src/Mat44' ),
-        Vec3 = require( '../src/Vec3' ),
-        Vec4 = require( '../src/Vec4' ),
-        Transform = require( '../src/Transform' );
+    var assert = require('assert');
+    var Mat33 = require('../src/Mat33');
+    var Mat44 = require('../src/Mat44');
+    var Vec3 = require('../src/Vec3');
+    var Vec4 = require('../src/Vec4');
+    var Transform = require('../src/Transform');
+    var EPSILON = require('../src/Epsilon');
 
     describe('Mat33', function() {
 
@@ -93,6 +93,15 @@
         });
 
         describe('#row()', function() {
+            it('should set the corresponding zero based row to the provided vector', function() {
+                var p = Mat33.random();
+                var t0 = Vec3.random();
+                var t1 = Vec3.random();
+                var t2 = Vec3.random();
+                assert.equal( p.row(0, t0).row(0).equals( t0 ), true );
+                assert.equal( p.row(0, t1).row(0).equals( t1 ), true );
+                assert.equal( p.row(0, t2).row(0).equals( t2 ), true );
+            });
             it('should return a the corresponding row, by zero based index', function() {
                 var p = Mat33.random();
                 assert.equal( p.row(0).equals( new Vec3( p.data[0], p.data[3], p.data[6] ) ), true );
@@ -102,6 +111,15 @@
         });
 
         describe('#col()', function() {
+            it('should set the corresponding zero based column to the provided vector', function() {
+                var p = Mat33.random();
+                var t0 = Vec3.random();
+                var t1 = Vec3.random();
+                var t2 = Vec3.random();
+                assert.equal( p.col(0, t0).col(0).equals( t0 ), true );
+                assert.equal( p.col(0, t1).col(0).equals( t1 ), true );
+                assert.equal( p.col(0, t2).col(0).equals( t2 ), true );
+            });
             it('should return a the corresponding column, by zero based index', function() {
                 var p = Mat33.random();
                 assert.equal( p.col(0).equals( new Vec3( p.data[0], p.data[1], p.data[2] ) ), true );
@@ -267,7 +285,7 @@
             it('should return an identity matrix if given a zero vector as an axis', function() {
                 var axis = new Vec3( 0, 0, 0 ),
                     angle = Math.random();
-                assert.equal( Mat33.rotationDegrees( angle, axis ).equals( Mat33() ), true );
+                assert.equal( Mat33.rotationDegrees( angle, axis ).equals( new Mat33() ), true );
             });
         });
 
@@ -290,7 +308,7 @@
             it('should return an identity matrix if given a zero vector as an axis', function() {
                 var axis = new Vec3( 0, 0, 0 ),
                     angle = Math.random();
-                assert.equal( Mat33.rotationRadians( angle, axis ).equals( Mat33() ), true );
+                assert.equal( Mat33.rotationRadians( angle, axis ).equals( new Mat33() ), true );
             });
         });
 
@@ -309,16 +327,16 @@
                 assert.equal( rs.equals( s, EPSILON ), true );
                 assert.equal( sr.equals( r, EPSILON ), true );
 
-                other = Mat33.rotationDegrees( 0.0001, v ).mult( ca ).normalize();
+                other = Mat33.rotationDegrees( EPSILON, v ).mult( ca ).normalize();
                 assert.equal( Mat33.rotationFromTo( ca, other ).mult( ca ).equals( other, EPSILON ), true );
 
-                other = Mat33.rotationDegrees( 0.0001, v ).mult( cb ).normalize();
+                other = Mat33.rotationDegrees( EPSILON, v ).mult( cb ).normalize();
                 assert.equal( Mat33.rotationFromTo( cb, other ).mult( cb ).equals( other, EPSILON ), true );
 
-                other = Mat33.rotationDegrees( 0.0001, v ).mult( cc ).normalize();
+                other = Mat33.rotationDegrees( EPSILON, v ).mult( cc ).normalize();
                 assert.equal( Mat33.rotationFromTo( cc, other ).mult( cc ).equals( other, EPSILON ), true );
 
-                other = Mat33.rotationDegrees( 0.0001, v ).mult( cd ).normalize();
+                other = Mat33.rotationDegrees( EPSILON, v ).mult( cd ).normalize();
                 assert.equal( Mat33.rotationFromTo( cd, other ).mult( cd ).equals( other, EPSILON ), true );
             });
         });

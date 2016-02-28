@@ -2,9 +2,9 @@
 
     'use strict';
 
-    var Vec3 = require( './Vec3' ),
-        Mat33 = require( './Mat33' ),
-        Mat44 = require( './Mat44' );
+    var Vec3 = require('./Vec3');
+    var Mat33 = require('./Mat33');
+    var Mat44 = require('./Mat44');
 
     /**
      * Instantiates a Transform object.
@@ -40,7 +40,6 @@
             this.origin( that.origin || new Vec3( 0, 0, 0 ) );
             this.scale( that.scale || new Vec3( 1, 1, 1 ) );
         }
-        return this;
     }
 
     /**

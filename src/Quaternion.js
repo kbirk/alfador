@@ -40,7 +40,6 @@
                 this.z = 0;
                 break;
         }
-        return this;
     }
 
     /**

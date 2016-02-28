@@ -2,7 +2,8 @@
 
     'use strict';
 
-    var Vec3 = require( './Vec3' );
+    var Vec3 = require('./Vec3');
+    var EPSILON = require('./Epsilon');
 
     /**
      * Instantiates a Mat33 object.
@@ -24,25 +25,43 @@
                     ];
                 }
             } else if ( that.length === 9 ) {
-                // copy array by value, use prototype to cast array buffers
+                // copy array by value
+                // NOTE: use prototype to cast array buffers
                 this.data = Array.prototype.slice.call( that );
             } else {
-                return Mat33.identity();
+                // default to identity
+                this.data = [
+                    1, 0, 0,
+                    0, 1, 0,
+                    0, 0, 1
+                ];
             }
         } else {
-            return Mat33.identity();
+            // default to identity
+            this.data = [
+                1, 0, 0,
+                0, 1, 0,
+                0, 0, 1
+            ];
         }
     }
 
     /**
-     * Returns a column of the matrix as a Vec3 object.
+     * Returns a row of the matrix as a Vec3 object.
      * @memberof Mat33
      *
-     * @param {number} index - The 0-based column index.
+     * @param {number} index - The 0-based row index.
+     * @param {Vec3||Array} vec - The vector to replace the row. Optional.
      *
-     * @returns {Vec3} The column vector.
+     * @returns {Vec3} The row vector.
      */
-    Mat33.prototype.row = function( index ) {
+    Mat33.prototype.row = function( index, vec ) {
+        if ( vec ) {
+            this.data[0+index] = vec[0] || vec.x;
+            this.data[3+index] = vec[1] || vec.y;
+            this.data[6+index] = vec[2] || vec.z;
+            return this;
+        }
         return new Vec3(
             this.data[0+index],
             this.data[3+index],
@@ -50,14 +69,21 @@
     };
 
     /**
-     * Returns a row of the matrix as a Vec3 object.
+     * Returns a column of the matrix as a Vec3 object.
      * @memberof Mat33
      *
-     * @param {number} index - The 0-based row index.
+     * @param {number} index - The 0-based col index.
+     * @param {Vec3||Array} vec - The vector to replace the col. Optional.
      *
      * @returns {Vec3} The column vector.
      */
-    Mat33.prototype.col = function( index ) {
+    Mat33.prototype.col = function( index, vec ) {
+        if ( vec ) {
+            this.data[0+index*3] = vec[0] || vec.x;
+            this.data[1+index*3] = vec[1] || vec.y;
+            this.data[2+index*3] = vec[2] || vec.z;
+            return this;
+        }
         return new Vec3(
             this.data[0+index*3],
             this.data[1+index*3],
@@ -172,19 +198,13 @@
      * @returns {Mat33} The matrix representing the rotation.
      */
     Mat33.rotationFromTo = function( fromVec, toVec ) {
-        /*Builds the rotation matrix that rotates one vector into another.
-
-        The generated rotation matrix will rotate the vector from into
-        the Vector3<var> to. from and to must be unit Vector3<var>s!
-
+        /*
         This method is based on the code from:
-
-        Tomas Mller, John Hughes
-        Efficiently Building a Matrix to Rotate One Vector to Another
-        Journal of Graphics Tools, 4(4):1-4, 1999
+            Tomas Mller, John Hughes
+            Efficiently Building a Matrix to Rotate One Vector to Another
+            Journal of Graphics Tools, 4(4):1-4, 1999
         */
-        var EPSILON = 0.000001,
-            from = new Vec3( fromVec ).normalize(),
+        var from = new Vec3( fromVec ).normalize(),
             to = new Vec3( toVec ).normalize(),
             e = from.dot( to ),
             f = Math.abs( e ),
@@ -193,20 +213,20 @@
             fx, fy, fz,
             ux, uz,
             c1, c2, c3;
-        if ( f > ( 1.0-EPSILON ) ) {
+        if ( f > 1.0 - EPSILON ) {
             // 'from' and 'to' almost parallel
             // nearly orthogonal
             fx = Math.abs( from.x );
             fy = Math.abs( from.y );
             fz = Math.abs( from.z );
-            if (fx < fy) {
-                if (fx<fz) {
+            if ( fx < fy ) {
+                if ( fx < fz ) {
                     x = new Vec3( 1, 0, 0 );
                 } else {
                     x = new Vec3( 0, 0, 1 );
                 }
             } else {
-                if (fy < fz) {
+                if ( fy < fz ) {
                     x = new Vec3( 0, 1, 0 );
                 } else {
                     x = new Vec3( 0, 0, 1 );

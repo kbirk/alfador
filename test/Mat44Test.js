@@ -2,13 +2,13 @@
 
     'use strict';
 
-    var EPSILON = 0.00001,
-        assert = require( 'assert' ),
-        Mat33 = require( '../src/Mat33' ),
-        Mat44 = require( '../src/Mat44' ),
-        Vec3 = require( '../src/Vec3' ),
-        Vec4 = require( '../src/Vec4' ),
-        Transform = require( '../src/Transform' );
+    var assert = require('assert');
+    var Mat33 = require('../src/Mat33');
+    var Mat44 = require('../src/Mat44');
+    var Vec3 = require('../src/Vec3');
+    var Vec4 = require('../src/Vec4');
+    var Transform = require('../src/Transform');
+    var EPSILON = require('../src/Epsilon');
 
     describe('Mat44', function() {
 
@@ -98,6 +98,17 @@
         });
 
         describe('#row()', function() {
+            it('should set the corresponding zero based row to the provided vector', function() {
+                var p = Mat44.random();
+                var t0 = Vec4.random();
+                var t1 = Vec4.random();
+                var t2 = Vec4.random();
+                var t3 = Vec4.random();
+                assert.equal( p.row(0, t0).row(0).equals( t0 ), true );
+                assert.equal( p.row(1, t1).row(1).equals( t1 ), true );
+                assert.equal( p.row(2, t2).row(2).equals( t2 ), true );
+                assert.equal( p.row(3, t3).row(3).equals( t3 ), true );
+            });
             it('should return a the corresponding row, by zero based index', function() {
                 var p = Mat44.random();
                 assert.equal( p.row(0).equals( new Vec4( p.data[0], p.data[4], p.data[8], p.data[12] ) ), true );
@@ -108,6 +119,17 @@
         });
 
         describe('#col()', function() {
+            it('should set the corresponding zero based row to the provided vector', function() {
+                var p = Mat44.random();
+                var t0 = Vec4.random();
+                var t1 = Vec4.random();
+                var t2 = Vec4.random();
+                var t3 = Vec4.random();
+                assert.equal( p.col(0, t0).col(0).equals( t0 ), true );
+                assert.equal( p.col(1, t1).col(1).equals( t1 ), true );
+                assert.equal( p.col(2, t2).col(2).equals( t2 ), true );
+                assert.equal( p.col(3, t3).col(3).equals( t3 ), true );
+            });
             it('should return a the corresponding column, by zero based index', function() {
                 var p = Mat44.random();
                 assert.equal( p.col(0).equals( new Vec4( p.data[0], p.data[1], p.data[2], p.data[3] ) ), true );
@@ -302,7 +324,7 @@
             it('should return an identity matrix if given a zero vector as an axis', function() {
                 var axis = new Vec3( 0, 0, 0 ),
                     angle = Math.random();
-                assert.equal( Mat44.rotationRadians( angle, axis ).equals( Mat44() ), true );
+                assert.equal( Mat44.rotationRadians( angle, axis ).equals( new Mat44() ), true );
             });
         });
 
@@ -325,7 +347,7 @@
             it('should return an identity matrix if given a zero vector as an axis', function() {
                 var axis = new Vec3( 0, 0, 0 ),
                     angle = Math.random();
-                assert.equal( Mat44.rotationRadians( angle, axis ).equals( Mat44() ), true );
+                assert.equal( Mat44.rotationRadians( angle, axis ).equals( new Mat44() ), true );
             });
         });
 

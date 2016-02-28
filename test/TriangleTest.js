@@ -2,40 +2,12 @@
 
     'use strict';
 
-    var EPSILON = 0.00001,
-        assert = require( 'assert' ),
-        Vec3 = require( '../src/Vec3' ),
-        Triangle = require( '../src/Triangle' );
-
-    var _log, _warn, _error;
-
-    function muteConsole() {
-        _log = console.log;
-        _warn = console.warn;
-        _error = console.error;
-        console.log = function() {};
-        console.warn = function() {};
-        console.error = function() {};
-    }
-
-    function unmuteConsole() {
-        console.log = _log;
-        console.warn = _warn;
-        console.error = _error;
-        _log = null;
-        _warn= null;
-        _error = null;
-    }
+    var assert = require('assert');
+    var Vec3 = require('../src/Vec3');
+    var Triangle = require('../src/Triangle');
+    var EPSILON = require('../src/Epsilon');
 
     describe('Triangle', function() {
-
-        beforeEach( function() {
-            muteConsole();
-        });
-
-        afterEach( function() {
-            unmuteConsole();
-        });
 
         describe('#equals()', function() {
             it('should return false if any components do not match', function() {

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    var Vec3 = require( './Vec3' ),
-        Vec4 = require( './Vec4' ),
-        Mat33 = require( './Mat33' );
+    var Vec3 = require('./Vec3'),
+        Vec4 = require('./Vec4'),
+        Mat33 = require('./Mat33');
 
     /**
      * Instantiates a Mat44 object.
@@ -23,28 +23,50 @@
                         that.data[0], that.data[1], that.data[2], 0,
                         that.data[3], that.data[4], that.data[5], 0,
                         that.data[6], that.data[7], that.data[8], 0,
-                        0, 0, 0, 1 ];
+                        0, 0, 0, 1
+                    ];
                 }
             } else if ( that.length === 16 ) {
-                 // copy array by value, use prototype to cast array buffers
+                // copy array by value
+                // NOTE: use prototype to cast array buffers
                 this.data = Array.prototype.slice.call( that );
             } else {
-                return Mat44.identity();
+                // default to identity
+                this.data = [
+                    1, 0, 0, 0,
+                    0, 1, 0, 0,
+                    0, 0, 1, 0,
+                    0, 0, 0, 1
+                ];
             }
         } else {
-            return Mat44.identity();
+            // default to identity
+            this.data = [
+                1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1
+            ];
         }
     }
 
     /**
-     * Returns a column of the matrix as a Vec4 object.
+     * Returns a row of the matrix as a Vec4 object.
      * @memberof Mat44
      *
-     * @param {number} index - The 0-based column index.
+     * @param {number} index - The 0-based row index.
+     * @param {Vec3||Array} vec - The vector to replace the row. Optional.
      *
-     * @returns {Vec4} The column vector.
+     * @returns {Vec4} The row vector.
      */
-    Mat44.prototype.row = function( index ) {
+    Mat44.prototype.row = function( index, vec ) {
+        if ( vec ) {
+            this.data[0+index] = vec[0] || vec.x;
+            this.data[4+index] = vec[1] || vec.y;
+            this.data[8+index] = vec[2] || vec.z;
+            this.data[12+index] = vec[3] || vec.w;
+            return this;
+        }
         return new Vec4(
             this.data[0+index],
             this.data[4+index],
@@ -53,14 +75,22 @@
     };
 
     /**
-     * Returns a row of the matrix as a Vec4 object.
+     * Returns a column of the matrix as a Vec4 object.
      * @memberof Mat44
      *
-     * @param {number} index - The 0-based row index.
+     * @param {number} index - The 0-based col index.
+     * @param {Vec3||Array} vec - The vector to replace the col. Optional.
      *
      * @returns {Vec4} The column vector.
      */
-    Mat44.prototype.col = function( index ) {
+    Mat44.prototype.col = function( index, vec ) {
+        if ( vec ) {
+            this.data[0+index*4] = vec[0] || vec.x;
+            this.data[1+index*4] = vec[1] || vec.y;
+            this.data[2+index*4] = vec[2] || vec.z;
+            this.data[3+index*4] = vec[3] || vec.w;
+            return this;
+        }
         return new Vec4(
             this.data[0+index*4],
             this.data[1+index*4],
@@ -79,7 +109,8 @@
             1, 0, 0, 0,
             0, 1, 0, 0,
             0, 0, 1, 0,
-            0, 0, 0, 1 ]);
+            0, 0, 0, 1
+        ]);
     };
 
     /**

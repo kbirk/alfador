@@ -2,11 +2,11 @@
 
     'use strict';
 
-    var EPSILON = 0.00001,
-        assert = require( 'assert' ),
-        Mat33 = require( '../src/Mat33' ),
-        Vec3 = require( '../src/Vec3' ),
-        Quaternion = require( '../src/Quaternion' );
+    var assert = require('assert');
+    var Mat33 = require('../src/Mat33');
+    var Vec3 = require('../src/Vec3');
+    var Quaternion = require('../src/Quaternion');
+    var EPSILON = require('../src/Epsilon');
 
     describe('Quaternion', function() {
 
@@ -132,7 +132,7 @@
             it('should return an identity matrix if given a zero vector as an axis', function() {
                 var axis = new Vec3( 0, 0, 0 ),
                     angle = Math.random();
-                assert.equal( Mat33.rotationDegrees( angle, axis ).equals( Mat33() ), true );
+                assert.equal( Mat33.rotationDegrees( angle, axis ).equals( new Mat33() ), true );
             });
             it('should accept an Array as axis argument', function() {
                 var up = [ 0, 1, 0 ],
@@ -170,7 +170,7 @@
             it('should return an identity matrix if given a zero vector as an axis', function() {
                 var axis = new Vec3( 0, 0, 0 ),
                     angle = Math.random();
-                assert.equal( Mat33.rotationRadians( angle, axis ).equals( Mat33() ), true );
+                assert.equal( Mat33.rotationRadians( angle, axis ).equals( new Mat33() ), true );
             });
             it('should accept an Array as axis argument', function() {
                 var up = [ 0, 1, 0 ],
