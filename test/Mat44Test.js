@@ -65,35 +65,15 @@
                     q = new Mat44( p );
                 assert.equal( p.equals( q ), true );
             });
-            it('should return a filled deep copy when supplied another Mat33', function() {
-                var p = Mat33.random(),
-                    q = new Mat44( p ),
-                    r = new Mat44([
-                        p.data[0], p.data[1], p.data[2], 0,
-                        p.data[3], p.data[4], p.data[5], 0,
-                        p.data[6], p.data[7], p.data[8], 0,
-                        0, 0, 0, 1 ]);
-                assert.equal( q.equals( r ), true );
-            });
-            it('should return a Mat44 from an array of length 9', function() {
+            it('should return a Mat44 from an array of length 16', function() {
                 var p = new Mat44( [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16 ] ),
                     q = new Mat44( p );
                 assert.equal( p.equals( q ), true );
             });
-            it('should return an identity matrix when given invalid input', function() {
-                var p = new Mat44( NaN, 4 ),
-                    q = new Mat44( {'random':Math.random()} ),
-                    r = new Mat44( {} ),
-                    s = new Mat44( function() {
-                        return false;
-                    }),
-                    t = new Mat44( [2,3,4] ),
+            it('should return an identity matrix when given no input', function() {
+                var p = new Mat44(),
                     identity = Mat44.identity();
                 assert.equal( p.equals( identity ), true );
-                assert.equal( q.equals( identity ), true );
-                assert.equal( r.equals( identity ), true );
-                assert.equal( s.equals( identity ), true );
-                assert.equal( t.equals( identity ), true );
             });
         });
 
@@ -302,7 +282,12 @@
         describe('#identity()', function() {
             it('should return an identity matrix', function() {
                 var p = Mat44.identity(),
-                    q = new Mat44([ 1, 0, 0, 0, 1, 0, 0, 0, 1 ]);
+                    q = new Mat44([
+                        1, 0, 0, 0,
+                        0, 1, 0, 0,
+                        0, 0, 1, 0,
+                        0, 0, 0, 1
+                    ]);
                 assert.equal( p.equals( q ), true );
             });
         });
@@ -348,7 +333,7 @@
 
         describe('#rotationDegrees()', function() {
             it('should return a rotation matrix, rotating counter-clockwise', function() {
-                var up = new Vec3( 0, 1, 0 ),
+                var up =  new Vec3( 0, 1, 0 ),
                     left = new Vec3( 1, 0, 0 ),
                     right = new Vec3( -1, 0, 0 ),
                     forward = new Vec3( 0, 0, 1 ),
@@ -362,16 +347,23 @@
                 assert.equal( v1.equals( up, EPSILON ), true );
                 assert.equal( v2.equals( right, EPSILON ), true );
             });
+            it('should accept both Vec3 and Array types as axis', function() {
+                var r = Math.random(),
+                    v = Vec3.random(),
+                    rot0 = Mat44.rotationDegrees( r, v ),
+                    rot1 = Mat44.rotationDegrees( r, [ v.x, v.y, v.z ] );
+                assert.equal( rot0.equals( rot1, EPSILON ), true );
+            });
             it('should return an identity matrix if given a zero vector as an axis', function() {
                 var axis = new Vec3( 0, 0, 0 ),
                     angle = Math.random();
-                assert.equal( Mat44.rotationRadians( angle, axis ).equals( new Mat44() ), true );
+                assert.equal( Mat44.rotationDegrees( angle, axis ).equals( new Mat44() ), true );
             });
         });
 
         describe('#rotationRadians()', function() {
             it('should return a rotation matrix, rotating counter-clockwise', function() {
-                var up = new Vec3( 0, 1, 0 ),
+                var up =  new Vec3( 0, 1, 0 ),
                     left = new Vec3( 1, 0, 0 ),
                     right = new Vec3( -1, 0, 0 ),
                     forward = new Vec3( 0, 0, 1 ),
@@ -393,15 +385,32 @@
         });
 
         describe('#rotationFromTo()', function() {
-            it('should return a rotation matrix', function() {
+            it('should return a rotation matrix from vector A to B', function() {
                 var r = Vec3.random().normalize(),
-                    s = Vec3.random().normalize(),
-                    p = Mat44.rotationFromTo( r, s ),
-                    q = Mat44.rotationFromTo( s, r ),
-                    a = p.multVec3( r ).normalize(),
-                    b = q.multVec3( s ).normalize();
-                assert.equal( a.equals( s, EPSILON ), true );
-                assert.equal( b.equals( r, EPSILON ), true );
+                    q = Vec3.random().normalize(),
+                    s = [ q.x, q.y, q.z ],
+                    rs = Mat44.rotationFromTo( r, s ).multVec3( r ).normalize(),
+                    sr = Mat44.rotationFromTo( s, r ).multVec3( s ).normalize(),
+                    v = Vec3.random().add( new Vec3( 1, 1, 1) ).normalize(),
+                    ca = new Vec3( 0, 1, 1).normalize(),
+                    cb = new Vec3( 0, 1, 0 ).normalize(),
+                    cc = new Vec3( 1, 0, -1 ).normalize(),
+                    cd = new Vec3( 1, 0, 0 ).normalize(),
+                    other;
+                assert.equal( rs.equals( s, EPSILON ), true );
+                assert.equal( sr.equals( r, EPSILON ), true );
+
+                other = Mat44.rotationDegrees( EPSILON, v ).multVec3( ca ).normalize();
+                assert.equal( Mat44.rotationFromTo( ca, other ).multVec3( ca ).equals( other, EPSILON ), true );
+
+                other = Mat44.rotationDegrees( EPSILON, v ).multVec3( cb ).normalize();
+                assert.equal( Mat44.rotationFromTo( cb, other ).multVec3( cb ).equals( other, EPSILON ), true );
+
+                other = Mat44.rotationDegrees( EPSILON, v ).multVec3( cc ).normalize();
+                assert.equal( Mat44.rotationFromTo( cc, other ).multVec3( cc ).equals( other, EPSILON ), true );
+
+                other = Mat44.rotationDegrees( EPSILON, v ).multVec3( cd ).normalize();
+                assert.equal( Mat44.rotationFromTo( cd, other ).multVec3( cd ).equals( other, EPSILON ), true );
             });
         });
 

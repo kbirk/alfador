@@ -13,8 +13,8 @@
      */
     function Transform( that ) {
         that = that || {};
-        if ( that.data && that.data instanceof Array ) {
-            // Mat33 or Mat44, extract transform components from Mat44
+        if ( that.data instanceof Array ) {
+            // Mat33 or Mat44, extract transform components
             that = that.decompose();
             this.up = that.up;
             this.forward = that.forward;

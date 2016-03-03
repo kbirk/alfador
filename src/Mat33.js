@@ -4,6 +4,11 @@
 
     var Vec3 = require('./Vec3');
     var EPSILON = require('./Epsilon');
+    var IDENTITY = [
+        1, 0, 0,
+        0, 1, 0,
+        0, 0, 1
+    ];
 
     /**
      * Instantiates a Mat33 object.
@@ -11,38 +16,11 @@
      * @classdesc A 3x3 column-major matrix.
      */
     function Mat33( that ) {
-        if ( that ) {
-            if ( that.data instanceof Array ) {
-                if ( that.data.length === 9 ) {
-                    // copy Mat33 data by value
-                    this.data = that.data.slice( 0 );
-                } else {
-                    // copy Mat44 data by value, account for index differences
-                    this.data = [
-                        that.data[0], that.data[1], that.data[2],
-                        that.data[4], that.data[5], that.data[6],
-                        that.data[8], that.data[9], that.data[10]
-                    ];
-                }
-            } else if ( that.length === 9 ) {
-                // copy array by value
-                // NOTE: use prototype to cast array buffers
-                this.data = Array.prototype.slice.call( that );
-            } else {
-                // default to identity
-                this.data = [
-                    1, 0, 0,
-                    0, 1, 0,
-                    0, 0, 1
-                ];
-            }
+        that = that || IDENTITY;
+        if ( that instanceof Array ) {
+            this.data = that.slice( 0 );
         } else {
-            // default to identity
-            this.data = [
-                1, 0, 0,
-                0, 1, 0,
-                0, 0, 1
-            ];
+            this.data = that.data.slice( 0 );
         }
     }
 
@@ -97,11 +75,7 @@
      * @returns {Mat33} The identiy matrix.
      */
     Mat33.identity = function() {
-        return new Mat33([
-            1, 0, 0,
-            0, 1, 0,
-            0, 0, 1
-        ]);
+        return new Mat33( IDENTITY );
     };
 
     /**
@@ -204,15 +178,14 @@
             Efficiently Building a Matrix to Rotate One Vector to Another
             Journal of Graphics Tools, 4(4):1-4, 1999
         */
-        var from = new Vec3( fromVec ).normalize(),
-            to = new Vec3( toVec ).normalize(),
-            e = from.dot( to ),
-            f = Math.abs( e ),
-            that = new Mat33(),
-            x, u, v,
-            fx, fy, fz,
-            ux, uz,
-            c1, c2, c3;
+        var from = new Vec3( fromVec ).normalize();
+        var to = new Vec3( toVec ).normalize();
+        var e = from.dot( to );
+        var f = Math.abs( e );
+        var x, u, v;
+        var fx, fy, fz;
+        var ux, uz;
+        var c1, c2, c3;
         if ( f > 1.0 - EPSILON ) {
             // 'from' and 'to' almost parallel
             // nearly orthogonal
@@ -238,38 +211,37 @@
             c2 = 2.0 / v.dot( v );
             c3 = c1*c2 * u.dot( v );
             // set matrix entries
-            that.data[0] = - c1*u.x*u.x - c2*v.x*v.x + c3*v.x*u.x;
-            that.data[3] = - c1*u.x*u.y - c2*v.x*v.y + c3*v.x*u.y;
-            that.data[6] = - c1*u.x*u.z - c2*v.x*v.z + c3*v.x*u.z;
-            that.data[1] = - c1*u.y*u.x - c2*v.y*v.x + c3*v.y*u.x;
-            that.data[4] = - c1*u.y*u.y - c2*v.y*v.y + c3*v.y*u.y;
-            that.data[7] = - c1*u.y*u.z - c2*v.y*v.z + c3*v.y*u.z;
-            that.data[2] = - c1*u.z*u.x - c2*v.z*v.x + c3*v.z*u.x;
-            that.data[5] = - c1*u.z*u.y - c2*v.z*v.y + c3*v.z*u.y;
-            that.data[8] = - c1*u.z*u.z - c2*v.z*v.z + c3*v.z*u.z;
-            that.data[0] += 1.0;
-            that.data[4] += 1.0;
-            that.data[8] += 1.0;
-        } else {
-            // the most common case, unless 'from'='to', or 'to'=-'from'
-            v = from.cross( to );
-            u = 1.0 / ( 1.0 + e );    // optimization by Gottfried Chen
-            ux = u * v.x;
-            uz = u * v.z;
-            c1 = ux * v.y;
-            c2 = ux * v.z;
-            c3 = uz * v.y;
-            that.data[0] = e + ux * v.x;
-            that.data[3] = c1 - v.z;
-            that.data[6] = c2 + v.y;
-            that.data[1] = c1 + v.z;
-            that.data[4] = e + u * v.y * v.y;
-            that.data[7] = c3 - v.x;
-            that.data[2] = c2 - v.y;
-            that.data[5] = c3 + v.x;
-            that.data[8] = e + uz * v.z;
+            return new Mat33([
+                -c1*u.x*u.x - c2*v.x*v.x + c3*v.x*u.x + 1.0,
+                -c1*u.y*u.x - c2*v.y*v.x + c3*v.y*u.x,
+                -c1*u.z*u.x - c2*v.z*v.x + c3*v.z*u.x,
+                -c1*u.x*u.y - c2*v.x*v.y + c3*v.x*u.y,
+                -c1*u.y*u.y - c2*v.y*v.y + c3*v.y*u.y + 1.0,
+                -c1*u.z*u.y - c2*v.z*v.y + c3*v.z*u.y,
+                -c1*u.x*u.z - c2*v.x*v.z + c3*v.x*u.z,
+                -c1*u.y*u.z - c2*v.y*v.z + c3*v.y*u.z,
+                -c1*u.z*u.z - c2*v.z*v.z + c3*v.z*u.z + 1.0
+            ]);
         }
-        return that;
+        // the most common case, unless 'from'='to', or 'to'=-'from'
+        v = from.cross( to );
+        u = 1.0 / ( 1.0 + e );    // optimization by Gottfried Chen
+        ux = u * v.x;
+        uz = u * v.z;
+        c1 = ux * v.y;
+        c2 = ux * v.z;
+        c3 = uz * v.y;
+        return new Mat33([
+            e + ux * v.x,
+            c1 + v.z,
+            c2 - v.y,
+            c1 - v.z,
+            e + u * v.y * v.y,
+            c3 + v.x,
+            c2 + v.y,
+            c3 - v.x,
+            e + uz * v.z
+        ]);
     };
 
     /**

@@ -61,34 +61,15 @@
                     q = new Mat33( p );
                 assert.equal( p.equals( q ), true );
             });
-            it('should return a truncated deep copy when supplied another Mat44', function() {
-                var p = Mat44.random(),
-                    q = new Mat33( p ),
-                    r = new Mat33([
-                        p.data[0], p.data[1], p.data[2],
-                        p.data[4], p.data[5], p.data[6],
-                        p.data[8], p.data[9], p.data[10] ]);
-                assert.equal( r.equals( q ), true );
-            });
             it('should return a Mat33 from an array of length 9', function() {
                 var p = new Mat33( [1, 2, 3, 4, 5, 6, 7, 8, 9 ] ),
                     q = new Mat33( p );
                 assert.equal( p.equals( q ), true );
             });
-            it('should return an identity matrix when given invalid input', function() {
-                var p = new Mat33( NaN, 4 ),
-                    q = new Mat33( {'random':Math.random()} ),
-                    r = new Mat33( {} ),
-                    s = new Mat33( function() {
-                        return false;
-                    }),
-                    t = new Mat33( [2,3,4] ),
+            it('should return an identity matrix when given no input', function() {
+                var p = new Mat33(),
                     identity = Mat33.identity();
                 assert.equal( p.equals( identity ), true );
-                assert.equal( q.equals( identity ), true );
-                assert.equal( r.equals( identity ), true );
-                assert.equal( s.equals( identity ), true );
-                assert.equal( t.equals( identity ), true );
             });
         });
 
@@ -266,7 +247,11 @@
         describe('#identity()', function() {
             it('should return an identity matrix', function() {
                 var p = Mat33.identity(),
-                    q = new Mat33([ 1, 0, 0, 0, 1, 0, 0, 0, 1 ]);
+                    q = new Mat33([
+                        1, 0, 0,
+                        0, 1, 0,
+                        0, 0, 1
+                    ]);
                 assert.equal( p.equals( q ), true );
             });
         });
@@ -418,8 +403,9 @@
         describe('#decompose', function() {
             it('should return the up, forward, scale, and origin components of the matrix', function() {
                 var m = Mat33.random(),
-                    t = new Transform( m.decompose() );
-                assert.equal( m.equals( new Mat33( t.matrix() ), EPSILON), true );
+                    t = new Transform( m.decompose() ),
+                    t33 = new Mat33().multMat44( t.matrix() );
+                assert.equal( m.equals( t33, EPSILON), true );
             });
         });
 

@@ -2,9 +2,15 @@
 
     'use strict';
 
-    var Vec3 = require('./Vec3'),
-        Vec4 = require('./Vec4'),
-        Mat33 = require('./Mat33');
+    var Vec3 = require('./Vec3');
+    var Vec4 = require('./Vec4');
+    var EPSILON = require('./Epsilon');
+    var IDENTITY = [
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    ];
 
     /**
      * Instantiates a Mat44 object.
@@ -12,41 +18,11 @@
      * @classdesc A 4x4 column-major matrix.
      */
     function Mat44( that ) {
-        if ( that ) {
-            if ( that.data instanceof Array ) {
-                if ( that.data.length === 16 ) {
-                    // copy Mat44 data by value
-                    this.data = that.data.slice( 0 );
-                } else {
-                    // copy Mat33 data by value, account for index differences
-                    this.data = [
-                        that.data[0], that.data[1], that.data[2], 0,
-                        that.data[3], that.data[4], that.data[5], 0,
-                        that.data[6], that.data[7], that.data[8], 0,
-                        0, 0, 0, 1
-                    ];
-                }
-            } else if ( that.length === 16 ) {
-                // copy array by value
-                // NOTE: use prototype to cast array buffers
-                this.data = Array.prototype.slice.call( that );
-            } else {
-                // default to identity
-                this.data = [
-                    1, 0, 0, 0,
-                    0, 1, 0, 0,
-                    0, 0, 1, 0,
-                    0, 0, 0, 1
-                ];
-            }
+        that = that || IDENTITY;
+        if ( that instanceof Array ) {
+            this.data = that.slice( 0 );
         } else {
-            // default to identity
-            this.data = [
-                1, 0, 0, 0,
-                0, 1, 0, 0,
-                0, 0, 1, 0,
-                0, 0, 0, 1
-            ];
+            this.data = that.data.slice( 0 );
         }
     }
 
@@ -105,12 +81,7 @@
      * @returns {Mat44} The identiy matrix.
      */
     Mat44.identity = function() {
-        return new Mat44([
-            1, 0, 0, 0,
-            0, 1, 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1
-        ]);
+        return new Mat44( IDENTITY );
     };
 
     /**
@@ -180,7 +151,7 @@
      * @returns {Mat44} The rotation matrix.
      */
     Mat44.rotationDegrees = function( angle, axis ) {
-        return new Mat44( Mat33.rotationDegrees( angle, axis ) );
+        return this.rotationRadians( angle*Math.PI/180, axis );
     };
 
     /**
@@ -193,7 +164,36 @@
      * @returns {Mat44} The rotation matrix.
      */
     Mat44.rotationRadians = function( angle, axis ) {
-        return new Mat44( Mat33.rotationRadians( angle, axis ) );
+        if ( axis instanceof Array ) {
+            axis = new Vec3( axis );
+        }
+        // zero vector, return identity
+        if ( axis.lengthSquared() === 0 ) {
+            return this.identity();
+        }
+        var normAxis = axis.normalize(),
+            x = normAxis.x,
+            y = normAxis.y,
+            z = normAxis.z,
+            modAngle = ( angle > 0 ) ? angle % (2*Math.PI) : angle % (-2*Math.PI),
+            s = Math.sin( modAngle ),
+            c = Math.cos( modAngle ),
+            xx = x * x,
+            yy = y * y,
+            zz = z * z,
+            xy = x * y,
+            yz = y * z,
+            zx = z * x,
+            xs = x * s,
+            ys = y * s,
+            zs = z * s,
+            one_c = 1.0 - c;
+        return new Mat44([
+            (one_c * xx) + c, (one_c * xy) + zs, (one_c * zx) - ys, 0,
+            (one_c * xy) - zs, (one_c * yy) + c, (one_c * yz) + xs, 0,
+            (one_c * zx) + ys, (one_c * yz) - xs, (one_c * zz) + c, 0,
+            0, 0, 0, 1
+        ]);
     };
 
     /**
@@ -207,7 +207,90 @@
      * @returns {Mat44} The matrix representing the rotation.
      */
     Mat44.rotationFromTo = function( fromVec, toVec ) {
-        return new Mat44( Mat33.rotationFromTo( fromVec, toVec ) );
+        /*
+        This method is based on the code from:
+            Tomas Mller, John Hughes
+            Efficiently Building a Matrix to Rotate One Vector to Another
+            Journal of Graphics Tools, 4(4):1-4, 1999
+        */
+        var from = new Vec3( fromVec ).normalize();
+        var to = new Vec3( toVec ).normalize();
+        var e = from.dot( to );
+        var f = Math.abs( e );
+        var x, u, v;
+        var fx, fy, fz;
+        var ux, uz;
+        var c1, c2, c3;
+        if ( f > 1.0 - EPSILON ) {
+            // 'from' and 'to' almost parallel
+            // nearly orthogonal
+            fx = Math.abs( from.x );
+            fy = Math.abs( from.y );
+            fz = Math.abs( from.z );
+            if ( fx < fy ) {
+                if ( fx < fz ) {
+                    x = new Vec3( 1, 0, 0 );
+                } else {
+                    x = new Vec3( 0, 0, 1 );
+                }
+            } else {
+                if ( fy < fz ) {
+                    x = new Vec3( 0, 1, 0 );
+                } else {
+                    x = new Vec3( 0, 0, 1 );
+                }
+            }
+            u = x.sub( from );
+            v = x.sub( to );
+            c1 = 2.0 / u.dot( u );
+            c2 = 2.0 / v.dot( v );
+            c3 = c1*c2 * u.dot( v );
+            // set matrix entries
+            return new Mat44([
+                -c1*u.x*u.x - c2*v.x*v.x + c3*v.x*u.x + 1.0,
+                -c1*u.y*u.x - c2*v.y*v.x + c3*v.y*u.x,
+                -c1*u.z*u.x - c2*v.z*v.x + c3*v.z*u.x,
+                0.0,
+                -c1*u.x*u.y - c2*v.x*v.y + c3*v.x*u.y,
+                -c1*u.y*u.y - c2*v.y*v.y + c3*v.y*u.y + 1.0,
+                -c1*u.z*u.y - c2*v.z*v.y + c3*v.z*u.y,
+                1.0,
+                -c1*u.x*u.z - c2*v.x*v.z + c3*v.x*u.z,
+                -c1*u.y*u.z - c2*v.y*v.z + c3*v.y*u.z,
+                -c1*u.z*u.z - c2*v.z*v.z + c3*v.z*u.z + 1.0,
+                 0.0,
+                 0.0,
+                 0.0,
+                 0.0,
+                 1.0
+            ]);
+        }
+        // the most common case, unless 'from'='to', or 'to'=-'from'
+        v = from.cross( to );
+        u = 1.0 / ( 1.0 + e );    // optimization by Gottfried Chen
+        ux = u * v.x;
+        uz = u * v.z;
+        c1 = ux * v.y;
+        c2 = ux * v.z;
+        c3 = uz * v.y;
+        return new Mat44([
+            e + ux * v.x,
+            c1 + v.z,
+            c2 - v.y,
+            0.0,
+            c1 - v.z,
+            e + u * v.y * v.y,
+            c3 + v.x,
+            0.0,
+            c2 + v.y,
+            c3 - v.x,
+            e + uz * v.z,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ]);
     };
 
     /**
