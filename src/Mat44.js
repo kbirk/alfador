@@ -127,19 +127,22 @@
                 scale, 0, 0, 0,
                 0, scale, 0, 0,
                 0, 0, scale, 0,
-                0, 0, 0, 1 ]);
+                0, 0, 0, 1
+            ]);
         } else if ( scale instanceof Array ) {
             return new Mat44([
                 scale[0], 0, 0, 0,
                 0, scale[1], 0, 0,
                 0, 0, scale[2], 0,
-                0, 0, 0, 1 ]);
+                0, 0, 0, 1
+            ]);
         }
         return new Mat44([
             scale.x, 0, 0, 0,
             0, scale.y, 0, 0,
             0, 0, scale.z, 0,
-            0, 0, 0, 1 ]);
+            0, 0, 0, 1
+        ]);
     };
 
     /**
@@ -156,13 +159,15 @@
                 1, 0, 0, 0,
                 0, 1, 0, 0,
                 0, 0, 1, 0,
-                translation[0], translation[1], translation[2], 1 ]);
+                translation[0], translation[1], translation[2], 1
+            ]);
         }
         return new Mat44([
             1, 0, 0, 0,
             0, 1, 0, 0,
             0, 0, 1, 0,
-            translation.x, translation.y, translation.z, 1 ]);
+            translation.x, translation.y, translation.z, 1
+        ]);
     };
 
     /**
@@ -253,7 +258,9 @@
     Mat44.prototype.multVector3 = function( that ) {
         // ensure 'that' is a Vec3
         // it is safe to only cast if Array since Vec4 has own method
-        that = ( that instanceof Array ) ? new Vec3( that ) : that;
+        if ( that instanceof Array ) {
+            that = new Vec3( that );
+        }
         return new Vec3({
             x: this.data[0] * that.x +
                 this.data[4] * that.y +
@@ -279,7 +286,9 @@
     Mat44.prototype.multVector4 = function( that ) {
         // ensure 'that' is a Vec4
         // it is safe to only cast if Array since Vec3 has own method
-        that = ( that instanceof Array ) ? new Vec4( that ) : that;
+        if ( that instanceof Array ) {
+            that = new Vec4( that );
+        }
         return new Vec4({
             x: this.data[0] * that.x +
                 this.data[4] * that.y +
@@ -331,7 +340,6 @@
         var mat = new Mat44(),
             i;
         // ensure 'that' is a Mat44
-        // must check if Array or Mat44
         if ( ( that.data && that.data.length === 9 ) ||
             that instanceof Array ) {
             that = new Mat44( that );
@@ -618,7 +626,7 @@
             this.data[1]*inv.data[4] +
             this.data[2]*inv.data[8] +
             this.data[3]*inv.data[12];
-        return inv.mult( 1 / det );
+        return inv.multScalar( 1 / det );
     };
 
     /**
@@ -653,7 +661,7 @@
         var rot = Mat44.rotationRadians( Math.random() * 360, Vec3.random() ),
             scale = Mat44.scale( Math.random() * 10 ),
             translation = Mat44.translation( Vec3.random() );
-        return translation.mult( rot.mult( scale ) );
+        return translation.multMatrix( rot.multMatrix( scale ) );
     };
 
     /**

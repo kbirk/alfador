@@ -13,32 +13,25 @@
      */
     function Transform( that ) {
         that = that || {};
-        if ( that._up &&
-            that._forward &&
-            that._left &&
-            that._origin &&
-            that._scale ) {
-            // copy Transform by value
-            this._up = that.up();
-            this._forward = that.forward();
-            this._left = that.left();
-            this._origin = that.origin();
-            this._scale = that.scale();
-        } else if ( that.data && that.data instanceof Array ) {
+        if ( that.data && that.data instanceof Array ) {
             // Mat33 or Mat44, extract transform components from Mat44
             that = that.decompose();
-            this._up = that.up;
-            this._forward = that.forward;
-            this._left = that.left;
-            this._scale = that.scale;
-            this._origin = that.origin || new Vec3( 0, 0, 0 );
+            this.up = that.up;
+            this.forward = that.forward;
+            this.left = that.left;
+            this.scale = that.scale;
+            this.origin = that.origin || new Vec3( 0, 0, 0 );
         } else {
-            // default to identity
-            this._up = that.up ? new Vec3( that.up ).normalize() : new Vec3( 0, 1, 0 );
-            this._forward = that.forward ? new Vec3( that.forward ).normalize() : new Vec3( 0, 0, 1 );
-            this._left = that.left ? new Vec3( that.left ).normalize() : this._up.cross( this._forward ).normalize();
-            this.origin( that.origin || new Vec3( 0, 0, 0 ) );
-            this.scale( that.scale || new Vec3( 1, 1, 1 ) );
+            // set individual components
+            this.up = that.up ? new Vec3( that.up ).normalize() : new Vec3( 0, 1, 0 );
+            this.forward = that.forward ? new Vec3( that.forward ).normalize() : new Vec3( 0, 0, 1 );
+            this.left = that.left ? new Vec3( that.left ).normalize() : this.up.cross( this.forward ).normalize();
+            this.origin = that.origin ? new Vec3( that.origin ) : new Vec3( 0, 0, 0 );
+            if ( typeof that.scale === 'number' ) {
+                this.scale = new Vec3( that.scale, that.scale, that.scale );
+            } else {
+                this.scale = that.scale ? new Vec3( that.scale ) : new Vec3( 1, 1, 1 );
+            }
         }
     }
 
@@ -50,29 +43,12 @@
      */
     Transform.identity = function() {
         return new Transform({
-            up: new Vec3( 0, 1, 0 ),
             forward: new Vec3( 0, 0, 1 ),
+            up: new Vec3( 0, 1, 0 ),
             left: new Vec3( 1, 0, 0 ),
             origin: new Vec3( 0, 0, 0 ),
             scale: new Vec3( 1, 1, 1 )
         });
-    };
-
-    /**
-     * If an argument is provided, sets the origin, otherwise returns the
-     * origin by value.
-     * @memberof Transform
-     *
-     * @param {Vec3|Array} origin - The origin. Optional.
-     *
-     * @returns {Vec3|Transform} The origin, or the transform for chaining.
-     */
-    Transform.prototype.origin = function( origin ) {
-        if ( origin ) {
-            this._origin = new Vec3( origin );
-            return this;
-        }
-        return new Vec3( this._origin );
     };
 
     /**
@@ -81,24 +57,21 @@
      * orignal forward vector to the new is used to rotate all other axes.
      * @memberof Transform
      *
-     * @param {Vec3|Array} origin - The forward vector. Optional.
+     * @param {Vec3|Array} forward - The forward vector. Optional.
      *
      * @returns {Vec3|Transform} The forward vector, or the transform for chaining.
      */
-    Transform.prototype.forward = function( forward ) {
-        if ( forward ) {
-            if ( forward instanceof Array ) {
-                forward = new Vec3( forward ).normalize();
-            } else {
-                forward = forward.normalize();
-            }
-            var rot = Mat33.rotationFromTo( this._forward, forward );
-            this._forward = forward;
-            this._up = rot.mult( this._up ).normalize();
-            this._left = rot.mult( this._left ).normalize();
-            return this;
+    Transform.prototype.rotateForwardTo = function( forward ) {
+        if ( forward instanceof Array ) {
+            forward = new Vec3( forward ).normalize();
+        } else {
+            forward = forward.normalize();
         }
-        return new Vec3( this._forward );
+        var rot = Mat33.rotationFromTo( this.forward, forward );
+        this.forward = forward;
+        this.up = rot.multVector( this.up ).normalize();
+        this.left = rot.multVector( this.left ).normalize();
+        return this;
     };
 
     /**
@@ -107,24 +80,21 @@
      * orignal up vector to the new is used to rotate all other axes.
      * @memberof Transform
      *
-     * @param {Vec3|Array} origin - The up vector. Optional.
+     * @param {Vec3|Array} up - The up vector. Optional.
      *
      * @returns {Vec3|Transform} The up vector, or the transform for chaining.
      */
-    Transform.prototype.up = function( up ) {
-        if ( up ) {
-            if ( up instanceof Array ) {
-                up = new Vec3( up ).normalize();
-            } else {
-                up = up.normalize();
-            }
-            var rot = Mat33.rotationFromTo( this._up, up );
-            this._forward = rot.mult( this._forward ).normalize();
-            this._up = up;
-            this._left = rot.mult( this._left ).normalize();
-            return this;
+    Transform.prototype.rotateUpTo = function( up ) {
+        if ( up instanceof Array ) {
+            up = new Vec3( up ).normalize();
+        } else {
+            up = up.normalize();
         }
-        return new Vec3( this._up );
+        var rot = Mat33.rotationFromTo( this.up, up );
+        this.forward = rot.multVector( this.forward ).normalize();
+        this.up = up;
+        this.left = rot.multVector( this.left ).normalize();
+        return this;
     };
 
     /**
@@ -133,45 +103,21 @@
      * orignal left vector to the new is used to rotate all other axes.
      * @memberof Transform
      *
-     * @param {Vec3|Array} origin - The left vector. Optional.
+     * @param {Vec3|Array} left - The left vector. Optional.
      *
      * @returns {Vec3|Transform} The left vector, or the transform for chaining.
      */
-    Transform.prototype.left = function( left ) {
-        if ( left ) {
-            if ( left instanceof Array ) {
-                left = new Vec3( left ).normalize();
-            } else {
-                left = left.normalize();
-            }
-            var rot = Mat33.rotationFromTo( this._left, left );
-            this._forward = rot.mult( this._forward ).normalize();
-            this._up = rot.mult( this._up ).normalize();
-            this._left = left;
-            return this;
+    Transform.prototype.rotateLeftTo = function( left ) {
+        if ( left instanceof Array ) {
+            left = new Vec3( left ).normalize();
+        } else {
+            left = left.normalize();
         }
-        return new Vec3( this._left );
-    };
-
-    /**
-     * If an argument is provided, sets the sacle, otherwise returns the
-     * scale by value.
-     * @memberof Transform
-     *
-     * @param {Vec3|Array|number} scale - The scale. Optional.
-     *
-     * @returns {Vec3|Transform} The scale, or the transform for chaining.
-     */
-    Transform.prototype.scale = function( scale ) {
-        if ( scale ) {
-            if ( typeof scale === 'number' ) {
-                this._scale = new Vec3( scale, scale, scale );
-            } else {
-                this._scale = new Vec3( scale );
-            }
-            return this;
-        }
-        return this._scale;
+        var rot = Mat33.rotationFromTo( this.left, left );
+        this.forward = rot.multVector( this.forward ).normalize();
+        this.up = rot.multVector( this.up ).normalize();
+        this.left = left;
+        return this;
     };
 
     /**
@@ -183,13 +129,12 @@
      * @returns {Transform} The resulting transform.
      */
     Transform.prototype.mult = function( that ) {
-        if ( that instanceof Array ||
-            that.data instanceof Array ) {
+        if ( that instanceof Array || that.data instanceof Array ) {
             // matrix or array
-            return new Transform( this.matrix().mult( that ) );
+            return new Transform( this.matrix().multMatrix( that ) );
         }
         // transform
-        return new Transform( this.matrix().mult( that.matrix() ) );
+        return new Transform( this.matrix().multMatrix( that.matrix() ) );
     };
 
     /**
@@ -199,7 +144,7 @@
      * @returns {Mat44} The scale matrix.
      */
     Transform.prototype.scaleMatrix = function() {
-        return Mat44.scale( this._scale );
+        return Mat44.scale( this.scale );
     };
 
     /**
@@ -210,10 +155,11 @@
      */
     Transform.prototype.rotationMatrix = function() {
         return new Mat44([
-            this._left.x, this._left.y, this._left.z, 0,
-            this._up.x, this._up.y, this._up.z, 0,
-            this._forward.x, this._forward.y, this._forward.z, 0,
-            0, 0, 0, 1 ]);
+            this.left.x, this.left.y, this.left.z, 0,
+            this.up.x, this.up.y, this.up.z, 0,
+            this.forward.x, this.forward.y, this.forward.z, 0,
+            0, 0, 0, 1
+        ]);
     };
 
     /**
@@ -223,7 +169,7 @@
      * @returns {Mat44} The translation matrix.
      */
     Transform.prototype.translationMatrix = function() {
-        return Mat44.translation( this._origin );
+        return Mat44.translation( this.origin );
     };
 
     /**
@@ -235,8 +181,8 @@
     Transform.prototype.matrix = function() {
         // T * R * S
         return this.translationMatrix()
-            .mult( this.rotationMatrix() )
-            .mult( this.scaleMatrix() );
+            .multMatrix( this.rotationMatrix() )
+            .multMatrix( this.scaleMatrix() );
     };
 
     /**
@@ -247,9 +193,9 @@
      */
     Transform.prototype.inverseScaleMatrix = function() {
         return Mat44.scale( new Vec3(
-            1/this._scale.x,
-            1/this._scale.y,
-            1/this._scale.z ) );
+            1 / this.scale.x,
+            1 / this.scale.y,
+            1 / this.scale.z ) );
     };
 
     /**
@@ -260,10 +206,11 @@
      */
     Transform.prototype.inverseRotationMatrix = function() {
         return new Mat44([
-            this._left.x, this._up.x, this._forward.x, 0,
-            this._left.y, this._up.y, this._forward.y, 0,
-            this._left.z, this._up.z, this._forward.z, 0,
-            0, 0, 0, 1 ]);
+            this.left.x, this.up.x, this.forward.x, 0,
+            this.left.y, this.up.y, this.forward.y, 0,
+            this.left.z, this.up.z, this.forward.z, 0,
+            0, 0, 0, 1
+        ]);
     };
 
     /**
@@ -273,7 +220,7 @@
      * @returns {Mat44} The inverse translation matrix.
      */
     Transform.prototype.inverseTranslationMatrix = function() {
-        return Mat44.translation( this._origin.negate() );
+        return Mat44.translation( this.origin.negate() );
     };
 
     /**
@@ -285,8 +232,8 @@
     Transform.prototype.inverseMatrix = function() {
         // S^-1 * R^-1 * T^-1
         return this.inverseScaleMatrix()
-            .mult( this.inverseRotationMatrix() )
-            .mult( this.inverseTranslationMatrix() );
+            .multMatrix( this.inverseRotationMatrix() )
+            .multMatrix( this.inverseTranslationMatrix() );
     };
 
     /**
@@ -296,14 +243,14 @@
      * @returns {Mat44} The view matrix.
      */
     Transform.prototype.viewMatrix = function() {
-        var nOrigin = this._origin.negate(),
-            right = this._left.negate(),
-            backward = this._forward.negate();
+        var nOrigin = this.origin.negate(),
+            right = this.left.negate(),
+            backward = this.forward.negate();
         return new Mat44([
-            right.x, this._up.x, backward.x, 0,
-            right.y, this._up.y, backward.y, 0,
-            right.z, this._up.z, backward.z, 0,
-            nOrigin.dot( right ), nOrigin.dot( this._up ), nOrigin.dot( backward ), 1 ]);
+            right.x, this.up.x, backward.x, 0,
+            right.y, this.up.y, backward.y, 0,
+            right.z, this.up.z, backward.z, 0,
+            nOrigin.dot( right ), nOrigin.dot( this.up ), nOrigin.dot( backward ), 1 ]);
     };
 
     /**
@@ -315,7 +262,7 @@
      * @returns {Transform} The transform for chaining.
      */
     Transform.prototype.translateWorld = function( translation ) {
-        this._origin = this._origin.add( translation );
+        this.origin = this.origin.add( translation );
         return this;
     };
 
@@ -331,9 +278,9 @@
         if ( translation instanceof Array ) {
             translation = new Vec3( translation );
         }
-        this._origin = this._origin.add( this._left.mult( translation.x ) )
-            .add( this._up.mult( translation.y ) )
-            .add( this._forward.mult( translation.z ) );
+        this.origin = this.origin.add( this.left.mult( translation.x ) )
+            .add( this.up.mult( translation.y ) )
+            .add( this.forward.mult( translation.z ) );
         return this;
     };
 
@@ -361,9 +308,9 @@
      */
     Transform.prototype.rotateWorldRadians = function( angle, axis ) {
         var rot = Mat33.rotationRadians( angle, axis );
-        this._up = rot.mult( this._up );
-        this._forward = rot.mult( this._forward );
-        this._left = rot.mult( this._left );
+        this.up = rot.multVector( this.up );
+        this.forward = rot.multVector( this.forward );
+        this.left = rot.multVector( this.left );
         return this;
     };
 
@@ -377,7 +324,7 @@
      * @returns {Transform} The transform for chaining.
      */
     Transform.prototype.rotateLocalDegrees = function( angle, axis ) {
-        return this.rotateWorldDegrees( angle, this.rotationMatrix().mult( axis ) );
+        return this.rotateWorldDegrees( angle, this.rotationMatrix().multVector3( axis ) );
     };
 
     /**
@@ -390,7 +337,7 @@
      * @returns {Transform} The transform for chaining.
      */
     Transform.prototype.rotateLocalRadians = function( angle, axis ) {
-        return this.rotateWorldRadians( angle, this.rotationMatrix().mult( axis ) );
+        return this.rotateWorldRadians( angle, this.rotationMatrix().multVector3( axis ) );
     };
 
     /**
@@ -408,13 +355,13 @@
     Transform.prototype.localToWorld = function( that, ignoreScale, ignoreRotation, ignoreTranslation ) {
         var mat = new Mat44();
         if ( !ignoreScale ) {
-            mat = this.scaleMatrix().mult( mat );
+            mat = this.scaleMatrix().multMatrix( mat );
         }
         if ( !ignoreRotation ) {
-            mat = this.rotationMatrix().mult( mat );
+            mat = this.rotationMatrix().multMatrix( mat );
         }
         if ( !ignoreTranslation ) {
-            mat = this.translationMatrix().mult( mat );
+            mat = this.translationMatrix().multMatrix( mat );
         }
         return mat.mult( that );
     };
@@ -434,13 +381,13 @@
     Transform.prototype.worldToLocal = function( that, ignoreScale, ignoreRotation, ignoreTranslation ) {
         var mat = new Mat44();
         if ( !ignoreTranslation ) {
-            mat = this.inverseTranslationMatrix().mult( mat );
+            mat = this.inverseTranslationMatrix().multMatrix( mat );
         }
         if ( !ignoreRotation ) {
-            mat = this.inverseRotationMatrix().mult( mat );
+            mat = this.inverseRotationMatrix().multMatrix( mat );
         }
         if ( !ignoreScale ) {
-            mat = this.inverseScaleMatrix().mult( mat );
+            mat = this.inverseScaleMatrix().multMatrix( mat );
         }
         return mat.mult( that );
     };
@@ -456,11 +403,11 @@
      * @returns {boolean} Whether or not the transform components match.
      */
     Transform.prototype.equals = function( that, epsilon ) {
-        return this._origin.equals( that.origin(), epsilon ) &&
-            this._forward.equals( that.forward(), epsilon ) &&
-            this._up.equals( that.up(), epsilon ) &&
-            this._left.equals( that.left(), epsilon ) &&
-            this._scale.equals( that.scale(), epsilon );
+        return this.origin.equals( that.origin, epsilon ) &&
+            this.forward.equals( that.forward, epsilon ) &&
+            this.up.equals( that.up, epsilon ) &&
+            this.left.equals( that.left, epsilon ) &&
+            this.scale.equals( that.scale, epsilon );
     };
 
     /**
@@ -470,10 +417,10 @@
      * @returns {Transform} The random transform.
      */
     Transform.random = function() {
-        return new Transform()
-            .origin( Vec3.random() )
-            .forward( Vec3.random() )
-            .scale( Vec3.random() );
+        return new Transform({
+            origin: Vec3.random(),
+            scale: Vec3.random(),
+        }).rotateForwardTo( Vec3.random() );
     };
 
     /**

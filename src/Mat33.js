@@ -320,7 +320,9 @@
     Mat33.prototype.multVector = function( that ) {
         // ensure 'that' is a Vec3
         // it is safe to only cast if Array since the .w of a Vec4 is not used
-        that = ( that instanceof Array ) ? new Vec3( that ) : that;
+        if ( that instanceof Array ) {
+            that = new Vec3( that );
+        }
         return new Vec3({
             x: this.data[0] * that.x + this.data[3] * that.y + this.data[6] * that.z,
             y: this.data[1] * that.x + this.data[4] * that.y + this.data[7] * that.z,
@@ -359,7 +361,6 @@
         var mat = new Mat33(),
             i;
         // ensure 'that' is a Mat33
-        // must check if Array or Mat33
         if ( ( that.data && that.data.length === 16 ) ||
             that instanceof Array ) {
             that = new Mat33( that );
@@ -455,7 +456,7 @@
     Mat33.prototype.transpose = function() {
         var trans = new Mat33(), i;
         for ( i = 0; i < 3; i++ ) {
-            trans.data[i*3]     = this.data[i];
+            trans.data[i*3] = this.data[i];
             trans.data[(i*3)+1] = this.data[i+3];
             trans.data[(i*3)+2] = this.data[i+6];
         }
@@ -486,7 +487,7 @@
         // calculate determinant
         det = this.data[0]*inv.data[0] + this.data[1]*inv.data[3] + this.data[2]*inv.data[6];
         // return
-        return inv.mult( 1 / det );
+        return inv.multScalar( 1 / det );
     };
 
     /**
@@ -517,7 +518,7 @@
     Mat33.random = function() {
         var rot = Mat33.rotationRadians( Math.random() * 360, Vec3.random() ),
             scale = Mat33.scale( Math.random() * 10 );
-        return rot.mult( scale );
+        return rot.multMatrix( scale );
     };
 
     /**

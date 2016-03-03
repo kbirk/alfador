@@ -171,6 +171,12 @@
         });
 
         describe('#mult()', function() {
+            it('should return a Mat33 when passed a scalar argument', function() {
+                var p = Mat33.random(),
+                    q = Math.random(),
+                    r = p.mult( q );
+                assert.equal( r instanceof Mat33, true );
+            });
             it('should return a Mat33 when passed a Mat33 argument', function() {
                 var p = Mat33.random(),
                     q = Mat33.random(),

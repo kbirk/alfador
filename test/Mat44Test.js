@@ -186,6 +186,12 @@
         });
 
         describe('#mult()', function() {
+            it('should return a Mat44 when passed a scalar argument', function() {
+                var p = Mat44.random(),
+                    q = Math.random(),
+                    r = p.mult( q );
+                assert.equal( r instanceof Mat44, true );
+            });
             it('should return a Mat44 when passed a Mat44 argument', function() {
                 var p = Mat44.random(),
                     q = Mat44.random(),
