@@ -197,30 +197,6 @@
             });
         });
 
-        describe('#mult', function() {
-            it('should return a transform that represents the product of the multiplication', function() {
-                var a = new Transform( Mat44.random() ),
-                    b = new Transform( Mat44.random() ),
-                    q = a.mult( b );
-                assert.equal( q.matrix().equals( a.matrix().multMat44( b.matrix() ), EPSILON ), true );
-            });
-            it('should accept Mat33, Mat44, and Transform instances as an argument', function() {
-                var a = new Transform( Mat44.random() ),
-                    b = Mat33.random(),
-                    c = new Transform( b ),
-                    d = new Mat44( b );
-                assert( a.mult( b ).equals( a.mult( c ), EPSILON ) );
-                assert( a.mult( c ).equals( a.mult( d ), EPSILON ) );
-            });
-            it('should return by value', function() {
-                var a = new Transform( Mat44.random() ),
-                    b = new Transform( Mat44.random() ),
-                    q = a.mult( b ),
-                    r = a.mult( b );
-                assert.equal( r !== q, true );
-            });
-        });
-
         describe('#scaleMatrix', function() {
             it('should return a scale matrix', function() {
                 var p = Vec3.random(),

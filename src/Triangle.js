@@ -117,7 +117,7 @@
         var u = b.cross( c );
         var v = c.cross( a );
         // Make sure they are both pointing in the same direction
-        if (u.dot( v ) < 0.0 ) {
+        if ( u.dot( v ) < 0.0 ) {
             return false;
         }
         // Compute normal vector for triangle pca

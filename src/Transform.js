@@ -121,23 +121,6 @@
     };
 
     /**
-     * Multiplies the transform by another transform or matrix.
-     * @memberof Transform
-     *
-     * @param {Mat33|Mat44|Transform|Array} that - The transform to multiply with.
-     *
-     * @returns {Transform} The resulting transform.
-     */
-    Transform.prototype.mult = function( that ) {
-        if ( that instanceof Array || that.data instanceof Array ) {
-            // matrix or array
-            return new Transform( this.matrix().multMat44( that ) );
-        }
-        // transform
-        return new Transform( this.matrix().multMat44( that.matrix() ) );
-    };
-
-    /**
      * Returns the transform's scale matrix.
      * @memberof Transform
      *

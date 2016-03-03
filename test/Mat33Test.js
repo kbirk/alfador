@@ -128,42 +128,52 @@
             });
         });
 
-        describe('#add()', function() {
-            it('should return a Mat33 when passed a Mat33 argument', function() {
+        describe('#addMat33()', function() {
+            it('should return a new Mat33 by value', function() {
                 var p = Mat33.random(),
                     q = Mat33.random(),
-                    r = p.add( q );
+                    r = p.addMat33( q );
                 assert.equal( r instanceof Mat33, true );
-                assert.equal( r.col(0).equals( p.col(0).add( q.col(0) ) ), true );
-                assert.equal( r.col(1).equals( p.col(1).add( q.col(1) ) ), true );
-                assert.equal( r.col(2).equals( p.col(2).add( q.col(2) ) ), true );
-            });
-            it('should return a Mat33 when passed a Mat44 argument', function() {
-                var p = Mat33.random(),
-                    q = Mat44.random(),
-                    r = p.add( q );
-                assert.equal( r instanceof Mat33, true );
+                assert.equal( r !== p, true );
                 assert.equal( r.col(0).equals( p.col(0).add( q.col(0) ) ), true );
                 assert.equal( r.col(1).equals( p.col(1).add( q.col(1) ) ), true );
                 assert.equal( r.col(2).equals( p.col(2).add( q.col(2) ) ), true );
             });
         });
 
-        describe('#sub()', function() {
+        describe('#addMat44()', function() {
+            it('should return a new Mat33 by value', function() {
+                var p = Mat33.random(),
+                    q = Mat44.random(),
+                    r = p.addMat44( q );
+                assert.equal( r instanceof Mat33, true );
+                assert.equal( r !== p, true );
+                assert.equal( r.col(0).equals( p.col(0).add( q.col(0) ) ), true );
+                assert.equal( r.col(1).equals( p.col(1).add( q.col(1) ) ), true );
+                assert.equal( r.col(2).equals( p.col(2).add( q.col(2) ) ), true );
+            });
+        });
+
+        describe('#subMat33()', function() {
             it('should return a Mat33 when passed a Mat33 argument', function() {
                 var p = Mat33.random(),
                     q = Mat33.random(),
-                    r = p.sub( q );
+                    r = p.subMat33( q );
                 assert.equal( r instanceof Mat33, true );
+                assert.equal( r !== p, true );
                 assert.equal( r.col(0).equals( p.col(0).sub( q.col(0) ) ), true );
                 assert.equal( r.col(1).equals( p.col(1).sub( q.col(1) ) ), true );
                 assert.equal( r.col(2).equals( p.col(2).sub( q.col(2) ) ), true );
             });
+        });
+
+        describe('#subMat44()', function() {
             it('should return a Mat33 when passed a Mat44 argument', function() {
                 var p = Mat33.random(),
                     q = Mat44.random(),
-                    r = p.sub( q );
+                    r = p.subMat44( q );
                 assert.equal( r instanceof Mat33, true );
+                assert.equal( r !== p, true );
                 assert.equal( r.col(0).equals( p.col(0).sub( q.col(0) ) ), true );
                 assert.equal( r.col(1).equals( p.col(1).sub( q.col(1) ) ), true );
                 assert.equal( r.col(2).equals( p.col(2).sub( q.col(2) ) ), true );
@@ -184,13 +194,9 @@
             it('should return a new Mat33 by value', function() {
                 var p = Mat33.random(),
                     q = Mat33.random(),
-                    r = p.multMat33( q ),
-                    s = Mat44.random(),
-                    t = p.multMat33( s );
+                    r = p.multMat33( q );
                 assert.equal( r instanceof Mat33, true );
-                assert.equal( t instanceof Mat33, true );
                 assert.equal( p !== r, true );
-                assert.equal( p !== t, true );
             });
             it('should accept array as an argument', function() {
                 var p = Mat33.random(),
@@ -198,6 +204,27 @@
                         Math.random(), Math.random(), Math.random(),
                         Math.random(), Math.random(), Math.random(),
                         Math.random(), Math.random(), Math.random()
+                    ],
+                    r = p.multMat33( q );
+                assert.equal( r instanceof Mat33, true );
+            });
+        });
+
+        describe('#multMat44()', function() {
+            it('should return a new Mat33 by value', function() {
+                var p = Mat33.random(),
+                    q = Mat44.random(),
+                    r = p.multMat44( q );
+                assert.equal( r instanceof Mat33, true );
+                assert.equal( p !== r, true );
+            });
+            it('should accept array as an argument', function() {
+                var p = Mat33.random(),
+                    q = [
+                        Math.random(), Math.random(), Math.random(), Math.random(),
+                        Math.random(), Math.random(), Math.random(), Math.random(),
+                        Math.random(), Math.random(), Math.random(), Math.random(),
+                        Math.random(), Math.random(), Math.random(), Math.random()
                     ],
                     r = p.multMat33( q );
                 assert.equal( r instanceof Mat33, true );

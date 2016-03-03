@@ -215,17 +215,61 @@
      * object.
      * @memberof Mat44
      *
-     * @param {Mat33|Mat44|Array} that - The matrix to add.
+     * @param {Mat33|Array} that - The matrix to add.
      *
      * @returns {Mat44} The sum of the two matrices.
      */
-    Mat44.prototype.add = function( that ) {
-        var mat = new Mat44( that ),
-            i;
-        for ( i=0; i<16; i++ ) {
-            mat.data[i] += this.data[i];
-        }
-        return mat;
+    Mat44.prototype.addMat33 = function( that ) {
+        that = ( that instanceof Array ) ? that : that.data;
+        return new Mat44([
+            this.data[0] + that[0],
+            this.data[1] + that[1],
+            this.data[2] + that[2],
+            this.data[3],
+            this.data[4] + that[3],
+            this.data[5] + that[4],
+            this.data[6] + that[5],
+            this.data[7],
+            this.data[8] + that[6],
+            this.data[9] + that[7],
+            this.data[10] + that[8],
+            this.data[11],
+            this.data[12],
+            this.data[13],
+            this.data[14],
+            this.data[15]
+        ]);
+    };
+
+    /**
+     * Adds the matrix with the provided matrix argument, returning a new Ma33
+     * object.
+     * @memberof Mat44
+     *
+     * @param {Mat44|Array} that - The matrix to add.
+     *
+     * @returns {Mat44} The sum of the two matrices.
+     */
+    Mat44.prototype.addMat44 = function( that ) {
+        that = ( that instanceof Array ) ? that : that.data;
+        return new Mat44([
+            this.data[0] + that[0],
+            this.data[1] + that[1],
+            this.data[2] + that[2],
+            this.data[3] + that[3],
+            this.data[4] + that[4],
+            this.data[5] + that[5],
+            this.data[6] + that[6],
+            this.data[7] + that[7],
+            this.data[8] + that[8],
+            this.data[9] + that[9],
+            this.data[10] + that[10],
+            this.data[11] + that[11],
+            this.data[12] + that[12],
+            this.data[13] + that[13],
+            this.data[14] + that[14],
+            this.data[15] + that[15],
+        ]);
     };
 
     /**
@@ -233,17 +277,61 @@
      * Mat44 object.
      * @memberof Mat44
      *
-     * @param {Mat33|Mat44|Array} that - The matrix to add.
+     * @param {Mat33|Array} that - The matrix to add.
      *
      * @returns {Mat44} The difference of the two matrices.
      */
-    Mat44.prototype.sub = function( that ) {
-        var mat = new Mat44( that ),
-            i;
-        for ( i=0; i<16; i++ ) {
-            mat.data[i] = this.data[i] - mat.data[i];
-        }
-        return mat;
+    Mat44.prototype.subMat33 = function( that ) {
+        that = ( that instanceof Array ) ? that : that.data;
+        return new Mat44([
+            this.data[0] - that[0],
+            this.data[1] - that[1],
+            this.data[2] - that[2],
+            this.data[3],
+            this.data[4] - that[3],
+            this.data[5] - that[4],
+            this.data[6] - that[5],
+            this.data[7],
+            this.data[8] - that[6],
+            this.data[9] - that[7],
+            this.data[10] - that[8],
+            this.data[11],
+            this.data[12],
+            this.data[13],
+            this.data[14],
+            this.data[15]
+        ]);
+    };
+
+    /**
+     * Subtracts the provided matrix argument from the matrix, returning a new
+     * Mat44 object.
+     * @memberof Mat44
+     *
+     * @param {Mat44|Array} that - The matrix to add.
+     *
+     * @returns {Mat44} The difference of the two matrices.
+     */
+    Mat44.prototype.subMat44 = function( that ) {
+        that = ( that instanceof Array ) ? that : that.data;
+        return new Mat44([
+            this.data[0] - that[0],
+            this.data[1] - that[1],
+            this.data[2] - that[2],
+            this.data[3] - that[3],
+            this.data[4] - that[4],
+            this.data[5] - that[5],
+            this.data[6] - that[6],
+            this.data[7] - that[7],
+            this.data[8] - that[8],
+            this.data[9] - that[9],
+            this.data[10] - that[10],
+            this.data[11] - that[11],
+            this.data[12] - that[12],
+            this.data[13] - that[13],
+            this.data[14] - that[14],
+            this.data[15] - that[15],
+        ]);
     };
 
     /**
@@ -259,19 +347,17 @@
         // ensure 'that' is a Vec3
         // it is safe to only cast if Array since Vec4 has own method
         if ( that instanceof Array ) {
-            that = new Vec3( that );
+            return new Vec3(
+                this.data[0] * that[0] + this.data[4] * that[1] + this.data[8] * that[2] + this.data[12],
+                this.data[1] * that[0] + this.data[5] * that[1] + this.data[9] * that[2] + this.data[13],
+                this.data[2] * that[0] + this.data[6] * that[1] + this.data[10] * that[2] + this.data[14]
+            );
         }
-        return new Vec3({
-            x: this.data[0] * that.x +
-                this.data[4] * that.y +
-                this.data[8] * that.z + this.data[12],
-            y: this.data[1] * that.x +
-                this.data[5] * that.y +
-                this.data[9] * that.z + this.data[13],
-            z: this.data[2] * that.x +
-                this.data[6] * that.y +
-                this.data[10] * that.z + this.data[14]
-        });
+        return new Vec3(
+            this.data[0] * that.x + this.data[4] * that.y + this.data[8] * that.z + this.data[12],
+            this.data[1] * that.x + this.data[5] * that.y + this.data[9] * that.z + this.data[13],
+            this.data[2] * that.x + this.data[6] * that.y + this.data[10] * that.z + this.data[14]
+        );
     };
 
     /**
@@ -287,26 +373,19 @@
         // ensure 'that' is a Vec4
         // it is safe to only cast if Array since Vec3 has own method
         if ( that instanceof Array ) {
-            that = new Vec4( that );
+            return new Vec4(
+                this.data[0] * that[0] + this.data[4] * that[1] + this.data[8] * that[2] + this.data[12] * that[3],
+                this.data[1] * that[0] + this.data[5] * that[1] + this.data[9] * that[2] + this.data[13] * that[3],
+                this.data[2] * that[0] + this.data[6] * that[1] + this.data[10] * that[2] + this.data[14] * that[3],
+                this.data[3] * that[0] + this.data[7] * that[1] + this.data[11] * that[2] + this.data[15] * that[3]
+            );
         }
-        return new Vec4({
-            x: this.data[0] * that.x +
-                this.data[4] * that.y +
-                this.data[8] * that.z +
-                this.data[12] * that.w,
-            y: this.data[1] * that.x +
-                this.data[5] * that.y +
-                this.data[9] * that.z +
-                this.data[13] * that.w,
-            z: this.data[2] * that.x +
-                this.data[6] * that.y +
-                this.data[10] * that.z +
-                this.data[14] * that.w,
-            w: this.data[3] * that.x +
-                this.data[7] * that.y +
-                this.data[11] * that.z +
-                this.data[15] * that.w
-        });
+        return new Vec4(
+            this.data[0] * that.x + this.data[4] * that.y + this.data[8] * that.z + this.data[12] * that.w,
+            this.data[1] * that.x + this.data[5] * that.y + this.data[9] * that.z + this.data[13] * that.w,
+            this.data[2] * that.x + this.data[6] * that.y + this.data[10] * that.z + this.data[14] * that.w,
+            this.data[3] * that.x + this.data[7] * that.y + this.data[11] * that.z + this.data[15] * that.w
+        );
     };
 
     /**
@@ -319,12 +398,24 @@
      * @returns {Mat44} The resulting matrix.
      */
     Mat44.prototype.multScalar = function( that ) {
-        var mat = new Mat44(),
-            i;
-        for ( i=0; i<16; i++ ) {
-            mat.data[i] = this.data[i] * that;
-        }
-        return mat;
+        return new Mat44([
+            this.data[0] * that,
+            this.data[1] * that,
+            this.data[2] * that,
+            this.data[3] * that,
+            this.data[4] * that,
+            this.data[5] * that,
+            this.data[6] * that,
+            this.data[7] * that,
+            this.data[8] * that,
+            this.data[9] * that,
+            this.data[10] * that,
+            this.data[11] * that,
+            this.data[12] * that,
+            this.data[13] * that,
+            this.data[14] * that,
+            this.data[15] * that
+        ]);
     };
 
     /**
@@ -332,37 +423,61 @@
      * Mat44 object.
      * @memberof Mat44
      *
-     * @param {Mat33|Mat44|Array} - The matrix to be multiplied by the matrix.
+     * @param {Mat33|Array} - The matrix to be multiplied by the matrix.
+     *
+     * @returns {Mat44} The resulting matrix.
+     */
+    Mat44.prototype.multMat33 = function( that ) {
+        that = ( that instanceof Array ) ? that : that.data;
+        return new Mat44([
+            this.data[0] * that[0] + this.data[4] * that[1] + this.data[8] * that[2],
+            this.data[1] * that[0] + this.data[5] * that[1] + this.data[9] * that[2],
+            this.data[2] * that[0] + this.data[6] * that[1] + this.data[10] * that[2],
+            this.data[3] * that[0] + this.data[7] * that[1] + this.data[11] * that[2],
+            this.data[0] * that[3] + this.data[4] * that[4] + this.data[8] * that[5],
+            this.data[1] * that[3] + this.data[5] * that[4] + this.data[9] * that[5],
+            this.data[2] * that[3] + this.data[6] * that[4] + this.data[10] * that[5],
+            this.data[3] * that[3] + this.data[7] * that[4] + this.data[11] * that[5],
+            this.data[0] * that[6] + this.data[4] * that[7] + this.data[8] * that[8],
+            this.data[1] * that[6] + this.data[5] * that[7] + this.data[9] * that[8],
+            this.data[2] * that[6] + this.data[6] * that[7] + this.data[10] * that[8],
+            this.data[3] * that[6] + this.data[7] * that[7] + this.data[11] * that[8],
+            this.data[12],
+            this.data[13],
+            this.data[14],
+            this.data[15]
+        ]);
+    };
+
+    /**
+     * Multiplies the provded matrix argument by the matrix, returning a new
+     * Mat44 object.
+     * @memberof Mat44
+     *
+     * @param {Mat44|Array} - The matrix to be multiplied by the matrix.
      *
      * @returns {Mat44} The resulting matrix.
      */
     Mat44.prototype.multMat44 = function( that ) {
-        var mat = new Mat44(),
-            i;
-        // ensure 'that' is a Mat44
-        if ( ( that.data && that.data.length === 9 ) ||
-            that instanceof Array ) {
-            that = new Mat44( that );
-        }
-        for ( i=0; i<4; i++ ) {
-            mat.data[i] = this.data[i] * that.data[0] +
-                this.data[i+4] * that.data[1] +
-                this.data[i+8] * that.data[2] +
-                this.data[i+12] * that.data[3];
-            mat.data[i+4] = this.data[i] * that.data[4] +
-                this.data[i+4] * that.data[5] +
-                this.data[i+8] * that.data[6] +
-                this.data[i+12] * that.data[7];
-            mat.data[i+8] = this.data[i] * that.data[8] +
-                this.data[i+4] * that.data[9] +
-                this.data[i+8] * that.data[10] +
-                this.data[i+12] * that.data[11];
-            mat.data[i+12] = this.data[i] * that.data[12] +
-                this.data[i+4] * that.data[13] +
-                this.data[i+8] * that.data[14] +
-                this.data[i+12] * that.data[15];
-        }
-        return mat;
+        that = ( that instanceof Array ) ? that : that.data;
+        return new Mat44([
+            this.data[0] * that[0] + this.data[4] * that[1] + this.data[8] * that[2] + this.data[12] * that[3],
+            this.data[1] * that[0] + this.data[5] * that[1] + this.data[9] * that[2] + this.data[13] * that[3],
+            this.data[2] * that[0] + this.data[6] * that[1] + this.data[10] * that[2] + this.data[14] * that[3],
+            this.data[3] * that[0] + this.data[7] * that[1] + this.data[11] * that[2] + this.data[15] * that[3],
+            this.data[0] * that[4] + this.data[4] * that[5] + this.data[8] * that[6] + this.data[12] * that[7],
+            this.data[1] * that[4] + this.data[5] * that[5] + this.data[9] * that[6] + this.data[13] * that[7],
+            this.data[2] * that[4] + this.data[6] * that[5] + this.data[10] * that[6] + this.data[14] * that[7],
+            this.data[3] * that[4] + this.data[7] * that[5] + this.data[11] * that[6] + this.data[15] * that[7],
+            this.data[0] * that[8] + this.data[4] * that[9] + this.data[8] * that[10] + this.data[12] * that[11],
+            this.data[1] * that[8] + this.data[5] * that[9] + this.data[9] * that[10] + this.data[13] * that[11],
+            this.data[2] * that[8] + this.data[6] * that[9] + this.data[10] * that[10] + this.data[14] * that[11],
+            this.data[3] * that[8] + this.data[7] * that[9] + this.data[11] * that[10] + this.data[15] * that[11],
+            this.data[0] * that[12] + this.data[4] * that[13] + this.data[8] * that[14] + this.data[12] * that[15],
+            this.data[1] * that[12] + this.data[5] * that[13] + this.data[9] * that[14] + this.data[13] * that[15],
+            this.data[2] * that[12] + this.data[6] * that[13] + this.data[10] * that[14] + this.data[14] * that[15],
+            this.data[3] * that[12] + this.data[7] * that[13] + this.data[11] * that[14] + this.data[15] * that[15]
+        ]);
     };
 
     /**
@@ -375,11 +490,24 @@
      * @returns {Mat44} The resulting matrix.
      */
     Mat44.prototype.divScalar = function( that ) {
-        var mat = new Mat44(), i;
-        for ( i=0; i<16; i++ ) {
-            mat.data[i] = this.data[i] / that;
-        }
-        return mat;
+        return new Mat44([
+            this.data[0] / that,
+            this.data[1] / that,
+            this.data[2] / that,
+            this.data[3] / that,
+            this.data[4] / that,
+            this.data[5] / that,
+            this.data[6] / that,
+            this.data[7] / that,
+            this.data[8] / that,
+            this.data[9] / that,
+            this.data[10] / that,
+            this.data[11] / that,
+            this.data[12] / that,
+            this.data[13] / that,
+            this.data[14] / that,
+            this.data[15] / that
+        ]);
     };
 
     /**
@@ -393,19 +521,24 @@
      * @returns {boolean} Whether or not the matrix components match.
      */
     Mat44.prototype.equals = function( that, epsilon ) {
-        var i;
         epsilon = epsilon === undefined ? 0 : epsilon;
-        for ( i=0; i<16; i++ ) {
-            // awkward comparison logic is required to ensure equality passes if
-            // corresponding are both undefined, NaN, or Infinity
-            if ( !(
-                ( this.data[i] === that.data[i] ) ||
-                ( Math.abs( this.data[i] - that.data[i] ) <= epsilon )
-               ) ) {
-                return false;
-            }
-        }
-        return true;
+        that = ( that instanceof Array ) ? that : that.data;
+        return (( this.data[0] === that[0] ) || ( Math.abs( this.data[0] - that[0] ) <= epsilon ) ) &&
+            (( this.data[1] === that[1] ) || ( Math.abs( this.data[1] - that[1] ) <= epsilon ) ) &&
+            (( this.data[2] === that[2] ) || ( Math.abs( this.data[2] - that[2] ) <= epsilon ) ) &&
+            (( this.data[3] === that[3] ) || ( Math.abs( this.data[3] - that[3] ) <= epsilon ) ) &&
+            (( this.data[4] === that[4] ) || ( Math.abs( this.data[4] - that[4] ) <= epsilon ) ) &&
+            (( this.data[5] === that[5] ) || ( Math.abs( this.data[5] - that[5] ) <= epsilon ) ) &&
+            (( this.data[6] === that[6] ) || ( Math.abs( this.data[6] - that[6] ) <= epsilon ) ) &&
+            (( this.data[7] === that[7] ) || ( Math.abs( this.data[7] - that[7] ) <= epsilon ) ) &&
+            (( this.data[8] === that[8] ) || ( Math.abs( this.data[8] - that[8] ) <= epsilon ) ) &&
+            (( this.data[9] === that[9] ) || ( Math.abs( this.data[9] - that[9] ) <= epsilon ) ) &&
+            (( this.data[10] === that[10] ) || ( Math.abs( this.data[10] - that[10] ) <= epsilon ) ) &&
+            (( this.data[11] === that[11] ) || ( Math.abs( this.data[11] - that[11] ) <= epsilon ) ) &&
+            (( this.data[12] === that[12] ) || ( Math.abs( this.data[12] - that[12] ) <= epsilon ) ) &&
+            (( this.data[13] === that[13] ) || ( Math.abs( this.data[13] - that[13] ) <= epsilon ) ) &&
+            (( this.data[14] === that[14] ) || ( Math.abs( this.data[14] - that[14] ) <= epsilon ) ) &&
+            (( this.data[15] === that[15] ) || ( Math.abs( this.data[15] - that[15] ) <= epsilon ) );
     };
 
     /**
@@ -465,14 +598,24 @@
      * @returns {Mat44} The transposed matrix.
      */
     Mat44.prototype.transpose = function() {
-        var trans = new Mat44(), i;
-        for ( i = 0; i < 4; i++ ) {
-            trans.data[i*4] = this.data[i];
-            trans.data[(i*4)+1] = this.data[i+4];
-            trans.data[(i*4)+2] = this.data[i+8];
-            trans.data[(i*4)+3] = this.data[i+12];
-        }
-        return trans;
+        return new Mat44([
+            this.data[0],
+            this.data[4],
+            this.data[8],
+            this.data[12],
+            this.data[1],
+            this.data[5],
+            this.data[9],
+            this.data[13],
+            this.data[2],
+            this.data[6],
+            this.data[10],
+            this.data[14],
+            this.data[3],
+            this.data[7],
+            this.data[11],
+            this.data[15]
+        ]);
     };
 
     /**
@@ -482,110 +625,110 @@
      * @returns {Mat44} The inverted matrix.
      */
     Mat44.prototype.inverse = function() {
-        var inv = new Mat44(), det;
-        // compute inverse
-        // row 1
-        inv.data[0] = this.data[5]*this.data[10]*this.data[15] -
-            this.data[5]*this.data[11]*this.data[14] -
-            this.data[9]*this.data[6]*this.data[15] +
-            this.data[9]*this.data[7]*this.data[14] +
-            this.data[13]*this.data[6]*this.data[11] -
-            this.data[13]*this.data[7]*this.data[10];
-        inv.data[4] = -this.data[4]*this.data[10]*this.data[15] +
-            this.data[4]*this.data[11]*this.data[14] +
-            this.data[8]*this.data[6]*this.data[15] -
-            this.data[8]*this.data[7]*this.data[14] -
-            this.data[12]*this.data[6]*this.data[11] +
-            this.data[12]*this.data[7]*this.data[10];
-        inv.data[8] = this.data[4]*this.data[9]*this.data[15] -
-            this.data[4]*this.data[11]*this.data[13] -
-            this.data[8]*this.data[5]*this.data[15] +
-            this.data[8]*this.data[7]*this.data[13] +
-            this.data[12]*this.data[5]*this.data[11] -
-            this.data[12]*this.data[7]*this.data[9];
-        inv.data[12] = -this.data[4]*this.data[9]*this.data[14] +
-            this.data[4]*this.data[10]*this.data[13] +
-            this.data[8]*this.data[5]*this.data[14] -
-            this.data[8]*this.data[6]*this.data[13] -
-            this.data[12]*this.data[5]*this.data[10] +
-            this.data[12]*this.data[6]*this.data[9];
-        // row 2
-        inv.data[1] = -this.data[1]*this.data[10]*this.data[15] +
-            this.data[1]*this.data[11]*this.data[14] +
-            this.data[9]*this.data[2]*this.data[15] -
-            this.data[9]*this.data[3]*this.data[14] -
-            this.data[13]*this.data[2]*this.data[11] +
-            this.data[13]*this.data[3]*this.data[10];
-        inv.data[5] = this.data[0]*this.data[10]*this.data[15] -
-            this.data[0]*this.data[11]*this.data[14] -
-            this.data[8]*this.data[2]*this.data[15] +
-            this.data[8]*this.data[3]*this.data[14] +
-            this.data[12]*this.data[2]*this.data[11] -
-            this.data[12]*this.data[3]*this.data[10];
-        inv.data[9] = -this.data[0]*this.data[9]*this.data[15] +
-            this.data[0]*this.data[11]*this.data[13] +
-            this.data[8]*this.data[1]*this.data[15] -
-            this.data[8]*this.data[3]*this.data[13] -
-            this.data[12]*this.data[1]*this.data[11] +
-            this.data[12]*this.data[3]*this.data[9];
-        inv.data[13] = this.data[0]*this.data[9]*this.data[14] -
-            this.data[0]*this.data[10]*this.data[13] -
-            this.data[8]*this.data[1]*this.data[14] +
-            this.data[8]*this.data[2]*this.data[13] +
-            this.data[12]*this.data[1]*this.data[10] -
-            this.data[12]*this.data[2]*this.data[9];
-        // row 3
-        inv.data[2] = this.data[1]*this.data[6]*this.data[15] -
-            this.data[1]*this.data[7]*this.data[14] -
-            this.data[5]*this.data[2]*this.data[15] +
-            this.data[5]*this.data[3]*this.data[14] +
-            this.data[13]*this.data[2]*this.data[7] -
-            this.data[13]*this.data[3]*this.data[6];
-        inv.data[6] = -this.data[0]*this.data[6]*this.data[15] +
-            this.data[0]*this.data[7]*this.data[14] +
-            this.data[4]*this.data[2]*this.data[15] -
-            this.data[4]*this.data[3]*this.data[14] -
-            this.data[12]*this.data[2]*this.data[7] +
-            this.data[12]*this.data[3]*this.data[6];
-        inv.data[10] = this.data[0]*this.data[5]*this.data[15] -
-            this.data[0]*this.data[7]*this.data[13] -
-            this.data[4]*this.data[1]*this.data[15] +
-            this.data[4]*this.data[3]*this.data[13] +
-            this.data[12]*this.data[1]*this.data[7] -
-            this.data[12]*this.data[3]*this.data[5];
-        inv.data[14] = -this.data[0]*this.data[5]*this.data[14] +
-            this.data[0]*this.data[6]*this.data[13] +
-            this.data[4]*this.data[1]*this.data[14] -
-            this.data[4]*this.data[2]*this.data[13] -
-            this.data[12]*this.data[1]*this.data[6] +
-            this.data[12]*this.data[2]*this.data[5];
-        // row 4
-        inv.data[3] = -this.data[1]*this.data[6]*this.data[11] +
-            this.data[1]*this.data[7]*this.data[10] +
-            this.data[5]*this.data[2]*this.data[11] -
-            this.data[5]*this.data[3]*this.data[10] -
-            this.data[9]*this.data[2]*this.data[7] +
-            this.data[9]*this.data[3]*this.data[6];
-        inv.data[7] = this.data[0]*this.data[6]*this.data[11] -
-            this.data[0]*this.data[7]*this.data[10] -
-            this.data[4]*this.data[2]*this.data[11] +
-            this.data[4]*this.data[3]*this.data[10] +
-            this.data[8]*this.data[2]*this.data[7] -
-            this.data[8]*this.data[3]*this.data[6];
-        inv.data[11] = -this.data[0]*this.data[5]*this.data[11] +
-            this.data[0]*this.data[7]*this.data[9] +
-            this.data[4]*this.data[1]*this.data[11] -
-            this.data[4]*this.data[3]*this.data[9] -
-            this.data[8]*this.data[1]*this.data[7] +
-            this.data[8]*this.data[3]*this.data[5];
-        inv.data[15] = this.data[0]*this.data[5]*this.data[10] -
-            this.data[0]*this.data[6]*this.data[9] -
-            this.data[4]*this.data[1]*this.data[10] +
-            this.data[4]*this.data[2]*this.data[9] +
-            this.data[8]*this.data[1]*this.data[6] -
-            this.data[8]*this.data[2]*this.data[5];
+        var inv = new Mat44([
+            // col 0
+            this.data[5]*this.data[10]*this.data[15] -
+                this.data[5]*this.data[11]*this.data[14] -
+                this.data[9]*this.data[6]*this.data[15] +
+                this.data[9]*this.data[7]*this.data[14] +
+                this.data[13]*this.data[6]*this.data[11] -
+                this.data[13]*this.data[7]*this.data[10],
+            -this.data[1]*this.data[10]*this.data[15] +
+                this.data[1]*this.data[11]*this.data[14] +
+                this.data[9]*this.data[2]*this.data[15] -
+                this.data[9]*this.data[3]*this.data[14] -
+                this.data[13]*this.data[2]*this.data[11] +
+                this.data[13]*this.data[3]*this.data[10],
+            this.data[1]*this.data[6]*this.data[15] -
+                this.data[1]*this.data[7]*this.data[14] -
+                this.data[5]*this.data[2]*this.data[15] +
+                this.data[5]*this.data[3]*this.data[14] +
+                this.data[13]*this.data[2]*this.data[7] -
+                this.data[13]*this.data[3]*this.data[6],
+            -this.data[1]*this.data[6]*this.data[11] +
+                this.data[1]*this.data[7]*this.data[10] +
+                this.data[5]*this.data[2]*this.data[11] -
+                this.data[5]*this.data[3]*this.data[10] -
+                this.data[9]*this.data[2]*this.data[7] +
+                this.data[9]*this.data[3]*this.data[6],
+            // col 1
+            -this.data[4]*this.data[10]*this.data[15] +
+                this.data[4]*this.data[11]*this.data[14] +
+                this.data[8]*this.data[6]*this.data[15] -
+                this.data[8]*this.data[7]*this.data[14] -
+                this.data[12]*this.data[6]*this.data[11] +
+                this.data[12]*this.data[7]*this.data[10],
+            this.data[0]*this.data[10]*this.data[15] -
+                this.data[0]*this.data[11]*this.data[14] -
+                this.data[8]*this.data[2]*this.data[15] +
+                this.data[8]*this.data[3]*this.data[14] +
+                this.data[12]*this.data[2]*this.data[11] -
+                this.data[12]*this.data[3]*this.data[10],
+            -this.data[0]*this.data[6]*this.data[15] +
+                this.data[0]*this.data[7]*this.data[14] +
+                this.data[4]*this.data[2]*this.data[15] -
+                this.data[4]*this.data[3]*this.data[14] -
+                this.data[12]*this.data[2]*this.data[7] +
+                this.data[12]*this.data[3]*this.data[6],
+            this.data[0]*this.data[6]*this.data[11] -
+                this.data[0]*this.data[7]*this.data[10] -
+                this.data[4]*this.data[2]*this.data[11] +
+                this.data[4]*this.data[3]*this.data[10] +
+                this.data[8]*this.data[2]*this.data[7] -
+                this.data[8]*this.data[3]*this.data[6],
+            // col 2
+            this.data[4]*this.data[9]*this.data[15] -
+                this.data[4]*this.data[11]*this.data[13] -
+                this.data[8]*this.data[5]*this.data[15] +
+                this.data[8]*this.data[7]*this.data[13] +
+                this.data[12]*this.data[5]*this.data[11] -
+                this.data[12]*this.data[7]*this.data[9],
+            -this.data[0]*this.data[9]*this.data[15] +
+                this.data[0]*this.data[11]*this.data[13] +
+                this.data[8]*this.data[1]*this.data[15] -
+                this.data[8]*this.data[3]*this.data[13] -
+                this.data[12]*this.data[1]*this.data[11] +
+                this.data[12]*this.data[3]*this.data[9],
+            this.data[0]*this.data[5]*this.data[15] -
+                this.data[0]*this.data[7]*this.data[13] -
+                this.data[4]*this.data[1]*this.data[15] +
+                this.data[4]*this.data[3]*this.data[13] +
+                this.data[12]*this.data[1]*this.data[7] -
+                this.data[12]*this.data[3]*this.data[5],
+            -this.data[0]*this.data[5]*this.data[11] +
+                this.data[0]*this.data[7]*this.data[9] +
+                this.data[4]*this.data[1]*this.data[11] -
+                this.data[4]*this.data[3]*this.data[9] -
+                this.data[8]*this.data[1]*this.data[7] +
+                this.data[8]*this.data[3]*this.data[5],
+            // col 3
+            -this.data[4]*this.data[9]*this.data[14] +
+                this.data[4]*this.data[10]*this.data[13] +
+                this.data[8]*this.data[5]*this.data[14] -
+                this.data[8]*this.data[6]*this.data[13] -
+                this.data[12]*this.data[5]*this.data[10] +
+                this.data[12]*this.data[6]*this.data[9],
+            this.data[0]*this.data[9]*this.data[14] -
+                this.data[0]*this.data[10]*this.data[13] -
+                this.data[8]*this.data[1]*this.data[14] +
+                this.data[8]*this.data[2]*this.data[13] +
+                this.data[12]*this.data[1]*this.data[10] -
+                this.data[12]*this.data[2]*this.data[9],
+            -this.data[0]*this.data[5]*this.data[14] +
+                this.data[0]*this.data[6]*this.data[13] +
+                this.data[4]*this.data[1]*this.data[14] -
+                this.data[4]*this.data[2]*this.data[13] -
+                this.data[12]*this.data[1]*this.data[6] +
+                this.data[12]*this.data[2]*this.data[5],
+            this.data[0]*this.data[5]*this.data[10] -
+                this.data[0]*this.data[6]*this.data[9] -
+                this.data[4]*this.data[1]*this.data[10] +
+                this.data[4]*this.data[2]*this.data[9] +
+                this.data[8]*this.data[1]*this.data[6] -
+                this.data[8]*this.data[2]*this.data[5]
+        ]);
         // calculate determinant
-        det = this.data[0]*inv.data[0] +
+        var det = this.data[0]*inv.data[0] +
             this.data[1]*inv.data[4] +
             this.data[2]*inv.data[8] +
             this.data[3]*inv.data[12];
@@ -621,10 +764,10 @@
      * @returns {Mat44} A random transform matrix.
      */
     Mat44.random = function() {
-        var rot = Mat44.rotationRadians( Math.random() * 360, Vec3.random() ),
-            scale = Mat44.scale( Math.random() * 10 ),
-            translation = Mat44.translation( Vec3.random() );
-        return translation.multMat44( rot.multMat44( scale ) );
+        var r = Mat44.rotationRadians( Math.random() * 360, Vec3.random() );
+        var s = Mat44.scale( Math.random() * 10 );
+        var t = Mat44.translation( Vec3.random() );
+        return t.multMat44( r.multMat44( s ) );
     };
 
     /**

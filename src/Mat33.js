@@ -277,17 +277,47 @@
      * object.
      * @memberof Mat33
      *
-     * @param {Mat33|Mat44|Array} that - The matrix to add.
+     * @param {Mat33|Array} that - The matrix to add.
      *
      * @returns {Mat33} The sum of the two matrices.
      */
-    Mat33.prototype.add = function( that ) {
-        var mat = new Mat33( that ),
-            i;
-        for ( i=0; i<9; i++ ) {
-            mat.data[i] += this.data[i];
-        }
-        return mat;
+    Mat33.prototype.addMat33 = function( that ) {
+        that = ( that instanceof Array ) ? that : that.data;
+        return new Mat33([
+            this.data[0] + that[0],
+            this.data[1] + that[1],
+            this.data[2] + that[2],
+            this.data[3] + that[3],
+            this.data[4] + that[4],
+            this.data[5] + that[5],
+            this.data[6] + that[6],
+            this.data[7] + that[7],
+            this.data[8] + that[8],
+        ]);
+    };
+
+    /**
+     * Adds the matrix with the provided matrix argument, returning a new Ma33
+     * object.
+     * @memberof Mat33
+     *
+     * @param {Mat44|Array} that - The matrix to add.
+     *
+     * @returns {Mat33} The sum of the two matrices.
+     */
+    Mat33.prototype.addMat44 = function( that ) {
+        that = ( that instanceof Array ) ? that : that.data;
+        return new Mat33([
+            this.data[0] + that[0],
+            this.data[1] + that[1],
+            this.data[2] + that[2],
+            this.data[3] + that[4],
+            this.data[4] + that[5],
+            this.data[5] + that[6],
+            this.data[6] + that[8],
+            this.data[7] + that[9],
+            this.data[8] + that[10],
+        ]);
     };
 
     /**
@@ -295,17 +325,47 @@
      * Mat33 object.
      * @memberof Mat33
      *
-     * @param {Mat33|Mat44|Array} that - The matrix to add.
+     * @param {Mat33|Array} that - The matrix to add.
      *
      * @returns {Mat33} The difference of the two matrices.
      */
-    Mat33.prototype.sub = function( that ) {
-        var mat = new Mat33( that ),
-            i;
-        for ( i=0; i<9; i++ ) {
-            mat.data[i] = this.data[i] - mat.data[i];
-        }
-        return mat;
+    Mat33.prototype.subMat33 = function( that ) {
+        that = ( that instanceof Array ) ? that : that.data;
+        return new Mat33([
+            this.data[0] - that[0],
+            this.data[1] - that[1],
+            this.data[2] - that[2],
+            this.data[3] - that[3],
+            this.data[4] - that[4],
+            this.data[5] - that[5],
+            this.data[6] - that[6],
+            this.data[7] - that[7],
+            this.data[8] - that[8],
+        ]);
+    };
+
+    /**
+     * Subtracts the provided matrix argument from the matrix, returning a new
+     * Mat33 object.
+     * @memberof Mat33
+     *
+     * @param {Mat44|Array} that - The matrix to add.
+     *
+     * @returns {Mat33} The difference of the two matrices.
+     */
+    Mat33.prototype.subMat44 = function( that ) {
+        that = ( that instanceof Array ) ? that : that.data;
+        return new Mat33([
+            this.data[0] - that[0],
+            this.data[1] - that[1],
+            this.data[2] - that[2],
+            this.data[3] - that[4],
+            this.data[4] - that[5],
+            this.data[5] - that[6],
+            this.data[6] - that[8],
+            this.data[7] - that[9],
+            this.data[8] - that[10],
+        ]);
     };
 
     /**
@@ -321,13 +381,15 @@
         // ensure 'that' is a Vec3
         // it is safe to only cast if Array since the .w of a Vec4 is not used
         if ( that instanceof Array ) {
-            that = new Vec3( that );
+            return new Vec3(
+                this.data[0] * that[0] + this.data[3] * that[1] + this.data[6] * that[2],
+                this.data[1] * that[0] + this.data[4] * that[1] + this.data[7] * that[2],
+                this.data[2] * that[0] + this.data[5] * that[1] + this.data[8] * that[2] );
         }
-        return new Vec3({
-            x: this.data[0] * that.x + this.data[3] * that.y + this.data[6] * that.z,
-            y: this.data[1] * that.x + this.data[4] * that.y + this.data[7] * that.z,
-            z: this.data[2] * that.x + this.data[5] * that.y + this.data[8] * that.z
-        });
+        return new Vec3(
+            this.data[0] * that.x + this.data[3] * that.y + this.data[6] * that.z,
+            this.data[1] * that.x + this.data[4] * that.y + this.data[7] * that.z,
+            this.data[2] * that.x + this.data[5] * that.y + this.data[8] * that.z );
     };
 
     /**
@@ -340,12 +402,17 @@
      * @returns {Mat33} The resulting matrix.
      */
     Mat33.prototype.multScalar = function( that ) {
-        var mat = new Mat33(),
-            i;
-        for ( i=0; i<9; i++ ) {
-            mat.data[i] = this.data[i] * that;
-        }
-        return mat;
+        return new Mat33([
+            this.data[0] * that,
+            this.data[1] * that,
+            this.data[2] * that,
+            this.data[3] * that,
+            this.data[4] * that,
+            this.data[5] * that,
+            this.data[6] * that,
+            this.data[7] * that,
+            this.data[8] * that
+        ]);
     };
 
     /**
@@ -353,24 +420,47 @@
      * Mat33 object.
      * @memberof Mat33
      *
-     * @param {Mat33|Mat44} - The matrix to be multiplied by the matrix.
+     * @param {Mat33|Array} - The matrix to be multiplied by the matrix.
      *
      * @returns {Mat33} The resulting matrix.
      */
     Mat33.prototype.multMat33 = function( that ) {
-        var mat = new Mat33(),
-            i;
-        // ensure 'that' is a Mat33
-        if ( ( that.data && that.data.length === 16 ) ||
-            that instanceof Array ) {
-            that = new Mat33( that );
-        }
-        for ( i=0; i<3; i++ ) {
-            mat.data[i] = this.data[i] * that.data[0] + this.data[i+3] * that.data[1] + this.data[i+6] * that.data[2];
-            mat.data[i+3] = this.data[i] * that.data[3] + this.data[i+3] * that.data[4] + this.data[i+6] * that.data[5];
-            mat.data[i+6] = this.data[i] * that.data[6] + this.data[i+3] * that.data[7] + this.data[i+6] * that.data[8];
-        }
-        return mat;
+        that = ( that instanceof Array ) ? that : that.data;
+        return new Mat33([
+            this.data[0] * that[0] + this.data[3] * that[1] + this.data[6] * that[2],
+            this.data[1] * that[0] + this.data[4] * that[1] + this.data[7] * that[2],
+            this.data[2] * that[0] + this.data[5] * that[1] + this.data[8] * that[2],
+            this.data[0] * that[3] + this.data[3] * that[4] + this.data[6] * that[5],
+            this.data[1] * that[3] + this.data[4] * that[4] + this.data[7] * that[5],
+            this.data[2] * that[3] + this.data[5] * that[4] + this.data[8] * that[5],
+            this.data[0] * that[6] + this.data[3] * that[7] + this.data[6] * that[8],
+            this.data[1] * that[6] + this.data[4] * that[7] + this.data[7] * that[8],
+            this.data[2] * that[6] + this.data[5] * that[7] + this.data[8] * that[8]
+        ]);
+    };
+
+    /**
+     * Multiplies the provded matrix argument by the matrix, returning a new
+     * Mat33 object.
+     * @memberof Mat33
+     *
+     * @param {Mat44|Array} - The matrix to be multiplied by the matrix.
+     *
+     * @returns {Mat33} The resulting matrix.
+     */
+    Mat33.prototype.multMat44 = function( that ) {
+        that = ( that instanceof Array ) ? that : that.data;
+        return new Mat33([
+            this.data[0] * that[0] + this.data[3] * that[1] + this.data[6] * that[2],
+            this.data[1] * that[0] + this.data[4] * that[1] + this.data[7] * that[2],
+            this.data[2] * that[0] + this.data[5] * that[1] + this.data[8] * that[2],
+            this.data[0] * that[4] + this.data[3] * that[5] + this.data[6] * that[6],
+            this.data[1] * that[4] + this.data[4] * that[5] + this.data[7] * that[6],
+            this.data[2] * that[4] + this.data[5] * that[5] + this.data[8] * that[6],
+            this.data[0] * that[8] + this.data[3] * that[9] + this.data[6] * that[10],
+            this.data[1] * that[8] + this.data[4] * that[9] + this.data[7] * that[10],
+            this.data[2] * that[8] + this.data[5] * that[9] + this.data[8] * that[10]
+        ]);
     };
 
     /**
@@ -383,12 +473,17 @@
      * @returns {Mat33} The resulting matrix.
      */
     Mat33.prototype.divScalar = function( that ) {
-        var mat = new Mat33(),
-            i;
-        for ( i=0; i<9; i++ ) {
-            mat.data[i] = this.data[i] / that;
-        }
-        return mat;
+        return new Mat33([
+            this.data[0] / that,
+            this.data[1] / that,
+            this.data[2] / that,
+            this.data[3] / that,
+            this.data[4] / that,
+            this.data[5] / that,
+            this.data[6] / that,
+            this.data[7] / that,
+            this.data[8] / that
+        ]);
     };
 
     /**
@@ -402,19 +497,17 @@
      * @returns {boolean} Whether or not the matrix components match.
      */
     Mat33.prototype.equals = function( that, epsilon ) {
-        var i;
         epsilon = epsilon === undefined ? 0 : epsilon;
-        for ( i=0; i<9; i++ ) {
-            // awkward comparison logic is required to ensure equality passes if
-            // corresponding are both undefined, NaN, or Infinity
-            if ( !(
-                ( this.data[i] === that.data[i] ) ||
-                ( Math.abs( this.data[i] - that.data[i] ) <= epsilon )
-               ) ) {
-                return false;
-            }
-        }
-        return true;
+        that = ( that instanceof Array ) ? that : that.data;
+        return (( this.data[0] === that[0] ) || ( Math.abs( this.data[0] - that[0] ) <= epsilon ) ) &&
+            (( this.data[1] === that[1] ) || ( Math.abs( this.data[1] - that[1] ) <= epsilon ) ) &&
+            (( this.data[2] === that[2] ) || ( Math.abs( this.data[2] - that[2] ) <= epsilon ) ) &&
+            (( this.data[3] === that[3] ) || ( Math.abs( this.data[3] - that[3] ) <= epsilon ) ) &&
+            (( this.data[4] === that[4] ) || ( Math.abs( this.data[4] - that[4] ) <= epsilon ) ) &&
+            (( this.data[5] === that[5] ) || ( Math.abs( this.data[5] - that[5] ) <= epsilon ) ) &&
+            (( this.data[6] === that[6] ) || ( Math.abs( this.data[6] - that[6] ) <= epsilon ) ) &&
+            (( this.data[7] === that[7] ) || ( Math.abs( this.data[7] - that[7] ) <= epsilon ) ) &&
+            (( this.data[8] === that[8] ) || ( Math.abs( this.data[8] - that[8] ) <= epsilon ) );
     };
 
     /**
@@ -424,13 +517,17 @@
      * @returns {Mat33} The transposed matrix.
      */
     Mat33.prototype.transpose = function() {
-        var trans = new Mat33(), i;
-        for ( i = 0; i < 3; i++ ) {
-            trans.data[i*3] = this.data[i];
-            trans.data[(i*3)+1] = this.data[i+3];
-            trans.data[(i*3)+2] = this.data[i+6];
-        }
-        return trans;
+        return new Mat33([
+            this.data[0],
+            this.data[3],
+            this.data[6],
+            this.data[1],
+            this.data[4],
+            this.data[7],
+            this.data[2],
+            this.data[5],
+            this.data[8]
+        ]);
     };
 
     /**
@@ -440,22 +537,22 @@
      * @returns {Mat33} The inverted matrix.
      */
     Mat33.prototype.inverse = function() {
-        var inv = new Mat33(), det;
-        // compute inverse
-        // row 1
-        inv.data[0] = this.data[4]*this.data[8] - this.data[7]*this.data[5];
-        inv.data[3] = -this.data[3]*this.data[8] + this.data[6]*this.data[5];
-        inv.data[6] = this.data[3]*this.data[7] - this.data[6]*this.data[4];
-        // row 2
-        inv.data[1] = -this.data[1]*this.data[8] + this.data[7]*this.data[2];
-        inv.data[4] = this.data[0]*this.data[8] - this.data[6]*this.data[2];
-        inv.data[7] = -this.data[0]*this.data[7] + this.data[6]*this.data[1];
-        // row 3
-        inv.data[2] = this.data[1]*this.data[5] - this.data[4]*this.data[2];
-        inv.data[5] = -this.data[0]*this.data[5] + this.data[3]*this.data[2];
-        inv.data[8] = this.data[0]*this.data[4] - this.data[3]*this.data[1];
+        var inv = new Mat33([
+            // col 0
+            this.data[4]*this.data[8] - this.data[7]*this.data[5],
+            -this.data[1]*this.data[8] + this.data[7]*this.data[2],
+            this.data[1]*this.data[5] - this.data[4]*this.data[2],
+            // col 1
+            -this.data[3]*this.data[8] + this.data[6]*this.data[5],
+            this.data[0]*this.data[8] - this.data[6]*this.data[2],
+            -this.data[0]*this.data[5] + this.data[3]*this.data[2],
+            // col 2
+            this.data[3]*this.data[7] - this.data[6]*this.data[4],
+            -this.data[0]*this.data[7] + this.data[6]*this.data[1],
+            this.data[0]*this.data[4] - this.data[3]*this.data[1]
+        ]);
         // calculate determinant
-        det = this.data[0]*inv.data[0] + this.data[1]*inv.data[3] + this.data[2]*inv.data[6];
+        var det = this.data[0]*inv.data[0] + this.data[1]*inv.data[3] + this.data[2]*inv.data[6];
         // return
         return inv.multScalar( 1 / det );
     };
@@ -486,9 +583,9 @@
      * @returns {Mat33} A random transform matrix.
      */
     Mat33.random = function() {
-        var rot = Mat33.rotationRadians( Math.random() * 360, Vec3.random() ),
-            scale = Mat33.scale( Math.random() * 10 );
-        return rot.multMat33( scale );
+        var r = Mat33.rotationRadians( Math.random() * 360, Vec3.random() );
+        var s = Mat33.scale( Math.random() * 10 );
+        return r.multMat33( s );
     };
 
     /**
