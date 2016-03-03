@@ -1,9 +1,9 @@
 {
   "name": "alfador",
-  "version": "0.4.12",
+  "version": "0.5.0",
   "description": "A fast 3D math library for JavaScript",
   "author": "Kevin Birk <birk.kevin@gmail.com>",
-  "main": "./src/exports.js",
+  "main": "src/exports.js",
   "license": "MIT",
   "repository": {
     "type": "git",
