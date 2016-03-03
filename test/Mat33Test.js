@@ -60,11 +60,14 @@
                 var p = Mat33.random(),
                     q = new Mat33( p );
                 assert.equal( p.equals( q ), true );
+                assert.equal( p !== q, true );
             });
             it('should return a Mat33 from an array of length 9', function() {
-                var p = new Mat33( [1, 2, 3, 4, 5, 6, 7, 8, 9 ] ),
+                var a = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
+                    p = new Mat33( a ),
                     q = new Mat33( p );
                 assert.equal( p.equals( q ), true );
+                assert.equal( p.data === a, true );
             });
             it('should return an identity matrix when given no input', function() {
                 var p = new Mat33(),

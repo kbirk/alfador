@@ -4,11 +4,6 @@
 
     var Vec3 = require('./Vec3');
     var EPSILON = require('./Epsilon');
-    var IDENTITY = [
-        1, 0, 0,
-        0, 1, 0,
-        0, 0, 1
-    ];
 
     /**
      * Instantiates a Mat33 object.
@@ -16,11 +11,24 @@
      * @classdesc A 3x3 column-major matrix.
      */
     function Mat33( that ) {
-        that = that || IDENTITY;
+        that = that || [
+            1, 0, 0,
+            0, 1, 0,
+            0, 0, 1
+        ];
         if ( that instanceof Array ) {
-            this.data = that.slice( 0 );
+            this.data = that;
         } else {
-            this.data = that.data.slice( 0 );
+            this.data = new Array( 16 );
+            this.data[0] = that.data[0];
+            this.data[1] = that.data[1];
+            this.data[2] = that.data[2];
+            this.data[3] = that.data[3];
+            this.data[4] = that.data[4];
+            this.data[5] = that.data[5];
+            this.data[6] = that.data[6];
+            this.data[7] = that.data[7];
+            this.data[8] = that.data[8];
         }
     }
 
@@ -75,7 +83,7 @@
      * @returns {Mat33} The identiy matrix.
      */
     Mat33.identity = function() {
-        return new Mat33( IDENTITY );
+        return new Mat33();
     };
 
     /**

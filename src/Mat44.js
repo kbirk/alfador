@@ -5,12 +5,6 @@
     var Vec3 = require('./Vec3');
     var Vec4 = require('./Vec4');
     var EPSILON = require('./Epsilon');
-    var IDENTITY = [
-        1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, 1, 0,
-        0, 0, 0, 1
-    ];
 
     /**
      * Instantiates a Mat44 object.
@@ -18,11 +12,32 @@
      * @classdesc A 4x4 column-major matrix.
      */
     function Mat44( that ) {
-        that = that || IDENTITY;
+        that = that || [
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        ];
         if ( that instanceof Array ) {
-            this.data = that.slice( 0 );
+            this.data = that;
         } else {
-            this.data = that.data.slice( 0 );
+            this.data = new Array( 16 );
+            this.data[0] = that.data[0];
+            this.data[1] = that.data[1];
+            this.data[2] = that.data[2];
+            this.data[3] = that.data[3];
+            this.data[4] = that.data[4];
+            this.data[5] = that.data[5];
+            this.data[6] = that.data[6];
+            this.data[7] = that.data[7];
+            this.data[8] = that.data[8];
+            this.data[9] = that.data[9];
+            this.data[10] = that.data[10];
+            this.data[11] = that.data[11];
+            this.data[12] = that.data[12];
+            this.data[13] = that.data[13];
+            this.data[14] = that.data[14];
+            this.data[15] = that.data[15];
         }
     }
 
@@ -81,7 +96,7 @@
      * @returns {Mat44} The identiy matrix.
      */
     Mat44.identity = function() {
-        return new Mat44( IDENTITY );
+        return new Mat44();
     };
 
     /**

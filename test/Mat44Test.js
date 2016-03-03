@@ -64,11 +64,14 @@
                 var p = Mat44.random(),
                     q = new Mat44( p );
                 assert.equal( p.equals( q ), true );
+                assert.equal( p !== q, true );
             });
-            it('should return a Mat44 from an array of length 16', function() {
-                var p = new Mat44( [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16 ] ),
+            it('should return a Mat44 from an array of length 16, copied by reference', function() {
+                var a = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16 ],
+                    p = new Mat44( a ),
                     q = new Mat44( p );
                 assert.equal( p.equals( q ), true );
+                assert.equal( p.data === a, true );
             });
             it('should return an identity matrix when given no input', function() {
                 var p = new Mat44(),
@@ -426,7 +429,7 @@
         });
 
         describe('#perspective()', function() {
-            it('should return an perspective projection matrix', function() {
+            it('should return a perspective projection matrix', function() {
                 var a = Mat44.perspective( 35, 3/2, 1, 500 ).multVec3( new Vec3( 1, 2, 3 ) ),
                     b = Mat44.perspective( 55, 2, 0.1, 10 ).multVec3( new Vec3( 1, 2, 3 ) );
                 assert.equal( a.equals( new Vec3( 2.1143965349088085, 6.343189604726425, -5.016032064128256 ), EPSILON ), true );
