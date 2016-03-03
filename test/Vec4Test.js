@@ -143,19 +143,19 @@
             });
         });
 
-        describe('#div', function() {
+        describe('#divScalar', function() {
             it('should return a value of self / argument', function() {
                 var v = Vec4.random(),
                     r = Math.random();
-                assert.equal( v.div( r ).equals( new Vec4( v.x / r, v.y / r, v.z / r, v.w / r ) ), true );
+                assert.equal( v.divScalar( r ).equals( new Vec4( v.x / r, v.y / r, v.z / r, v.w / r ) ), true );
             });
         });
 
-        describe('#mult', function() {
+        describe('#multScalar', function() {
             it('should return a value of self * argument', function() {
                 var v = Vec4.random(),
                     r = Math.random();
-                assert.equal( v.mult( r ).equals( new Vec4( v.x * r, v.y * r, v.z * r, v.w * r ) ), true );
+                assert.equal( v.multScalar( r ).equals( new Vec4( v.x * r, v.y * r, v.z * r, v.w * r ) ), true );
             });
         });
 

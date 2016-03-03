@@ -83,7 +83,7 @@
      *
      * @returns {Vec3} The scaled vector.
      */
-    Vec3.prototype.mult = function( that ) {
+    Vec3.prototype.multScalar = function( that ) {
         return new Vec3( this.x * that, this.y * that, this.z * that );
     };
 
@@ -96,7 +96,7 @@
      *
      * @returns {Vec3} The scaled vector.
      */
-    Vec3.prototype.div = function( that ) {
+    Vec3.prototype.divScalar = function( that ) {
         return new Vec3( this.x / that, this.y / that, this.z / that );
     };
 
@@ -157,7 +157,7 @@
                 return Math.sqrt( len );
             }
         }
-        return this.normalize().mult( length );
+        return this.normalize().multScalar( length );
     };
 
     /**
@@ -217,7 +217,7 @@
      */
     Vec3.prototype.projectOntoPlane =  function( n ) {
         var dist = this.dot( n );
-        return this.sub( n.mult( dist ) );
+        return this.sub( n.multScalar( dist ) );
     };
 
     /**

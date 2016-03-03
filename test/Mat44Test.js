@@ -185,79 +185,87 @@
             });
         });
 
-        describe('#mult()', function() {
-            it('should return a Mat44 when passed a scalar argument', function() {
+        describe('#multScalar()', function() {
+            it('should return a new Mat44 by value', function() {
                 var p = Mat44.random(),
                     q = Math.random(),
-                    r = p.mult( q );
+                    r = p.multScalar( q );
                 assert.equal( r instanceof Mat44, true );
-            });
-            it('should return a Mat44 when passed a Mat44 argument', function() {
-                var p = Mat44.random(),
-                    q = Mat44.random(),
-                    r = p.mult( q );
-                assert.equal( r instanceof Mat44, true );
-            });
-            it('should return a Mat44 when passed a Mat33 argument', function() {
-                var p = Mat44.random(),
-                    q = Mat33.random(),
-                    r = p.mult( q ),
-                    s = p.mult( new Mat44( q ) );
-                assert.equal( r instanceof Mat44, true );
-                assert.equal( r.equals( s ), true );
-            });
-            it('should return a Vec4 when passed a Vec4 argument', function() {
-                var p = Mat44.random(),
-                    q = Vec4.random(),
-                    r = p.mult( q ),
-                    s = p.mult( new Vec4( q ) );
-                assert.equal( r instanceof Vec4, true );
-                assert.equal( r.equals( s ), true );
-            });
-            it('should return a Vec3 when passed a Vec3 argument', function() {
-                var p = Mat44.random(),
-                    q = Vec3.random(),
-                    r = p.mult( q );
-                assert.equal( r instanceof Vec3, true );
-            });
-            it('should return a Vec3 when passed an Array argument of length 3', function() {
-                var p = Mat44.random(),
-                    q = [ Math.random(), Math.random(), Math.random() ],
-                    r = p.mult( q );
-                assert.equal( r instanceof Vec3, true );
-                assert.equal( r.equals( p.mult( new Vec3( q ) ) ), true );
-            });
-            it('should return a Vec4 when passed an Array argument of length 4', function() {
-                var p = Mat44.random(),
-                    q = [ Math.random(), Math.random(), Math.random(), Math.random() ],
-                    r = p.mult( q );
-                assert.equal( r instanceof Vec4, true );
-                assert.equal( r.equals( p.mult( new Vec4( q ) ) ), true );
-            });
-            it('should return a Vec4 when passed an Array argument of length 4', function() {
-                var p = Mat44.random(),
-                    q = [ Math.random(), Math.random(), Math.random(), Math.random() ],
-                    r = p.mult( q );
-                assert.equal( r instanceof Vec4, true );
-                assert.equal( r.equals( p.mult( new Vec4( q ) ) ), true );
-            });
-            it('should return a Mat44 when passed an Array argument of length > 4', function() {
-                var p = Mat44.random(),
-                    q = [ Math.random(), Math.random(), Math.random(), Math.random(),
-                        Math.random(), Math.random(), Math.random(), Math.random(),
-                        Math.random(), Math.random(), Math.random(), Math.random(),
-                        Math.random(), Math.random(), Math.random(), Math.random() ],
-                    r = p.mult( q );
-                assert.equal( r instanceof Mat44, true );
-                assert.equal( r.equals( p.mult( new Mat44( q ) ) ), true );
+                assert.equal( p !== r, true );
             });
         });
 
-        describe('#div()', function() {
+        describe('#multMat44()', function() {
+            it('should return a new Mat44 by value', function() {
+                var p = Mat44.random(),
+                    q = Mat44.random(),
+                    r = p.multMat44( q ),
+                    s = Mat33.random(),
+                    t = p.multMat44( s );
+                assert.equal( r instanceof Mat44, true );
+                assert.equal( t instanceof Mat44, true );
+                assert.equal( p !== r, true );
+                assert.equal( p !== t, true );
+            });
+            it('should accept array as an argument', function() {
+                var p = Mat44.random(),
+                    q = [
+                        Math.random(), Math.random(), Math.random(),
+                        Math.random(), Math.random(), Math.random(),
+                        Math.random(), Math.random(), Math.random()
+                    ],
+                    r = p.multMat44( q );
+                assert.equal( r instanceof Mat44, true );
+            });
+        });
+
+        describe('#multVec3()', function() {
+            it('should return a new Vec3 by value', function() {
+                var p = Mat44.random(),
+                    q = Vec3.random(),
+                    r = p.multVec3( q ),
+                    s = Vec4.random(),
+                    t = p.multVec3( s );
+                assert.equal( r instanceof Vec3, true );
+                assert.equal( t instanceof Vec3, true );
+                assert.equal( p !== r, true );
+                assert.equal( p !== t, true );
+            });
+            it('should accept array as an argument', function() {
+                var p = Mat44.random(),
+                    q = [ Math.random(), Math.random(), Math.random() ],
+                    r = p.multVec3( q );
+                assert.equal( r instanceof Vec3, true );
+                assert.equal( r.equals( p.multVec3( new Vec3( q ) ) ), true );
+            });
+        });
+
+        describe('#multVec4()', function() {
+            it('should return a new Vec4 by value', function() {
+                var p = Mat44.random(),
+                    q = Vec3.random(),
+                    r = p.multVec4( q ),
+                    s = Vec4.random(),
+                    t = p.multVec4( s );
+                assert.equal( r instanceof Vec4, true );
+                assert.equal( t instanceof Vec4, true );
+                assert.equal( p !== r, true );
+                assert.equal( p !== t, true );
+            });
+            it('should accept array as an argument', function() {
+                var p = Mat44.random(),
+                    q = [ Math.random(), Math.random(), Math.random(), Math.random() ],
+                    r = p.multVec4( q );
+                assert.equal( r instanceof Vec4, true );
+                assert.equal( r.equals( p.multVec4( new Vec4( q ) ) ), true );
+            });
+        });
+
+        describe('#divScalar()', function() {
             it('should return a Mat44 with each component divided by a scalar', function() {
                 var m = Mat44.random(),
                     r = Math.random(),
-                    q = m.div( r ), i;
+                    q = m.divScalar( r ), i;
                 for ( i=0; i<16; i++ ) {
                     assert.equal( q.data[i] === m.data[i] / r, true );
                 }
@@ -320,9 +328,9 @@
                     up90 = Mat44.rotationDegrees( 90, up ),
                     left90 = Mat44.rotationDegrees( -90, left ),
                     forward90 = Mat44.rotationDegrees( 90, forward ),
-                    v0 = up90.mult( forward ).normalize(),
-                    v1 = left90.mult( forward ).normalize(),
-                    v2 = forward90.mult( up ).normalize();
+                    v0 = up90.multVec3( forward ).normalize(),
+                    v1 = left90.multVec3( forward ).normalize(),
+                    v2 = forward90.multVec3( up ).normalize();
                 assert.equal( v0.equals( left, EPSILON ), true );
                 assert.equal( v1.equals( up, EPSILON ), true );
                 assert.equal( v2.equals( right, EPSILON ), true );
@@ -343,9 +351,9 @@
                     up90 = Mat44.rotationRadians( 90 * Math.PI / 180, up ),
                     left90 = Mat44.rotationRadians( -90 * Math.PI / 180, left ),
                     forward90 = Mat44.rotationRadians( 90 * Math.PI / 180, forward ),
-                    v0 = up90.mult( forward ).normalize(),
-                    v1 = left90.mult( forward ).normalize(),
-                    v2 = forward90.mult( up ).normalize();
+                    v0 = up90.multVec3( forward ).normalize(),
+                    v1 = left90.multVec3( forward ).normalize(),
+                    v2 = forward90.multVec3( up ).normalize();
                 assert.equal( v0.equals( left, EPSILON ), true );
                 assert.equal( v1.equals( up, EPSILON ), true );
                 assert.equal( v2.equals( right, EPSILON ), true );
@@ -363,8 +371,8 @@
                     s = Vec3.random().normalize(),
                     p = Mat44.rotationFromTo( r, s ),
                     q = Mat44.rotationFromTo( s, r ),
-                    a = p.mult( r ).normalize(),
-                    b = q.mult( s ).normalize();
+                    a = p.multVec3( r ).normalize(),
+                    b = q.multVec3( s ).normalize();
                 assert.equal( a.equals( s, EPSILON ), true );
                 assert.equal( b.equals( r, EPSILON ), true );
             });
@@ -373,8 +381,8 @@
         describe('#ortho()', function() {
             it('should return an orthographic projection matrix', function() {
                 var i = Mat44.ortho( -1, 1, -1, 1, 1, -1 ),
-                    a = Mat44.ortho( -10, 5, -11, 6, 10, 500 ).mult( new Vec3( 1, 2, 3 ) ),
-                    b = Mat44.ortho( -1, 23, 10, 24, -10, -200 ).mult( new Vec3( 1, 2, 3 ) );
+                    a = Mat44.ortho( -10, 5, -11, 6, 10, 500 ).multVec3( new Vec3( 1, 2, 3 ) ),
+                    b = Mat44.ortho( -1, 23, 10, 24, -10, -200 ).multVec3( new Vec3( 1, 2, 3 ) );
                 assert.equal( i.equals( new Mat44() ), true );
                 assert.equal( a.equals( new Vec3( 0.4666666666666667, 0.5294117647058824, -1.0530612244897959 ), EPSILON ), true );
                 assert.equal( b.equals( new Vec3( -0.8333333333333333, -2.142857142857143, -1.0736842105263158 ), EPSILON ), true );
@@ -383,8 +391,8 @@
 
         describe('#perspective()', function() {
             it('should return an perspective projection matrix', function() {
-                var a = Mat44.perspective( 35, 3/2, 1, 500 ).mult( new Vec3( 1, 2, 3 ) ),
-                    b = Mat44.perspective( 55, 2, 0.1, 10 ).mult( new Vec3( 1, 2, 3 ) );
+                var a = Mat44.perspective( 35, 3/2, 1, 500 ).multVec3( new Vec3( 1, 2, 3 ) ),
+                    b = Mat44.perspective( 55, 2, 0.1, 10 ).multVec3( new Vec3( 1, 2, 3 ) );
                 assert.equal( a.equals( new Vec3( 2.1143965349088085, 6.343189604726425, -5.016032064128256 ), EPSILON ), true );
                 assert.equal( b.equals( new Vec3( 0.9604910634855831, 3.8419642539423324, -3.2626262626262625 ), EPSILON ), true );
             });
@@ -419,8 +427,8 @@
             it('should return an inverse copy of the matrix', function() {
                 var identity = Mat44.identity(),
                     a = new Mat44().inverse( Vec3.random(), Vec3.random() );
-                assert.equal( a.inverse().mult( a ).equals( identity ), true );
-                assert.equal( a.mult( a.inverse() ).equals( identity ), true );
+                assert.equal( a.inverse().multMat44( a ).equals( identity ), true );
+                assert.equal( a.multMat44( a.inverse() ).equals( identity ), true );
             });
 
             it('should return a deep copy', function() {

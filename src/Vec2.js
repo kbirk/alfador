@@ -80,7 +80,7 @@
      *
      * @returns {Vec2} The scaled vector.
      */
-    Vec2.prototype.mult = function( that ) {
+    Vec2.prototype.multScalar = function( that ) {
         return new Vec2( this.x * that, this.y * that );
     };
 
@@ -93,7 +93,7 @@
      *
      * @returns {Vec2} The scaled vector.
      */
-    Vec2.prototype.div = function( that ) {
+    Vec2.prototype.divScalar = function( that ) {
         return new Vec2( this.x / that, this.y / that );
     };
 
@@ -150,7 +150,7 @@
                 return Math.sqrt( len );
             }
         }
-        return this.normalize().mult( length );
+        return this.normalize().multScalar( length );
     };
 
     /**

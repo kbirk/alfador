@@ -128,19 +128,19 @@
             });
         });
 
-        describe('#div', function() {
+        describe('#divScalar', function() {
             it('should return a value of self / scalar argument, returning Vec2', function() {
                 var v = Vec2.random(),
                     r = Math.random();
-                assert.equal( v.div( r ).equals( new Vec2( v.x / r, v.y / r ) ), true );
+                assert.equal( v.divScalar( r ).equals( new Vec2( v.x / r, v.y / r ) ), true );
             });
         });
 
-        describe('#mult', function() {
+        describe('#multScalar', function() {
             it('should return a value of self * scalar argument, returning Vec2', function() {
                 var v = Vec2.random(),
                     r = Math.random();
-                assert.equal( v.mult( r ).equals( new Vec2( v.x * r, v.y * r ) ), true );
+                assert.equal( v.multScalar( r ).equals( new Vec2( v.x * r, v.y * r ) ), true );
             });
         });
 

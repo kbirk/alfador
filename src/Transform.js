@@ -69,8 +69,8 @@
         }
         var rot = Mat33.rotationFromTo( this.forward, forward );
         this.forward = forward;
-        this.up = rot.multVector( this.up ).normalize();
-        this.left = rot.multVector( this.left ).normalize();
+        this.up = rot.multVec3( this.up ).normalize();
+        this.left = rot.multVec3( this.left ).normalize();
         return this;
     };
 
@@ -91,9 +91,9 @@
             up = up.normalize();
         }
         var rot = Mat33.rotationFromTo( this.up, up );
-        this.forward = rot.multVector( this.forward ).normalize();
+        this.forward = rot.multVec3( this.forward ).normalize();
         this.up = up;
-        this.left = rot.multVector( this.left ).normalize();
+        this.left = rot.multVec3( this.left ).normalize();
         return this;
     };
 
@@ -114,8 +114,8 @@
             left = left.normalize();
         }
         var rot = Mat33.rotationFromTo( this.left, left );
-        this.forward = rot.multVector( this.forward ).normalize();
-        this.up = rot.multVector( this.up ).normalize();
+        this.forward = rot.multVec3( this.forward ).normalize();
+        this.up = rot.multVec3( this.up ).normalize();
         this.left = left;
         return this;
     };
@@ -131,10 +131,10 @@
     Transform.prototype.mult = function( that ) {
         if ( that instanceof Array || that.data instanceof Array ) {
             // matrix or array
-            return new Transform( this.matrix().multMatrix( that ) );
+            return new Transform( this.matrix().multMat44( that ) );
         }
         // transform
-        return new Transform( this.matrix().multMatrix( that.matrix() ) );
+        return new Transform( this.matrix().multMat44( that.matrix() ) );
     };
 
     /**
@@ -181,8 +181,8 @@
     Transform.prototype.matrix = function() {
         // T * R * S
         return this.translationMatrix()
-            .multMatrix( this.rotationMatrix() )
-            .multMatrix( this.scaleMatrix() );
+            .multMat44( this.rotationMatrix() )
+            .multMat44( this.scaleMatrix() );
     };
 
     /**
@@ -232,8 +232,8 @@
     Transform.prototype.inverseMatrix = function() {
         // S^-1 * R^-1 * T^-1
         return this.inverseScaleMatrix()
-            .multMatrix( this.inverseRotationMatrix() )
-            .multMatrix( this.inverseTranslationMatrix() );
+            .multMat44( this.inverseRotationMatrix() )
+            .multMat44( this.inverseTranslationMatrix() );
     };
 
     /**
@@ -278,9 +278,9 @@
         if ( translation instanceof Array ) {
             translation = new Vec3( translation );
         }
-        this.origin = this.origin.add( this.left.mult( translation.x ) )
-            .add( this.up.mult( translation.y ) )
-            .add( this.forward.mult( translation.z ) );
+        this.origin = this.origin.add( this.left.multScalar( translation.x ) )
+            .add( this.up.multScalar( translation.y ) )
+            .add( this.forward.multScalar( translation.z ) );
         return this;
     };
 
@@ -308,9 +308,9 @@
      */
     Transform.prototype.rotateWorldRadians = function( angle, axis ) {
         var rot = Mat33.rotationRadians( angle, axis );
-        this.up = rot.multVector( this.up );
-        this.forward = rot.multVector( this.forward );
-        this.left = rot.multVector( this.left );
+        this.up = rot.multVec3( this.up );
+        this.forward = rot.multVec3( this.forward );
+        this.left = rot.multVec3( this.left );
         return this;
     };
 
@@ -324,7 +324,7 @@
      * @returns {Transform} The transform for chaining.
      */
     Transform.prototype.rotateLocalDegrees = function( angle, axis ) {
-        return this.rotateWorldDegrees( angle, this.rotationMatrix().multVector3( axis ) );
+        return this.rotateWorldDegrees( angle, this.rotationMatrix().multVec3( axis ) );
     };
 
     /**
@@ -337,7 +337,7 @@
      * @returns {Transform} The transform for chaining.
      */
     Transform.prototype.rotateLocalRadians = function( angle, axis ) {
-        return this.rotateWorldRadians( angle, this.rotationMatrix().multVector3( axis ) );
+        return this.rotateWorldRadians( angle, this.rotationMatrix().multVec3( axis ) );
     };
 
     /**
@@ -345,25 +345,25 @@
      * to the world space.
      * @memberof Transform
      *
-     * @param {Vec3|Vec4|Mat33|Mat44} that - The argument to transform.
+     * @param {Vec3|Vec4} vec - The vector argument to transform.
      * @param {boolean} ignoreScale - Whether or not to include the scale in the transform.
      * @param {boolean} ignoreRotation - Whether or not to include the rotation in the transform.
      * @param {boolean} ignoreTranslation - Whether or not to include the translation in the transform.
      *
      * @returns {Transform} The transform for chaining.
      */
-    Transform.prototype.localToWorld = function( that, ignoreScale, ignoreRotation, ignoreTranslation ) {
+    Transform.prototype.localToWorld = function( vec, ignoreScale, ignoreRotation, ignoreTranslation ) {
         var mat = new Mat44();
         if ( !ignoreScale ) {
-            mat = this.scaleMatrix().multMatrix( mat );
+            mat = this.scaleMatrix().multMat44( mat );
         }
         if ( !ignoreRotation ) {
-            mat = this.rotationMatrix().multMatrix( mat );
+            mat = this.rotationMatrix().multMat44( mat );
         }
         if ( !ignoreTranslation ) {
-            mat = this.translationMatrix().multMatrix( mat );
+            mat = this.translationMatrix().multMat44( mat );
         }
-        return mat.mult( that );
+        return mat.multVec3( vec );
     };
 
     /**
@@ -371,25 +371,25 @@
      * transforms local space.
      * @memberof Transform
      *
-     * @param {Vec3|Vec4|Mat33|Mat44} that - The argument to transform.
+     * @param {Vec3|Vec4} vec - The vector argument to transform.
      * @param {boolean} ignoreScale - Whether or not to include the scale in the transform.
      * @param {boolean} ignoreRotation - Whether or not to include the rotation in the transform.
      * @param {boolean} ignoreTranslation - Whether or not to include the translation in the transform.
      *
      * @returns {Transform} The transform for chaining.
      */
-    Transform.prototype.worldToLocal = function( that, ignoreScale, ignoreRotation, ignoreTranslation ) {
+    Transform.prototype.worldToLocal = function( vec, ignoreScale, ignoreRotation, ignoreTranslation ) {
         var mat = new Mat44();
         if ( !ignoreTranslation ) {
-            mat = this.inverseTranslationMatrix().multMatrix( mat );
+            mat = this.inverseTranslationMatrix().multMat44( mat );
         }
         if ( !ignoreRotation ) {
-            mat = this.inverseRotationMatrix().multMatrix( mat );
+            mat = this.inverseRotationMatrix().multMat44( mat );
         }
         if ( !ignoreScale ) {
-            mat = this.inverseScaleMatrix().multMatrix( mat );
+            mat = this.inverseScaleMatrix().multMat44( mat );
         }
-        return mat.mult( that );
+        return mat.multVec3( vec );
     };
 
     /**

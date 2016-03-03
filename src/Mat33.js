@@ -317,7 +317,7 @@
      *
      * @returns {Vec3} The resulting vector.
      */
-    Mat33.prototype.multVector = function( that ) {
+    Mat33.prototype.multVec3 = function( that ) {
         // ensure 'that' is a Vec3
         // it is safe to only cast if Array since the .w of a Vec4 is not used
         if ( that instanceof Array ) {
@@ -357,7 +357,7 @@
      *
      * @returns {Mat33} The resulting matrix.
      */
-    Mat33.prototype.multMatrix = function( that ) {
+    Mat33.prototype.multMat33 = function( that ) {
         var mat = new Mat33(),
             i;
         // ensure 'that' is a Mat33
@@ -374,36 +374,6 @@
     };
 
     /**
-     * Multiplies the provded argument by the matrix.
-     * @memberof Mat33
-     *
-     * @param {Vec3|Vec4|Mat33|Mat44|Array|number} - The argument to be multiplied by the matrix.
-     *
-     * @returns {Mat33|Vec3} The resulting product.
-     */
-    Mat33.prototype.mult = function( that ) {
-        if ( typeof that === 'number' ) {
-            // scalar
-            return this.multScalar( that );
-        } else if ( that instanceof Array ) {
-            // array
-            if ( that.length === 3 || that.length === 4 ) {
-                return this.multVector( that );
-            } else {
-                return this.multMatrix( that );
-            }
-        }
-        // vector
-        if ( that.x !== undefined &&
-            that.y !== undefined &&
-            that.z !== undefined ) {
-            return this.multVector( that );
-        }
-        // matrix
-        return this.multMatrix( that );
-    };
-
-    /**
      * Divides all components of the matrix by the provded scalar argument,
      * returning a new Mat33 object.
      * @memberof Mat33
@@ -412,7 +382,7 @@
      *
      * @returns {Mat33} The resulting matrix.
      */
-    Mat33.prototype.div = function( that ) {
+    Mat33.prototype.divScalar = function( that ) {
         var mat = new Mat33(),
             i;
         for ( i=0; i<9; i++ ) {
@@ -518,7 +488,7 @@
     Mat33.random = function() {
         var rot = Mat33.rotationRadians( Math.random() * 360, Vec3.random() ),
             scale = Mat33.scale( Math.random() * 10 );
-        return rot.multMatrix( scale );
+        return rot.multMat33( scale );
     };
 
     /**

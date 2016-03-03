@@ -170,71 +170,66 @@
             });
         });
 
-        describe('#mult()', function() {
-            it('should return a Mat33 when passed a scalar argument', function() {
+        describe('#multScalar()', function() {
+            it('should return a new Mat33 by value', function() {
                 var p = Mat33.random(),
                     q = Math.random(),
-                    r = p.mult( q );
+                    r = p.multScalar( q );
                 assert.equal( r instanceof Mat33, true );
-            });
-            it('should return a Mat33 when passed a Mat33 argument', function() {
-                var p = Mat33.random(),
-                    q = Mat33.random(),
-                    r = p.mult( q );
-                assert.equal( r instanceof Mat33, true );
-            });
-            it('should return a Mat33 when passed a Mat44 argument', function() {
-                var p = Mat33.random(),
-                    q = Mat44.random(),
-                    r = p.mult( q ),
-                    s = p.mult( new Mat33( q ) );
-                assert.equal( r instanceof Mat33, true );
-                assert.equal( r.equals( s ), true );
-            });
-            it('should return a Vec3 when passed a Vec4 argument', function() {
-                var p = Mat33.random(),
-                    q = Vec4.random(),
-                    r = p.mult( q ),
-                    s = p.mult( new Vec3( q ) );
-                assert.equal( r instanceof Vec3, true );
-                assert.equal( r.equals( s ), true );
-            });
-            it('should return a Vec3 when passed a Vec3 argument', function() {
-                var p = Mat33.random(),
-                    q = Vec3.random(),
-                    r = p.mult( q );
-                assert.equal( r instanceof Vec3, true );
-            });
-            it('should return a Vec3 when passed an Array argument of length 3', function() {
-                var p = Mat33.random(),
-                    q = [ Math.random(), Math.random(), Math.random() ],
-                    r = p.mult( q );
-                assert.equal( r instanceof Vec3, true );
-                assert.equal( r.equals( p.mult( new Vec3( q ) ) ), true );
-            });
-            it('should return a Vec3 when passed an Array argument of length 4', function() {
-                var p = Mat33.random(),
-                    q = [ Math.random(), Math.random(), Math.random(), Math.random() ],
-                    r = p.mult( q );
-                assert.equal( r instanceof Vec3, true );
-                assert.equal( r.equals( p.mult( new Vec3( q ) ) ), true );
-            });
-            it('should return a Mat33 when passed an Array argument of length > 4', function() {
-                var p = Mat33.random(),
-                    q = [ Math.random(), Math.random(), Math.random(),
-                        Math.random(), Math.random(), Math.random(),
-                        Math.random(), Math.random(), Math.random() ],
-                    r = p.mult( q );
-                assert.equal( r instanceof Mat33, true );
-                assert.equal( r.equals( p.mult( new Mat33( q ) ) ), true );
+                assert.equal( p !== r, true );
             });
         });
 
-        describe('#div()', function() {
+        describe('#multMat33()', function() {
+            it('should return a new Mat33 by value', function() {
+                var p = Mat33.random(),
+                    q = Mat33.random(),
+                    r = p.multMat33( q ),
+                    s = Mat44.random(),
+                    t = p.multMat33( s );
+                assert.equal( r instanceof Mat33, true );
+                assert.equal( t instanceof Mat33, true );
+                assert.equal( p !== r, true );
+                assert.equal( p !== t, true );
+            });
+            it('should accept array as an argument', function() {
+                var p = Mat33.random(),
+                    q = [
+                        Math.random(), Math.random(), Math.random(),
+                        Math.random(), Math.random(), Math.random(),
+                        Math.random(), Math.random(), Math.random()
+                    ],
+                    r = p.multMat33( q );
+                assert.equal( r instanceof Mat33, true );
+            });
+        });
+
+        describe('#multVec3()', function() {
+            it('should return a new Vec3 by value', function() {
+                var p = Mat33.random(),
+                    q = Vec3.random(),
+                    r = p.multVec3( q ),
+                    s = Vec4.random(),
+                    t = p.multVec3( s );
+                assert.equal( r instanceof Vec3, true );
+                assert.equal( t instanceof Vec3, true );
+                assert.equal( p !== r, true );
+                assert.equal( p !== t, true );
+            });
+            it('should accept array as an argument', function() {
+                var p = Mat33.random(),
+                    q = [ Math.random(), Math.random(), Math.random() ],
+                    r = p.multVec3( q );
+                assert.equal( r instanceof Vec3, true );
+                assert.equal( r.equals( p.multVec3( new Vec3( q ) ) ), true );
+            });
+        });
+
+        describe('#divScalar()', function() {
             it('should return a Mat33 with each component divided by a scalar', function() {
                 var m = Mat33.random(),
                     r = Math.random(),
-                    q = m.div( r ), i;
+                    q = m.divScalar( r ), i;
                 for ( i=0; i<9; i++ ) {
                     assert.equal( q.data[i] === m.data[i] / r, true );
                 }
@@ -274,9 +269,9 @@
                     up90 = Mat33.rotationDegrees( 90, up ),
                     left90 = Mat33.rotationDegrees( -90, left ),
                     forward90 = Mat33.rotationDegrees( 90, forward ),
-                    v0 = up90.mult( forward ).normalize(),
-                    v1 = left90.mult( forward ).normalize(),
-                    v2 = forward90.mult( up ).normalize();
+                    v0 = up90.multVec3( forward ).normalize(),
+                    v1 = left90.multVec3( forward ).normalize(),
+                    v2 = forward90.multVec3( up ).normalize();
                 assert.equal( v0.equals( left, EPSILON ), true );
                 assert.equal( v1.equals( up, EPSILON ), true );
                 assert.equal( v2.equals( right, EPSILON ), true );
@@ -304,9 +299,9 @@
                     up90 = Mat33.rotationRadians( 90 * Math.PI / 180, up ),
                     left90 = Mat33.rotationRadians( -90 * Math.PI / 180, left ),
                     forward90 = Mat33.rotationRadians( 90 * Math.PI / 180, forward ),
-                    v0 = up90.mult( forward ).normalize(),
-                    v1 = left90.mult( forward ).normalize(),
-                    v2 = forward90.mult( up ).normalize();
+                    v0 = up90.multVec3( forward ).normalize(),
+                    v1 = left90.multVec3( forward ).normalize(),
+                    v2 = forward90.multVec3( up ).normalize();
                 assert.equal( v0.equals( left, EPSILON ), true );
                 assert.equal( v1.equals( up, EPSILON ), true );
                 assert.equal( v2.equals( right, EPSILON ), true );
@@ -322,8 +317,8 @@
             it('should return a rotation matrix from vector A to B', function() {
                 var r = Vec3.random().normalize(),
                     s = Vec3.random().normalize(),
-                    rs = Mat33.rotationFromTo( r, s ).mult( r ).normalize(),
-                    sr = Mat33.rotationFromTo( s, r ).mult( s ).normalize(),
+                    rs = Mat33.rotationFromTo( r, s ).multVec3( r ).normalize(),
+                    sr = Mat33.rotationFromTo( s, r ).multVec3( s ).normalize(),
                     v = Vec3.random().add( new Vec3( 1, 1, 1) ).normalize(),
                     ca = new Vec3( 0, 1, 1).normalize(),
                     cb = new Vec3( 0, 1, 0 ).normalize(),
@@ -333,17 +328,17 @@
                 assert.equal( rs.equals( s, EPSILON ), true );
                 assert.equal( sr.equals( r, EPSILON ), true );
 
-                other = Mat33.rotationDegrees( EPSILON, v ).mult( ca ).normalize();
-                assert.equal( Mat33.rotationFromTo( ca, other ).mult( ca ).equals( other, EPSILON ), true );
+                other = Mat33.rotationDegrees( EPSILON, v ).multVec3( ca ).normalize();
+                assert.equal( Mat33.rotationFromTo( ca, other ).multVec3( ca ).equals( other, EPSILON ), true );
 
-                other = Mat33.rotationDegrees( EPSILON, v ).mult( cb ).normalize();
-                assert.equal( Mat33.rotationFromTo( cb, other ).mult( cb ).equals( other, EPSILON ), true );
+                other = Mat33.rotationDegrees( EPSILON, v ).multVec3( cb ).normalize();
+                assert.equal( Mat33.rotationFromTo( cb, other ).multVec3( cb ).equals( other, EPSILON ), true );
 
-                other = Mat33.rotationDegrees( EPSILON, v ).mult( cc ).normalize();
-                assert.equal( Mat33.rotationFromTo( cc, other ).mult( cc ).equals( other, EPSILON ), true );
+                other = Mat33.rotationDegrees( EPSILON, v ).multVec3( cc ).normalize();
+                assert.equal( Mat33.rotationFromTo( cc, other ).multVec3( cc ).equals( other, EPSILON ), true );
 
-                other = Mat33.rotationDegrees( EPSILON, v ).mult( cd ).normalize();
-                assert.equal( Mat33.rotationFromTo( cd, other ).mult( cd ).equals( other, EPSILON ), true );
+                other = Mat33.rotationDegrees( EPSILON, v ).multVec3( cd ).normalize();
+                assert.equal( Mat33.rotationFromTo( cd, other ).multVec3( cd ).equals( other, EPSILON ), true );
             });
         });
 
@@ -375,8 +370,8 @@
             it('should return an inverse copy of the matrix', function() {
                 var identity = Mat33.identity(),
                     a = new Mat33().inverse( Vec3.random(), Vec3.random() );
-                assert.equal( a.inverse().mult( a ).equals( identity ), true );
-                assert.equal( a.mult( a.inverse() ).equals( identity ), true );
+                assert.equal( a.inverse().multMat33( a ).equals( identity ), true );
+                assert.equal( a.multMat33( a.inverse() ).equals( identity ), true );
             });
 
             it('should return a deep copy', function() {

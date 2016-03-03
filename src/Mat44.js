@@ -255,7 +255,7 @@
      *
      * @returns {Vec3} The resulting vector.
      */
-    Mat44.prototype.multVector3 = function( that ) {
+    Mat44.prototype.multVec3 = function( that ) {
         // ensure 'that' is a Vec3
         // it is safe to only cast if Array since Vec4 has own method
         if ( that instanceof Array ) {
@@ -283,7 +283,7 @@
      *
      * @returns {Vec4} The resulting vector.
      */
-    Mat44.prototype.multVector4 = function( that ) {
+    Mat44.prototype.multVec4 = function( that ) {
         // ensure 'that' is a Vec4
         // it is safe to only cast if Array since Vec3 has own method
         if ( that instanceof Array ) {
@@ -336,7 +336,7 @@
      *
      * @returns {Mat44} The resulting matrix.
      */
-    Mat44.prototype.multMatrix = function( that ) {
+    Mat44.prototype.multMat44 = function( that ) {
         var mat = new Mat44(),
             i;
         // ensure 'that' is a Mat44
@@ -366,43 +366,6 @@
     };
 
     /**
-     * Multiplies the provded argument by the matrix.
-     * @memberof Mat44
-     *
-     * @param {Vec3|Vec4|Mat33|Mat44|Array|number} - The argument to be multiplied by the matrix.
-     *
-     * @returns {Mat44|Vec4} The resulting product.
-     */
-    Mat44.prototype.mult = function( that ) {
-        if ( typeof that === 'number' ) {
-            // scalar
-            return this.multScalar( that );
-        } else if ( that instanceof Array ) {
-            // array
-            if ( that.length === 3 ) {
-                return this.multVector3( that );
-            } else if ( that.length === 4 ) {
-                return this.multVector4( that );
-            } else {
-                return this.multMatrix( that );
-            }
-        }
-        // vector
-        if ( that.x !== undefined &&
-            that.y !== undefined &&
-            that.z !== undefined ) {
-            if ( that.w !== undefined ) {
-                // vec4
-                return this.multVector4( that );
-            }
-            //vec3
-            return this.multVector3( that );
-        }
-        // matrix
-        return this.multMatrix( that );
-    };
-
-    /**
      * Divides all components of the matrix by the provded scalar argument,
      * returning a new Mat44 object.
      * @memberof Mat44
@@ -411,7 +374,7 @@
      *
      * @returns {Mat44} The resulting matrix.
      */
-    Mat44.prototype.div = function( that ) {
+    Mat44.prototype.divScalar = function( that ) {
         var mat = new Mat44(), i;
         for ( i=0; i<16; i++ ) {
             mat.data[i] = this.data[i] / that;
@@ -661,7 +624,7 @@
         var rot = Mat44.rotationRadians( Math.random() * 360, Vec3.random() ),
             scale = Mat44.scale( Math.random() * 10 ),
             translation = Mat44.translation( Vec3.random() );
-        return translation.multMatrix( rot.multMatrix( scale ) );
+        return translation.multMat44( rot.multMat44( scale ) );
     };
 
     /**

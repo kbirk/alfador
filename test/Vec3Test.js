@@ -137,19 +137,19 @@
             });
         });
 
-        describe('#div', function() {
+        describe('#divScalar', function() {
             it('should return a value of self / scalar argument', function() {
                 var v = Vec3.random(),
                     r = Math.random();
-                assert.equal( v.div( r ).equals( new Vec3( v.x / r, v.y / r, v.z / r ) ), true );
+                assert.equal( v.divScalar( r ).equals( new Vec3( v.x / r, v.y / r, v.z / r ) ), true );
             });
         });
 
-        describe('#mult', function() {
+        describe('#multScalar', function() {
             it('should return a value of self * scalar argument', function() {
                 var v = Vec3.random(),
                     r = Math.random();
-                assert.equal( v.mult( r ).equals( new Vec3( v.x * r, v.y * r, v.z * r ) ), true );
+                assert.equal( v.multScalar( r ).equals( new Vec3( v.x * r, v.y * r, v.z * r ) ), true );
             });
         });
 
@@ -236,10 +236,10 @@
 
                 function getRot( v, n ) {
                     var rot0 = Mat33.rotationFromTo( [ 0, 0, 1 ], n );
-                    var rv = rot0.mult( v );
+                    var rv = rot0.multVec3( v );
                     var cross = n.cross( rv );
                     var rot1 = Mat33.rotationDegrees( 90 * Math.random(), cross );
-                    return rot1.mult( rot0.mult( v ) );
+                    return rot1.multVec3( rot0.multVec3( v ) );
                 }
 
                 var a = getRot([ 1, 0, 0 ], n);
@@ -290,14 +290,14 @@
             it('should the unsigned angle in degrees', function() {
                 var n = Vec3.random();
                 var rotation = Mat33.rotationFromTo( [ 0, 0, 1 ], n );
-                var a = rotation.mult([ 1, 0, 0 ]);
-                var b = rotation.mult([ 1, 1, 0 ]);
-                var c = rotation.mult([ 0, 1, 0 ]);
-                var d = rotation.mult([ -1, 1, 0 ]);
-                var e = rotation.mult([ -1, 0, 0 ]);
-                var f = rotation.mult([ -1, -1, 0 ]);
-                var g = rotation.mult([ 0, -1, 0 ]);
-                var h = rotation.mult([ 1, -1, 0 ]);
+                var a = rotation.multVec3([ 1, 0, 0 ]);
+                var b = rotation.multVec3([ 1, 1, 0 ]);
+                var c = rotation.multVec3([ 0, 1, 0 ]);
+                var d = rotation.multVec3([ -1, 1, 0 ]);
+                var e = rotation.multVec3([ -1, 0, 0 ]);
+                var f = rotation.multVec3([ -1, -1, 0 ]);
+                var g = rotation.multVec3([ 0, -1, 0 ]);
+                var h = rotation.multVec3([ 1, -1, 0 ]);
                 assert( Math.abs( a.unsignedAngleDegrees( [ b.x, b.y, b.z ], n ) - 45 ) < EPSILON );
                 assert( Math.abs( a.unsignedAngleDegrees( c, n ) - 90 ) < EPSILON );
                 assert( Math.abs( a.unsignedAngleDegrees( d, n ) - 135 ) < EPSILON );

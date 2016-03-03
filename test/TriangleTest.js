@@ -240,9 +240,9 @@
                 var ab = t.b.sub( t.a );
                 var bc = t.c.sub( t.b );
                 var ca = t.a.sub( t.c );
-                var abm = t.a.add( ab.normalize().mult( ab.length() / 2 ) );
-                var bcm = t.b.add( bc.normalize().mult( bc.length() / 2 ) );
-                var cam = t.c.add( ca.normalize().mult( ca.length() / 2 ) );
+                var abm = t.a.add( ab.normalize().multScalar( ab.length() / 2 ) );
+                var bcm = t.b.add( bc.normalize().multScalar( bc.length() / 2 ) );
+                var cam = t.c.add( ca.normalize().multScalar( ca.length() / 2 ) );
                 var abp = ab.cross( t.normal() ).normalize();
                 var bcp = bc.cross( t.normal() ).normalize();
                 var cap = ca.cross( t.normal() ).normalize();
@@ -254,10 +254,10 @@
 
         describe('#radius()', function() {
             it('should return the radius of the bounding sphere of the triangle', function() {
-                var a = Vec3.random().mult( Math.random() ),
-                    b = Vec3.random().mult( Math.random() ),
-                    c = Vec3.random().mult( Math.random() ),
-                    centroid = a.add( b ).add( c ).div( 3 ),
+                var a = Vec3.random().multScalar( Math.random() ),
+                    b = Vec3.random().multScalar( Math.random() ),
+                    c = Vec3.random().multScalar( Math.random() ),
+                    centroid = a.add( b ).add( c ).divScalar( 3 ),
                     aLength = centroid.sub( a ).length(),
                     bLength = centroid.sub( b ).length(),
                     cLength = centroid.sub( c ).length(),
@@ -269,11 +269,11 @@
 
         describe('#centroid()', function() {
             it('should return the centroid of the triangle', function() {
-                var a = Vec3.random().mult( Math.random() ),
-                    b = Vec3.random().mult( Math.random() ),
-                    c = Vec3.random().mult( Math.random() ),
+                var a = Vec3.random().multScalar( Math.random() ),
+                    b = Vec3.random().multScalar( Math.random() ),
+                    c = Vec3.random().multScalar( Math.random() ),
                     t = new Triangle([ a, b, c ]),
-                    centroid = a.add( b ).add( c ).div( 3 );
+                    centroid = a.add( b ).add( c ).divScalar( 3 );
                 assert( centroid.equals( t.centroid() ) );
             });
         });

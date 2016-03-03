@@ -202,7 +202,7 @@
                 var a = new Transform( Mat44.random() ),
                     b = new Transform( Mat44.random() ),
                     q = a.mult( b );
-                assert.equal( q.matrix().equals( a.matrix().mult( b.matrix() ), EPSILON ), true );
+                assert.equal( q.matrix().equals( a.matrix().multMat44( b.matrix() ), EPSILON ), true );
             });
             it('should accept Mat33, Mat44, and Transform instances as an argument', function() {
                 var a = new Transform( Mat44.random() ),
@@ -273,7 +273,7 @@
         describe('#matrix', function() {
             it('should return the affine Transform matrix', function() {
                 var p = Transform.random();
-                assert.equal( p.matrix().equals( p.translationMatrix().mult( p.rotationMatrix() ).mult( p.scaleMatrix() ), EPSILON ), true );
+                assert.equal( p.matrix().equals( p.translationMatrix().multMat44( p.rotationMatrix() ).multMat44( p.scaleMatrix() ), EPSILON ), true );
             });
             it('should return by value', function() {
                 var p = new Transform().rotateForwardTo( Vec3.random() ),
@@ -292,8 +292,8 @@
                     q = Mat44.scale( s ).inverse(),
                     r = p.inverseScaleMatrix();
                 assert.equal( r.equals( q, EPSILON ), true );
-                assert.equal( r.mult( p.scaleMatrix() ).equals( Mat44.identity(), EPSILON ), true );
-                assert.equal( p.scaleMatrix().mult( q ).equals( Mat44.identity(), EPSILON ), true );
+                assert.equal( r.multMat44( p.scaleMatrix() ).equals( Mat44.identity(), EPSILON ), true );
+                assert.equal( p.scaleMatrix().multMat44( q ).equals( Mat44.identity(), EPSILON ), true );
             });
             it('should return by value', function() {
                 var p = new Transform({
@@ -312,8 +312,8 @@
                     r = q.inverseRotationMatrix(),
                     s = Mat44.rotationFromTo( new Vec3( 0, 0, 1 ), p ).inverse();
                 assert.equal( s.equals( r, EPSILON ), true );
-                assert.equal( s.mult( q.rotationMatrix() ).equals( Mat44.identity(), EPSILON ), true );
-                assert.equal( q.rotationMatrix().mult( s ).equals( Mat44.identity(), EPSILON ), true );
+                assert.equal( s.multMat44( q.rotationMatrix() ).equals( Mat44.identity(), EPSILON ), true );
+                assert.equal( q.rotationMatrix().multMat44( s ).equals( Mat44.identity(), EPSILON ), true );
             });
             it('should return by value', function() {
                 var p = new Transform().rotateForwardTo( Vec3.random() ),
@@ -331,8 +331,8 @@
                     q = Mat44.translation( p.origin ).inverse(),
                     r = p.inverseTranslationMatrix();
                 assert.equal( q.equals( r, EPSILON ), true );
-                assert.equal( q.mult( p.translationMatrix() ).equals( Mat44.identity(), EPSILON ), true );
-                assert.equal( p.translationMatrix().mult( q ).equals( Mat44.identity(), EPSILON ), true );
+                assert.equal( q.multMat44( p.translationMatrix() ).equals( Mat44.identity(), EPSILON ), true );
+                assert.equal( p.translationMatrix().multMat44( q ).equals( Mat44.identity(), EPSILON ), true );
             });
             it('should return by value', function() {
                 var p = new Transform({
@@ -350,7 +350,7 @@
                         origin: Vec3.random()
                     }).rotateForwardTo( Vec3.random() );
                 assert.equal( p.inverseMatrix().equals( p.matrix().inverse(), EPSILON ), true );
-                assert.equal( p.inverseMatrix().mult( p.matrix() ).equals( Mat44.identity(), EPSILON ), true );
+                assert.equal( p.inverseMatrix().multMat44( p.matrix() ).equals( Mat44.identity(), EPSILON ), true );
             });
             it('should return by value', function() {
                 var p = new Transform({
@@ -398,7 +398,7 @@
                     p = Transform.random(),
                     s = p.origin,
                     q = p.translateLocal( r.normalize() ).origin,
-                    t = s.add( p.rotationMatrix().mult( r ).normalize() );
+                    t = s.add( p.rotationMatrix().multVec3( r ).normalize() );
                 assert.equal( q.equals( t, EPSILON ), true );
             });
             it('should return the transform by reference for chaining', function() {
@@ -416,7 +416,7 @@
                     s = Math.random(),
                     t = p.rotateWorldDegrees( s, r ),
                     u = Mat44.rotationDegrees( s, r );
-                assert.equal( u.mult( q ).equals( t.matrix(), EPSILON ), true );
+                assert.equal( u.multMat44( q ).equals( t.matrix(), EPSILON ), true );
             });
             it('should return the transform by reference for chaining', function() {
                 var p = Transform.random(),
@@ -433,7 +433,7 @@
                     s = Math.random(),
                     t = p.rotateWorldRadians( s * Math.PI / 180, r ),
                     u = Mat44.rotationRadians( s * Math.PI / 180, r );
-                assert.equal( u.mult( q ).equals( t.matrix(), EPSILON ), true );
+                assert.equal( u.multMat44( q ).equals( t.matrix(), EPSILON ), true );
             });
             it('should return the transform by reference for chaining', function() {
                 var p = Transform.random(),
@@ -448,9 +448,9 @@
                     q = p.matrix(),
                     r = Vec3.random(),
                     s = Math.random(),
-                    t = p.rotateLocalDegrees( s, p.rotationMatrix().mult( r ) ),
-                    u = Mat44.rotationDegrees( s, p.rotationMatrix().mult( r ) );
-                assert.equal( u.mult( q ).equals( t.matrix(), EPSILON ), true );
+                    t = p.rotateLocalDegrees( s, p.rotationMatrix().multVec3( r ) ),
+                    u = Mat44.rotationDegrees( s, p.rotationMatrix().multVec3( r ) );
+                assert.equal( u.multMat44( q ).equals( t.matrix(), EPSILON ), true );
             });
             it('should return the transform by reference for chaining', function() {
                 var p = Transform.random(),
@@ -465,9 +465,9 @@
                     q = p.matrix(),
                     r = Vec3.random(),
                     s = Math.random(),
-                    t = p.rotateLocalRadians( s * Math.PI / 180, p.rotationMatrix().mult( r ) ),
-                    u = Mat44.rotationRadians( s * Math.PI / 180, p.rotationMatrix().mult( r ) );
-                assert.equal( u.mult( q ).equals( t.matrix(), EPSILON ), true );
+                    t = p.rotateLocalRadians( s * Math.PI / 180, p.rotationMatrix().multVec3( r ) ),
+                    u = Mat44.rotationRadians( s * Math.PI / 180, p.rotationMatrix().multVec3( r ) );
+                assert.equal( u.multMat44( q ).equals( t.matrix(), EPSILON ), true );
             });
             it('should return the transform by reference for chaining', function() {
                 var p = Transform.random(),
@@ -481,7 +481,7 @@
                 var p = Transform.random(),
                     q = Vec3.random(),
                     r = p.localToWorld( q );
-                assert.equal( r.equals( p.matrix().mult( q ), EPSILON ), true );
+                assert.equal( r.equals( p.matrix().multVec3( q ), EPSILON ), true );
             });
             it('should ignore scale if second argument is true', function() {
                 var p = new Transform({
@@ -518,7 +518,7 @@
                 var p = Transform.random(),
                     q = Vec3.random(),
                     r = p.worldToLocal( q );
-                assert.equal( r.equals( p.inverseMatrix().mult( q ), EPSILON ), true );
+                assert.equal( r.equals( p.inverseMatrix().multVec3( q ), EPSILON ), true );
             });
             it('should ignore scale if second argument is true', function() {
                 var p = new Transform({

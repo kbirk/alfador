@@ -72,7 +72,7 @@
      *
      * @returns {Quaternion} The resulting concatenated quaternion.
      */
-    Quaternion.prototype.mult = function( that ) {
+    Quaternion.prototype.multQuat = function( that ) {
         that = ( that instanceof Array ) ? new Quaternion( that ) : that;
         var w = (that.w * this.w) - (that.x * this.x) - (that.y * this.y) - (that.z * this.z),
             x = this.y*that.z - this.z*that.y + this.w*that.x + this.x*that.w,
@@ -93,7 +93,7 @@
     Quaternion.prototype.rotate = function( that ) {
         that = ( that instanceof Array ) ? new Vec3( that ) : that;
         var vq = new Quaternion( 0, that.x, that.y, that.z ),
-            r = this.mult( vq ).mult( this.inverse() );
+            r = this.multQuat( vq ).multQuat( this.inverse() );
         return new Vec3( r.x, r.y, r.z );
     };
 

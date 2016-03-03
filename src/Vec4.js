@@ -24,7 +24,7 @@
                 this.x = arguments[0];
                 this.y = arguments[1];
                 this.z = arguments[2];
-                this.w = arguments[3];
+                this.w = arguments[3] || 0.0;
                 break;
             default:
                 this.x = 0.0;
@@ -102,7 +102,7 @@
      *
      * @returns {Vec4} The scaled vector.
      */
-    Vec4.prototype.mult = function( that ) {
+    Vec4.prototype.multScalar = function( that ) {
         return new Vec4(
             this.x * that,
             this.y * that,
@@ -119,7 +119,7 @@
      *
      * @returns {Vec4} The scaled vector.
      */
-    Vec4.prototype.div = function( that ) {
+    Vec4.prototype.divScalar = function( that ) {
         return new Vec4(
             this.x / that,
             this.y / that,
@@ -168,7 +168,7 @@
                 return Math.sqrt( len );
             }
         }
-        return this.normalize().mult( length );
+        return this.normalize().multScalar( length );
     };
 
     /**

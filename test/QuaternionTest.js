@@ -207,10 +207,10 @@
                     angleB = Math.random(),
                     rotMatrixA = Mat33.rotationRadians( angleA, axisA ),
                     rotMatrixB = Mat33.rotationRadians( angleB, axisB ),
-                    concatMatrix = rotMatrixA.mult( rotMatrixB ),
+                    concatMatrix = rotMatrixA.multMat33( rotMatrixB ),
                     rotQuaternionA = Quaternion.rotationRadians( angleA, axisA ),
                     rotQuaternionB = Quaternion.rotationRadians( angleB, axisB ),
-                    concatQuaternion = rotQuaternionA.mult( rotQuaternionB );
+                    concatQuaternion = rotQuaternionA.multQuat( rotQuaternionB );
                 assert.equal( concatMatrix.equals( concatQuaternion.matrix(), EPSILON ), true );
             });
             it('should accept an Array argument', function() {
@@ -220,10 +220,10 @@
                     angleB = Math.random(),
                     rotMatrixA = Mat33.rotationRadians( angleA, axisA ),
                     rotMatrixB = Mat33.rotationRadians( angleB, axisB ),
-                    concatMatrix = rotMatrixA.mult( rotMatrixB ),
+                    concatMatrix = rotMatrixA.multMat33( rotMatrixB ),
                     rotQuaternionA = Quaternion.rotationRadians( angleA, axisA ),
                     rotQuaternionB = Quaternion.rotationRadians( angleB, axisB ),
-                    concatQuaternion = rotQuaternionA.mult([
+                    concatQuaternion = rotQuaternionA.multQuat([
                         rotQuaternionB.w,
                         rotQuaternionB.x,
                         rotQuaternionB.y,
@@ -239,7 +239,7 @@
                     vec = Vec3.random(),
                     rotMatrix = Mat33.rotationRadians( angle, axis ),
                     rotQuaternion = Quaternion.rotationRadians( angle, axis );
-                assert.equal( rotMatrix.mult( vec ).equals( rotQuaternion.rotate( vec ), EPSILON ), true );
+                assert.equal( rotMatrix.multVec3( vec ).equals( rotQuaternion.rotate( vec ), EPSILON ), true );
             });
             it('should accept an Array argument', function() {
                 var axis = Vec3.random(),
@@ -247,7 +247,7 @@
                     vec = Vec3.random(),
                     rotMatrix = Mat33.rotationRadians( angle, axis ),
                     rotQuaternion = Quaternion.rotationRadians( angle, axis );
-                assert.equal( rotMatrix.mult( vec ).equals( rotQuaternion.rotate([ vec.x, vec.y, vec.z ]), EPSILON ), true );
+                assert.equal( rotMatrix.multVec3( vec ).equals( rotQuaternion.rotate([ vec.x, vec.y, vec.z ]), EPSILON ), true );
             });
         });
 
@@ -263,9 +263,9 @@
                     quarter = Quaternion.slerp( fromQuat, toQuat0, 0.25 ).rotate( vec ),
                     half = Quaternion.slerp( fromQuat, toQuat0, 0.5 ).rotate( vec ),
                     threeQuarter = Quaternion.slerp( fromQuat, toQuat0, 0.75 ).rotate( vec );
-                assert( quarter.normalize().equals( quarterRot.mult( vec ).normalize(), EPSILON ) );
-                assert( half.normalize().equals( halfRot.mult( vec ).normalize(), EPSILON ) );
-                assert( threeQuarter.normalize().equals( threeQuarterRot.mult( vec ).normalize(), EPSILON ) );
+                assert( quarter.normalize().equals( quarterRot.multVec3( vec ).normalize(), EPSILON ) );
+                assert( half.normalize().equals( halfRot.multVec3( vec ).normalize(), EPSILON ) );
+                assert( threeQuarter.normalize().equals( threeQuarterRot.multVec3( vec ).normalize(), EPSILON ) );
                 assert( Quaternion.slerp( fromQuat, toQuat0, 0 ).equals( fromQuat, EPSILON ) );
                 assert( Quaternion.slerp( fromQuat, toQuat0, 1 ).equals( toQuat0, EPSILON ) );
                 assert( Quaternion.slerp( fromQuat, toQuat1, 0 ).equals( fromQuat, EPSILON ) );
@@ -294,9 +294,9 @@
                     threeQuarter = Quaternion.slerp(
                         [ fromQuat.w, fromQuat.x, fromQuat.y, fromQuat.z ],
                         [ toQuat.w, toQuat.x, toQuat.y, toQuat.z ], 0.75 ).rotate( vec );
-                assert( quarter.normalize().equals( quarterRot.mult( vec ).normalize(), EPSILON ) );
-                assert( half.normalize().equals( halfRot.mult( vec ).normalize(), EPSILON ) );
-                assert( threeQuarter.normalize().equals( threeQuarterRot.mult( vec ).normalize(), EPSILON ) );
+                assert( quarter.normalize().equals( quarterRot.multVec3( vec ).normalize(), EPSILON ) );
+                assert( half.normalize().equals( halfRot.multVec3( vec ).normalize(), EPSILON ) );
+                assert( threeQuarter.normalize().equals( threeQuarterRot.multVec3( vec ).normalize(), EPSILON ) );
             });
         });
 

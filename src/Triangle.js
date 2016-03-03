@@ -16,7 +16,7 @@
             t = 1;
         }
         // compute projected position from the clamped t
-        return a.add( ab.mult( t ) );
+        return a.add( ab.multScalar( t ) );
     }
 
     /**
@@ -71,7 +71,7 @@
         return this.a
             .add( this.b )
             .add( this.c )
-            .div( 3 );
+            .divScalar( 3 );
     };
 
     /**
@@ -164,7 +164,7 @@
                 return false;
             }
         }
-        var position = o.add( d.mult( t ) );
+        var position = o.add( d.multScalar( t ) );
         // check if point is inside the triangle
         if ( !this.isInside( position ) ) {
             return false;
@@ -208,7 +208,7 @@
         var a = Vec3.random(),
             b = Vec3.random(),
             c = Vec3.random(),
-            centroid = a.add( b ).add( c ).div( 3 ),
+            centroid = a.add( b ).add( c ).divScalar( 3 ),
             aCent = a.sub( centroid ),
             bCent = b.sub( centroid ),
             cCent = c.sub( centroid ),
@@ -218,9 +218,9 @@
             maxDist = Math.max( Math.max( aDist, bDist ), cDist ),
             scale = 1 / maxDist;
         return new Triangle(
-            aCent.mult( scale ),
-            bCent.mult( scale ),
-            cCent.mult( scale ) );
+            aCent.multScalar( scale ),
+            bCent.multScalar( scale ),
+            cCent.multScalar( scale ) );
     };
 
     /**
