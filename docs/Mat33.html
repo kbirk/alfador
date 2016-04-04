@@ -1,0 +1,3877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Mat33 - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Mat33.html">Mat33</a><ul class='methods'><li data-type='method'><a href="Mat33.html#addMat33">addMat33</a></li><li data-type='method'><a href="Mat33.html#addMat44">addMat44</a></li><li data-type='method'><a href="Mat33.html#col">col</a></li><li data-type='method'><a href="Mat33.html#decompose">decompose</a></li><li data-type='method'><a href="Mat33.html#divScalar">divScalar</a></li><li data-type='method'><a href="Mat33.html#equals">equals</a></li><li data-type='method'><a href="Mat33.html#inverse">inverse</a></li><li data-type='method'><a href="Mat33.html#inverseRotation">inverseRotation</a></li><li data-type='method'><a href="Mat33.html#inverseScale">inverseScale</a></li><li data-type='method'><a href="Mat33.html#multMat33">multMat33</a></li><li data-type='method'><a href="Mat33.html#multMat44">multMat44</a></li><li data-type='method'><a href="Mat33.html#multScalar">multScalar</a></li><li data-type='method'><a href="Mat33.html#multVec3">multVec3</a></li><li data-type='method'><a href="Mat33.html#rotation">rotation</a></li><li data-type='method'><a href="Mat33.html#row">row</a></li><li data-type='method'><a href="Mat33.html#scale">scale</a></li><li data-type='method'><a href="Mat33.html#subMat33">subMat33</a></li><li data-type='method'><a href="Mat33.html#subMat44">subMat44</a></li><li data-type='method'><a href="Mat33.html#toArray">toArray</a></li><li data-type='method'><a href="Mat33.html#toMat44">toMat44</a></li><li data-type='method'><a href="Mat33.html#toString">toString</a></li><li data-type='method'><a href="Mat33.html#transpose">transpose</a></li><li data-type='method'><a href="Mat33.html#.identity">identity</a></li><li data-type='method'><a href="Mat33.html#.random">random</a></li><li data-type='method'><a href="Mat33.html#.rotation">rotation</a></li><li data-type='method'><a href="Mat33.html#.rotationFromTo">rotationFromTo</a></li><li data-type='method'><a href="Mat33.html#.scale">scale</a></li></ul></li><li><a href="Mat44.html">Mat44</a><ul class='methods'><li data-type='method'><a href="Mat44.html#addMat33">addMat33</a></li><li data-type='method'><a href="Mat44.html#addMat44">addMat44</a></li><li data-type='method'><a href="Mat44.html#col">col</a></li><li data-type='method'><a href="Mat44.html#decompose">decompose</a></li><li data-type='method'><a href="Mat44.html#divScalar">divScalar</a></li><li data-type='method'><a href="Mat44.html#equals">equals</a></li><li data-type='method'><a href="Mat44.html#inverse">inverse</a></li><li data-type='method'><a href="Mat44.html#inverseRotation">inverseRotation</a></li><li data-type='method'><a href="Mat44.html#inverseScale">inverseScale</a></li><li data-type='method'><a href="Mat44.html#inverseTranslation">inverseTranslation</a></li><li data-type='method'><a href="Mat44.html#multMat33">multMat33</a></li><li data-type='method'><a href="Mat44.html#multMat44">multMat44</a></li><li data-type='method'><a href="Mat44.html#multScalar">multScalar</a></li><li data-type='method'><a href="Mat44.html#multVec3">multVec3</a></li><li data-type='method'><a href="Mat44.html#multVec4">multVec4</a></li><li data-type='method'><a href="Mat44.html#rotation">rotation</a></li><li data-type='method'><a href="Mat44.html#row">row</a></li><li data-type='method'><a href="Mat44.html#scale">scale</a></li><li data-type='method'><a href="Mat44.html#subMat33">subMat33</a></li><li data-type='method'><a href="Mat44.html#subMat44">subMat44</a></li><li data-type='method'><a href="Mat44.html#toArray">toArray</a></li><li data-type='method'><a href="Mat44.html#toMat33">toMat33</a></li><li data-type='method'><a href="Mat44.html#toString">toString</a></li><li data-type='method'><a href="Mat44.html#translation">translation</a></li><li data-type='method'><a href="Mat44.html#transpose">transpose</a></li><li data-type='method'><a href="Mat44.html#.identity">identity</a></li><li data-type='method'><a href="Mat44.html#.random">random</a></li><li data-type='method'><a href="Mat44.html#.rotation">rotation</a></li><li data-type='method'><a href="Mat44.html#.rotationFromTo">rotationFromTo</a></li><li data-type='method'><a href="Mat44.html#.scale">scale</a></li><li data-type='method'><a href="Mat44.html#.translation">translation</a></li></ul></li><li><a href="Quaternion.html">Quaternion</a><ul class='methods'><li data-type='method'><a href="Quaternion.html#.identity">identity</a></li><li data-type='method'><a href="Quaternion.html#.random">random</a></li><li data-type='method'><a href="Quaternion.html#.rotation">rotation</a></li><li data-type='method'><a href="Quaternion.html#.rotationFromTo">rotationFromTo</a></li><li data-type='method'><a href="Quaternion.html#.slerp">slerp</a></li><li data-type='method'><a href="Quaternion.html#axes">axes</a></li><li data-type='method'><a href="Quaternion.html#conjugate">conjugate</a></li><li data-type='method'><a href="Quaternion.html#equals">equals</a></li><li data-type='method'><a href="Quaternion.html#inverse">inverse</a></li><li data-type='method'><a href="Quaternion.html#matrix">matrix</a></li><li data-type='method'><a href="Quaternion.html#multQuat">multQuat</a></li><li data-type='method'><a href="Quaternion.html#negate">negate</a></li><li data-type='method'><a href="Quaternion.html#normalize">normalize</a></li><li data-type='method'><a href="Quaternion.html#rotate">rotate</a></li><li data-type='method'><a href="Quaternion.html#toArray">toArray</a></li><li data-type='method'><a href="Quaternion.html#toString">toString</a></li><li data-type='method'><a href="Quaternion.html#xAxis">xAxis</a></li><li data-type='method'><a href="Quaternion.html#yAxis">yAxis</a></li><li data-type='method'><a href="Quaternion.html#zAxis">zAxis</a></li></ul></li><li><a href="Transform.html">Transform</a><ul class='methods'><li data-type='method'><a href="Transform.html#.identity">identity</a></li><li data-type='method'><a href="Transform.html#.random">random</a></li><li data-type='method'><a href="Transform.html#axes">axes</a></li><li data-type='method'><a href="Transform.html#equals">equals</a></li><li data-type='method'><a href="Transform.html#inverseMatrix">inverseMatrix</a></li><li data-type='method'><a href="Transform.html#inverseRotationMatrix">inverseRotationMatrix</a></li><li data-type='method'><a href="Transform.html#inverseScaleMatrix">inverseScaleMatrix</a></li><li data-type='method'><a href="Transform.html#inverseTranslationMatrix">inverseTranslationMatrix</a></li><li data-type='method'><a href="Transform.html#localToWorld">localToWorld</a></li><li data-type='method'><a href="Transform.html#matrix">matrix</a></li><li data-type='method'><a href="Transform.html#rotateLocal">rotateLocal</a></li><li data-type='method'><a href="Transform.html#rotateWorld">rotateWorld</a></li><li data-type='method'><a href="Transform.html#rotateXTo">rotateXTo</a></li><li data-type='method'><a href="Transform.html#rotateYTo">rotateYTo</a></li><li data-type='method'><a href="Transform.html#rotateZTo">rotateZTo</a></li><li data-type='method'><a href="Transform.html#rotationMatrix">rotationMatrix</a></li><li data-type='method'><a href="Transform.html#scaleMatrix">scaleMatrix</a></li><li data-type='method'><a href="Transform.html#toString">toString</a></li><li data-type='method'><a href="Transform.html#translateLocal">translateLocal</a></li><li data-type='method'><a href="Transform.html#translateWorld">translateWorld</a></li><li data-type='method'><a href="Transform.html#translationMatrix">translationMatrix</a></li><li data-type='method'><a href="Transform.html#viewMatrix">viewMatrix</a></li><li data-type='method'><a href="Transform.html#worldToLocal">worldToLocal</a></li><li data-type='method'><a href="Transform.html#xAxis">xAxis</a></li><li data-type='method'><a href="Transform.html#yAxis">yAxis</a></li><li data-type='method'><a href="Transform.html#zAxis">zAxis</a></li></ul></li><li><a href="Triangle.html">Triangle</a><ul class='methods'><li data-type='method'><a href="Triangle.html#.random">random</a></li><li data-type='method'><a href="Triangle.html#area">area</a></li><li data-type='method'><a href="Triangle.html#centroid">centroid</a></li><li data-type='method'><a href="Triangle.html#closestPoint">closestPoint</a></li><li data-type='method'><a href="Triangle.html#equals">equals</a></li><li data-type='method'><a href="Triangle.html#intersect">intersect</a></li><li data-type='method'><a href="Triangle.html#isInside">isInside</a></li><li data-type='method'><a href="Triangle.html#normal">normal</a></li><li data-type='method'><a href="Triangle.html#radius">radius</a></li><li data-type='method'><a href="Triangle.html#toString">toString</a></li></ul></li><li><a href="Vec2.html">Vec2</a><ul class='methods'><li data-type='method'><a href="Vec2.html#add">add</a></li><li data-type='method'><a href="Vec2.html#cross">cross</a></li><li data-type='method'><a href="Vec2.html#divScalar">divScalar</a></li><li data-type='method'><a href="Vec2.html#dot">dot</a></li><li data-type='method'><a href="Vec2.html#equals">equals</a></li><li data-type='method'><a href="Vec2.html#length">length</a></li><li data-type='method'><a href="Vec2.html#lengthSquared">lengthSquared</a></li><li data-type='method'><a href="Vec2.html#multScalar">multScalar</a></li><li data-type='method'><a href="Vec2.html#negate">negate</a></li><li data-type='method'><a href="Vec2.html#normalize">normalize</a></li><li data-type='method'><a href="Vec2.html#sub">sub</a></li><li data-type='method'><a href="Vec2.html#toArray">toArray</a></li><li data-type='method'><a href="Vec2.html#toString">toString</a></li><li data-type='method'><a href="Vec2.html#unsignedAngle">unsignedAngle</a></li><li data-type='method'><a href="Vec2.html#.random">random</a></li></ul></li><li><a href="Vec3.html">Vec3</a><ul class='methods'><li data-type='method'><a href="Vec3.html#add">add</a></li><li data-type='method'><a href="Vec3.html#cross">cross</a></li><li data-type='method'><a href="Vec3.html#divScalar">divScalar</a></li><li data-type='method'><a href="Vec3.html#dot">dot</a></li><li data-type='method'><a href="Vec3.html#equals">equals</a></li><li data-type='method'><a href="Vec3.html#length">length</a></li><li data-type='method'><a href="Vec3.html#lengthSquared">lengthSquared</a></li><li data-type='method'><a href="Vec3.html#multScalar">multScalar</a></li><li data-type='method'><a href="Vec3.html#negate">negate</a></li><li data-type='method'><a href="Vec3.html#normalize">normalize</a></li><li data-type='method'><a href="Vec3.html#projectOntoPlane">projectOntoPlane</a></li><li data-type='method'><a href="Vec3.html#sub">sub</a></li><li data-type='method'><a href="Vec3.html#toArray">toArray</a></li><li data-type='method'><a href="Vec3.html#toString">toString</a></li><li data-type='method'><a href="Vec3.html#unsignedAngle">unsignedAngle</a></li><li data-type='method'><a href="Vec3.html#.random">random</a></li></ul></li><li><a href="Vec4.html">Vec4</a><ul class='methods'><li data-type='method'><a href="Vec4.html#add">add</a></li><li data-type='method'><a href="Vec4.html#divScalar">divScalar</a></li><li data-type='method'><a href="Vec4.html#dot">dot</a></li><li data-type='method'><a href="Vec4.html#equals">equals</a></li><li data-type='method'><a href="Vec4.html#length">length</a></li><li data-type='method'><a href="Vec4.html#lengthSquared">lengthSquared</a></li><li data-type='method'><a href="Vec4.html#multScalar">multScalar</a></li><li data-type='method'><a href="Vec4.html#negate">negate</a></li><li data-type='method'><a href="Vec4.html#normalize">normalize</a></li><li data-type='method'><a href="Vec4.html#sub">sub</a></li><li data-type='method'><a href="Vec4.html#toArray">toArray</a></li><li data-type='method'><a href="Vec4.html#toString">toString</a></li><li data-type='method'><a href="Vec4.html#.random">random</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Mat33</h1>
+    
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+        Mat33
+        </h2>
+        
+            <div class="class-description">A 3x3 column-major matrix.</div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+    <h2>Constructor</h2>
+    
+
+    <h4 class="name" id="Mat33"><span class="type-signature"></span>new Mat33<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Instantiates a Mat33 object.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat33.js.html">Mat33.js</a>, <a href="Mat33.js.html#line8">line 8</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="addMat33"><span class="type-signature"></span>addMat33<span class="signature">(that)</span><span class="type-signature"> &rarr; {<a href="Mat33.html">Mat33</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Adds the matrix with the provided matrix argument, returning a new Ma33object.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>that</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Mat33.html">Mat33</a></span>
+|
+
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The matrix to add.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat33.js.html">Mat33.js</a>, <a href="Mat33.js.html#line251">line 251</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The sum of the two matrices.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Mat33.html">Mat33</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="addMat44"><span class="type-signature"></span>addMat44<span class="signature">(that)</span><span class="type-signature"> &rarr; {<a href="Mat33.html">Mat33</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Adds the matrix with the provided matrix argument, returning a new Ma33object.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>that</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Mat44.html">Mat44</a></span>
+|
+
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The matrix to add.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat33.js.html">Mat33.js</a>, <a href="Mat33.js.html#line275">line 275</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The sum of the two matrices.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Mat33.html">Mat33</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="col"><span class="type-signature"></span>col<span class="signature">(index, vec)</span><span class="type-signature"> &rarr; {<a href="Vec3.html">Vec3</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns a column of the matrix as a Vec3 object.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The 0-based col index.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vec</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Vec3.html">Vec3</a></span>
+|
+
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The vector to replace the col. Optional.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat33.js.html">Mat33.js</a>, <a href="Mat33.js.html#line66">line 66</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The column vector.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Vec3.html">Vec3</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="decompose"><span class="type-signature"></span>decompose<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Decomposes the matrix into the corresponding rotation, and scale components.a scale.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Quaternion.js.html">Quaternion.js</a>, <a href="Quaternion.js.html#line401">line 401</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The decomposed components of the matrix.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="divScalar"><span class="type-signature"></span>divScalar<span class="signature">(that)</span><span class="type-signature"> &rarr; {<a href="Mat33.html">Mat33</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Divides all components of the matrix by the provded scalar argument,returning a new Mat33 object.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>that</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The scalar to divide the matrix by.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat33.js.html">Mat33.js</a>, <a href="Mat33.js.html#line442">line 442</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The resulting matrix.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Mat33.html">Mat33</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="equals"><span class="type-signature"></span>equals<span class="signature">(that, epsilon)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns true if the all components match those of a provided matrix.An optional epsilon value may be provided.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>that</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Mat33.html">Mat33</a></span>
+|
+
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The matrix to test equality with.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>epsilon</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The epsilon value. Optional.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat33.js.html">Mat33.js</a>, <a href="Mat33.js.html#line466">line 466</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Whether or not the matrix components match.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="inverse"><span class="type-signature"></span>inverse<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Mat33.html">Mat33</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the inverse of the matrix.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat33.js.html">Mat33.js</a>, <a href="Mat33.js.html#line506">line 506</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The inverted matrix.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Mat33.html">Mat33</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="inverseRotation"><span class="type-signature"></span>inverseRotation<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Mat33.html">Mat33</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the inverse of the transform's rotation matrix.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat33.js.html">Mat33.js</a>, <a href="Mat33.js.html#line563">line 563</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The inverse rotation matrix.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Mat33.html">Mat33</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="inverseScale"><span class="type-signature"></span>inverseScale<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Mat33.html">Mat33</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the inverse of the transform's scale matrix.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat33.js.html">Mat33.js</a>, <a href="Mat33.js.html#line580">line 580</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The inverse scale matrix.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Mat33.html">Mat33</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="multMat33"><span class="type-signature"></span>multMat33<span class="signature">(that)</span><span class="type-signature"> &rarr; {<a href="Mat33.html">Mat33</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Multiplies the provded matrix argument by the matrix, returning a newMat33 object.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>that</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Mat33.html">Mat33</a></span>
+|
+
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The matrix to be multiplied by the matrix.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat33.js.html">Mat33.js</a>, <a href="Mat33.js.html#line394">line 394</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The resulting matrix.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Mat33.html">Mat33</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="multMat44"><span class="type-signature"></span>multMat44<span class="signature">(that)</span><span class="type-signature"> &rarr; {<a href="Mat33.html">Mat33</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Multiplies the provded matrix argument by the matrix, returning a newMat33 object.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>that</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Mat44.html">Mat44</a></span>
+|
+
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The matrix to be multiplied by the matrix.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat33.js.html">Mat33.js</a>, <a href="Mat33.js.html#line418">line 418</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The resulting matrix.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Mat33.html">Mat33</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="multScalar"><span class="type-signature"></span>multScalar<span class="signature">(that)</span><span class="type-signature"> &rarr; {<a href="Mat33.html">Mat33</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Multiplies all components of the matrix by the provded scalar argument,returning a new Mat33 object.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>that</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The scalar to multiply the matrix by.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat33.js.html">Mat33.js</a>, <a href="Mat33.js.html#line371">line 371</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The resulting matrix.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Mat33.html">Mat33</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="multVec3"><span class="type-signature"></span>multVec3<span class="signature">(that)</span><span class="type-signature"> &rarr; {<a href="Vec3.html">Vec3</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Multiplies the provded vector argument by the matrix, returning a newVec3 object.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>that</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Vec3.html">Vec3</a></span>
+|
+
+<span class="param-type"><a href="Vec4.html">Vec4</a></span>
+|
+
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The vector to be multiplied by the matrix.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat33.js.html">Mat33.js</a>, <a href="Mat33.js.html#line347">line 347</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The resulting vector.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Vec3.html">Vec3</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="rotation"><span class="type-signature"></span>rotation<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Mat33.html">Mat33</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the rotation matrix from the affine-transformation.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat33.js.html">Mat33.js</a>, <a href="Mat33.js.html#line533">line 533</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The rotation matrix.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Mat33.html">Mat33</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="row"><span class="type-signature"></span>row<span class="signature">(index, vec)</span><span class="type-signature"> &rarr; {<a href="Vec3.html">Vec3</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns a row of the matrix as a Vec3 object.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The 0-based row index.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vec</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Vec3.html">Vec3</a></span>
+|
+
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The vector to replace the row. Optional.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat33.js.html">Mat33.js</a>, <a href="Mat33.js.html#line44">line 44</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The row vector.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Vec3.html">Vec3</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="scale"><span class="type-signature"></span>scale<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Mat33.html">Mat33</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the scale matrix from the affine-transformation.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat33.js.html">Mat33.js</a>, <a href="Mat33.js.html#line550">line 550</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The scale matrix.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Mat33.html">Mat33</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="subMat33"><span class="type-signature"></span>subMat33<span class="signature">(that)</span><span class="type-signature"> &rarr; {<a href="Mat33.html">Mat33</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Subtracts the provided matrix argument from the matrix, returning a newMat33 object.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>that</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Mat33.html">Mat33</a></span>
+|
+
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The matrix to add.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat33.js.html">Mat33.js</a>, <a href="Mat33.js.html#line299">line 299</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The difference of the two matrices.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Mat33.html">Mat33</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="subMat44"><span class="type-signature"></span>subMat44<span class="signature">(that)</span><span class="type-signature"> &rarr; {<a href="Mat33.html">Mat33</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Subtracts the provided matrix argument from the matrix, returning a newMat33 object.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>that</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Mat44.html">Mat44</a></span>
+|
+
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The matrix to add.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat33.js.html">Mat33.js</a>, <a href="Mat33.js.html#line323">line 323</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The difference of the two matrices.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Mat33.html">Mat33</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="toArray"><span class="type-signature"></span>toArray<span class="signature">()</span><span class="type-signature"> &rarr; {Array}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns an array representation of the matrix.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat33.js.html">Mat33.js</a>, <a href="Mat33.js.html#line622">line 622</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The matrix as an array.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="toMat44"><span class="type-signature"></span>toMat44<span class="signature">()</span><span class="type-signature"> &rarr; {Array}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns an array representation of the matrix.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat44.js.html">Mat44.js</a>, <a href="Mat44.js.html#line1004">line 1004</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The matrix as an array.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="toString"><span class="type-signature"></span>toString<span class="signature">()</span><span class="type-signature"> &rarr; {String}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns a string representation of the matrix.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat33.js.html">Mat33.js</a>, <a href="Mat33.js.html#line610">line 610</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The string representation of the matrix.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">String</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="transpose"><span class="type-signature"></span>transpose<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Mat33.html">Mat33</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the transpose of the matrix.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat33.js.html">Mat33.js</a>, <a href="Mat33.js.html#line486">line 486</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The transposed matrix.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Mat33.html">Mat33</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".identity"><span class="type-signature">(static) </span>identity<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Mat33.html">Mat33</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the identity matrix.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat33.js.html">Mat33.js</a>, <a href="Mat33.js.html#line85">line 85</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The identiy matrix.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Mat33.html">Mat33</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".random"><span class="type-signature">(static) </span>random<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Mat33.html">Mat33</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns a random transform matrix composed of a rotation and scale.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat33.js.html">Mat33.js</a>, <a href="Mat33.js.html#line598">line 598</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A random transform matrix.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Mat33.html">Mat33</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".rotation"><span class="type-signature">(static) </span>rotation<span class="signature">(angle, axis)</span><span class="type-signature"> &rarr; {<a href="Mat33.html">Mat33</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns a rotation matrix defined by an axis and an angle.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>angle</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The angle of the rotation, in radians.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>axis</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Vec3.html">Vec3</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The axis of the rotation.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat33.js.html">Mat33.js</a>, <a href="Mat33.js.html#line127">line 127</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The rotation matrix.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Mat33.html">Mat33</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".rotationFromTo"><span class="type-signature">(static) </span>rotationFromTo<span class="signature">(from, to)</span><span class="type-signature"> &rarr; {<a href="Mat33.html">Mat33</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns a rotation matrix to rotate a vector from one direction toanother.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>from</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Vec3.html">Vec3</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The starting direction.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>to</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Vec3.html">Vec3</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ending direction.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat33.js.html">Mat33.js</a>, <a href="Mat33.js.html#line169">line 169</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The matrix representing the rotation.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Mat33.html">Mat33</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".scale"><span class="type-signature">(static) </span>scale<span class="signature">(scale)</span><span class="type-signature"> &rarr; {<a href="Mat33.html">Mat33</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns a scale matrix.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>scale</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Vec3.html">Vec3</a></span>
+|
+
+<span class="param-type">Array</span>
+|
+
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The scalar or vector scaling factor.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Mat33.js.html">Mat33.js</a>, <a href="Mat33.js.html#line97">line 97</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The scale matrix.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Mat33.html">Mat33</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Mon Apr 04 2016 19:24:58 GMT-0400 (EDT) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
