@@ -4,6 +4,7 @@
 
     var Vec3 = require('./Vec3');
     var Vec4 = require('./Vec4');
+    var Mat33 = require('./Mat33');
     var EPSILON = require('./Epsilon');
 
     /**
@@ -46,7 +47,7 @@
      * @memberof Mat44
      *
      * @param {number} index - The 0-based row index.
-     * @param {Vec3||Array} vec - The vector to replace the row. Optional.
+     * @param {Vec3|Array} vec - The vector to replace the row. Optional.
      *
      * @returns {Vec4} The row vector.
      */
@@ -70,7 +71,7 @@
      * @memberof Mat44
      *
      * @param {number} index - The 0-based col index.
-     * @param {Vec3||Array} vec - The vector to replace the col. Optional.
+     * @param {Vec3|Array} vec - The vector to replace the col. Optional.
      *
      * @returns {Vec4} The column vector.
      */
@@ -160,31 +161,18 @@
      * Returns a rotation matrix defined by an axis and an angle.
      * @memberof Mat44
      *
-     * @param {number} angle - The angle of the rotation, in degrees.
-     * @param {Vec3} axis - The axis of the rotation.
-     *
-     * @returns {Mat44} The rotation matrix.
-     */
-    Mat44.rotationDegrees = function( angle, axis ) {
-        return this.rotationRadians( angle*Math.PI/180, axis );
-    };
-
-    /**
-     * Returns a rotation matrix defined by an axis and an angle.
-     * @memberof Mat44
-     *
      * @param {number} angle - The angle of the rotation, in radians.
      * @param {Vec3} axis - The axis of the rotation.
      *
      * @returns {Mat44} The rotation matrix.
      */
-    Mat44.rotationRadians = function( angle, axis ) {
+    Mat44.rotation = function( angle, axis ) {
         if ( axis instanceof Array ) {
             axis = new Vec3( axis );
         }
         // zero vector, return identity
         if ( axis.lengthSquared() === 0 ) {
-            return this.identity();
+            throw 'Cannot create rotation matrix for a zero vector axis';
         }
         var normAxis = axis.normalize(),
             x = normAxis.x,
@@ -228,9 +216,9 @@
             Efficiently Building a Matrix to Rotate One Vector to Another
             Journal of Graphics Tools, 4(4):1-4, 1999
         */
-        var from = new Vec3( fromVec ).normalize();
-        var to = new Vec3( toVec ).normalize();
-        var e = from.dot( to );
+        fromVec = new Vec3( fromVec ).normalize();
+        toVec = new Vec3( toVec ).normalize();
+        var e = fromVec.dot( toVec );
         var f = Math.abs( e );
         var x, u, v;
         var fx, fy, fz;
@@ -239,9 +227,9 @@
         if ( f > 1.0 - EPSILON ) {
             // 'from' and 'to' almost parallel
             // nearly orthogonal
-            fx = Math.abs( from.x );
-            fy = Math.abs( from.y );
-            fz = Math.abs( from.z );
+            fx = Math.abs( fromVec.x );
+            fy = Math.abs( fromVec.y );
+            fz = Math.abs( fromVec.z );
             if ( fx < fy ) {
                 if ( fx < fz ) {
                     x = new Vec3( 1, 0, 0 );
@@ -255,8 +243,8 @@
                     x = new Vec3( 0, 0, 1 );
                 }
             }
-            u = x.sub( from );
-            v = x.sub( to );
+            u = x.sub( fromVec );
+            v = x.sub( toVec );
             c1 = 2.0 / u.dot( u );
             c2 = 2.0 / v.dot( v );
             c3 = c1*c2 * u.dot( v );
@@ -281,7 +269,7 @@
             ]);
         }
         // the most common case, unless 'from'='to', or 'to'=-'from'
-        v = from.cross( to );
+        v = fromVec.cross( toVec );
         u = 1.0 / ( 1.0 + e );    // optimization by Gottfried Chen
         ux = u * v.x;
         uz = u * v.z;
@@ -366,7 +354,7 @@
             this.data[12] + that[12],
             this.data[13] + that[13],
             this.data[14] + that[14],
-            this.data[15] + that[15],
+            this.data[15] + that[15]
         ]);
     };
 
@@ -428,7 +416,7 @@
             this.data[12] - that[12],
             this.data[13] - that[13],
             this.data[14] - that[14],
-            this.data[15] - that[15],
+            this.data[15] - that[15]
         ]);
     };
 
@@ -665,28 +653,42 @@
     /**
      * Returns a perspective projection matrix.
      *
-     * @param {number} fov - The field of view.
+     * @param {number} fovy - The vertical field of view, in radians.
      * @param {number} aspect - The aspect ratio.
-     * @param {number} zMin - The minimum y extent of the frustum.
-     * @param {number} zMax - The maximum y extent of the frustum.
+     * @param {number} near - The near clipping plane of the frustum.
+     * @param {number} far - The far clipping plane of the frustum.
      *
      * @returns {Mat44} The perspective projection matrix.
      */
-    Mat44.perspective = function( fov, aspect, zMin, zMax ) {
-        var yMax = zMin * Math.tan( fov * ( Math.PI / 360.0 ) ),
-            yMin = -yMax,
-            xMin = yMin * aspect,
-            xMax = -xMin,
-            mat = Mat44.identity();
-        mat.data[0] = (2 * zMin) / (xMax - xMin);
-        mat.data[5] = (2 * zMin) / (yMax - yMin);
-        mat.data[8] = (xMax + xMin) / (xMax - xMin);
-        mat.data[9] = (yMax + yMin) / (yMax - yMin);
-        mat.data[10] = -((zMax + zMin) / (zMax - zMin));
+    Mat44.perspective = function( fovy, aspect, near, far ) {
+        var f = 1.0 / Math.tan( fovy / 2.0 );
+        var nf = 1.0 / ( near - far );
+        var mat = Mat44.identity();
+        mat.data[0] = f / aspect;
+        mat.data[5] = f;
+        mat.data[10] = ( far + near ) * nf;
         mat.data[11] = -1;
-        mat.data[14] = -( ( 2 * (zMax*zMin) )/(zMax - zMin));
+        mat.data[14] = ( 2.0 * far * near ) * nf;
         mat.data[15] = 0;
         return mat;
+    };
+
+    /**
+     * Returns the a view matrix for the affine-transformation of the current matrix.
+     *
+     * @returns {Mat44} The view matrix.
+     */
+    Mat44.prototype.view = function() {
+        var x = new Vec3( this.data[0], this.data[1], this.data[2] ).normalize();
+        var y = new Vec3( this.data[4], this.data[5], this.data[6] ).normalize();
+        var z = new Vec3( this.data[8], this.data[9], this.data[10] ).normalize();
+        var t = new Vec3( -this.data[12], -this.data[13], -this.data[14] );
+        return new Mat44([
+            x.x, y.x, z.x, 0,
+            x.y, y.y, z.y, 0,
+            x.z, y.z, z.z, 0,
+            t.dot( x ), t.dot( y ), t.dot( z ), 1
+        ]);
     };
 
     /**
@@ -834,25 +836,90 @@
     };
 
     /**
-     * Decomposes the matrix into the corresponding x, y, and z axes, along with
-     * a scale.
+     * Returns the rotation matrix from the affine-transformation.
      * @memberof Mat44
      *
-     * @returns {Object} The decomposed components of the matrix.
+     * @returns {Mat44} The rotation matrix.
      */
-    Mat44.prototype.decompose = function() {
-        // extract transform components
-        var col0 = new Vec3( this.col( 0 ) ),
-            col1 = new Vec3( this.col( 1 ) ),
-            col2 = new Vec3( this.col( 2 ) ),
-            col3 = new Vec3( this.col( 3 ) );
-        return {
-            left: col0.normalize(),
-            up: col1.normalize(),
-            forward: col2.normalize(),
-            origin: col3,
-            scale: new Vec3( col0.length(), col1.length(), col2.length() )
-        };
+    Mat44.prototype.rotation = function() {
+        var x = new Vec3( this.data[0], this.data[1], this.data[2] ).normalize();
+        var y = new Vec3( this.data[4], this.data[5], this.data[6] ).normalize();
+        var z = new Vec3( this.data[8], this.data[9], this.data[10] ).normalize();
+        return new Mat44([
+            x.x, x.y, x.z, 0,
+            y.x, y.y, y.z, 0,
+            z.x, z.y, z.z, 0,
+            0, 0, 0, 1
+        ]);
+    };
+
+    /**
+     * Returns the translation matrix from the affine-transformation.
+     * @memberof Mat44
+     *
+     * @returns {Mat44} The translation matrix.
+     */
+    Mat44.prototype.translation = function() {
+        return Mat44.translation([ this.data[12], this.data[13], this.data[14] ]);
+    };
+
+    /**
+     * Returns the scale matrix from the affine-transformation.
+     * @memberof Mat44
+     *
+     * @returns {Mat44} The scale matrix.
+     */
+    Mat44.prototype.scale = function() {
+        var x = new Vec3( this.data[0], this.data[1], this.data[2] );
+        var y = new Vec3( this.data[4], this.data[5], this.data[6] );
+        var z = new Vec3( this.data[8], this.data[9], this.data[10] );
+        return Mat44.scale([ x.length(), y.length(), z.length() ]);
+    };
+
+    /**
+     * Returns the inverse of the transform's rotation matrix.
+     * @memberof Mat44
+     *
+     * @returns {Mat44} The inverse rotation matrix.
+     */
+    Mat44.prototype.inverseRotation = function() {
+        var x = new Vec3( this.data[0], this.data[1], this.data[2] ).normalize();
+        var y = new Vec3( this.data[4], this.data[5], this.data[6] ).normalize();
+        var z = new Vec3( this.data[8], this.data[9], this.data[10] ).normalize();
+        return new Mat44([
+            x.x, y.x, z.x, 0,
+            x.y, y.y, z.y, 0,
+            x.z, y.z, z.z, 0,
+            0, 0, 0, 1
+        ]);
+    };
+
+    /**
+     * Returns the inverse of the transform's translation matrix.
+     * @memberof Mat44
+     *
+     * @returns {Mat44} The inverse translation matrix.
+     */
+    Mat44.prototype.inverseTranslation = function() {
+        return Mat44.translation([ -this.data[12], -this.data[13], -this.data[14] ]);
+    };
+
+    /**
+     * Returns the inverse of the transform's scale matrix.
+     * @memberof Mat44
+     *
+     * @returns {Mat44} The inverse scale matrix.
+     */
+    Mat44.prototype.inverseScale = function() {
+        var x = new Vec3( this.data[0], this.data[1], this.data[2] );
+        var y = new Vec3( this.data[4], this.data[5], this.data[6] );
+        var z = new Vec3( this.data[8], this.data[9], this.data[10] );
+        var scale = new Vec3( x.length(), y.length(), z.length() );
+        return Mat44.scale([
+            1 / scale.x,
+            1 / scale.y,
+            1 / scale.z
+        ]);
     };
 
     /**
@@ -862,7 +929,7 @@
      * @returns {Mat44} A random transform matrix.
      */
     Mat44.random = function() {
-        var r = Mat44.rotationRadians( Math.random() * 360, Vec3.random() );
+        var r = Mat44.rotation( Math.random() * 360, Vec3.random() );
         var s = Mat44.scale( Math.random() * 10 );
         var t = Mat44.translation( Vec3.random() );
         return t.multMat44( r.multMat44( s ) );
@@ -888,7 +955,71 @@
      * @returns {Array} The matrix as an array.
      */
     Mat44.prototype.toArray = function() {
-        return this.data.slice( 0 );
+        return [
+            this.data[0],
+            this.data[1],
+            this.data[2],
+            this.data[3],
+            this.data[4],
+            this.data[5],
+            this.data[6],
+            this.data[7],
+            this.data[8],
+            this.data[9],
+            this.data[10],
+            this.data[11],
+            this.data[12],
+            this.data[13],
+            this.data[14],
+            this.data[15]
+        ];
+    };
+
+    /**
+     * Returns an the matrix representation as a 3x3 Mat33 object.
+     * @memberof Mat44
+     *
+     * @returns {Mat33} The matrix as an array.
+     */
+    Mat44.prototype.toMat33 = function() {
+        return new Mat33([
+            this.data[0],
+            this.data[1],
+            this.data[2],
+            this.data[4],
+            this.data[5],
+            this.data[6],
+            this.data[8],
+            this.data[9],
+            this.data[10]
+        ]);
+    };
+
+    /**
+     * Returns an array representation of the matrix.
+     * @memberof Mat33
+     *
+     * @returns {Array} The matrix as an array.
+     */
+    Mat33.prototype.toMat44 = function() {
+        return new Mat44([
+            this.data[0],
+            this.data[1],
+            this.data[2],
+            0.0,
+            this.data[3],
+            this.data[4],
+            this.data[5],
+            0.0,
+            this.data[6],
+            this.data[7],
+            this.data[8],
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ]);
     };
 
     module.exports = Mat44;

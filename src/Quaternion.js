@@ -2,8 +2,9 @@
 
     'use strict';
 
-    var Vec3 = require('./Vec3'),
-        Mat33 = require('./Mat33');
+    var Vec3 = require('./Vec3');
+    var Mat33 = require('./Mat33');
+    var Mat44 = require('./Mat44');
 
     /**
      * Instantiates a Quaternion object.
@@ -98,6 +99,86 @@
     };
 
     /**
+     * Returns the x-axis of the rotation matrix that the quaternion represents.
+     * @memberof Quaternion
+     *
+     * @returns {Vec3} The x-axis of the rotation matrix represented by the quaternion.
+     */
+    Quaternion.prototype.xAxis = function() {
+        var yy = this.y*this.y,
+            zz = this.z*this.z,
+            xy = this.x*this.y,
+            xz = this.x*this.z,
+            yw = this.y*this.w,
+            zw = this.z*this.w;
+        return new Vec3(
+            1 - 2*yy - 2*zz,
+            2*xy + 2*zw,
+            2*xz - 2*yw ).normalize();
+    };
+
+    /**
+     * Returns the y-axis of the rotation matrix that the quaternion represents.
+     * @memberof Quaternion
+     *
+     * @returns {Vec3} The y-axis of the rotation matrix represented by the quaternion.
+     */
+    Quaternion.prototype.yAxis = function() {
+        var xx = this.x*this.x,
+            zz = this.z*this.z,
+            xy = this.x*this.y,
+            xw = this.x*this.w,
+            yz = this.y*this.z,
+            zw = this.z*this.w;
+        return new Vec3(
+            2*xy - 2*zw,
+            1 - 2*xx - 2*zz,
+            2*yz + 2*xw ).normalize();
+    };
+
+    /**
+     * Returns the z-axis of the rotation matrix that the quaternion represents.
+     * @memberof Quaternion
+     *
+     * @returns {Vec3} The z-axis of the rotation matrix represented by the quaternion.
+     */
+    Quaternion.prototype.zAxis = function() {
+        var xx = this.x*this.x,
+            yy = this.y*this.y,
+            xz = this.x*this.z,
+            xw = this.x*this.w,
+            yz = this.y*this.z,
+            yw = this.y*this.w;
+        return new Vec3(
+            2*xz + 2*yw,
+            2*yz - 2*xw,
+            1 - 2*xx - 2*yy ).normalize();
+    };
+
+    /**
+     * Returns the axes of the rotation matrix that the quaternion represents.
+     * @memberof Quaternion
+     *
+     * @returns {Object} The axes of the matrix represented by the quaternion.
+     */
+    Quaternion.prototype.axes = function() {
+        var xx = this.x*this.x,
+            yy = this.y*this.y,
+            zz = this.z*this.z,
+            xy = this.x*this.y,
+            xz = this.x*this.z,
+            xw = this.x*this.w,
+            yz = this.y*this.z,
+            yw = this.y*this.w,
+            zw = this.z*this.w;
+        return {
+            x: new Vec3( 1 - 2*yy - 2*zz, 2*xy + 2*zw, 2*xz - 2*yw ),
+            y: new Vec3( 2*xy - 2*zw, 1 - 2*xx - 2*zz, 2*yz + 2*xw ),
+            z: new Vec3( 2*xz + 2*yw, 2*yz - 2*xw, 1 - 2*xx - 2*yy )
+        };
+    };
+
+    /**
      * Returns the rotation matrix that the quaternion represents.
      * @memberof Quaternion
      *
@@ -124,26 +205,12 @@
      * and an angle.
      * @memberof Quaternion
      *
-     * @param {number} angle - The angle of the rotation, in degrees.
-     * @param {Vec3|Array} axis - The axis of the rotation.
-     *
-     * @returns {Quaternion} The quaternion representing the rotation.
-     */
-    Quaternion.rotationDegrees = function( angle, axis ) {
-        return Quaternion.rotationRadians( angle * ( Math.PI/180 ), axis );
-    };
-
-    /**
-     * Returns a quaternion representing the rotation defined by an axis
-     * and an angle.
-     * @memberof Quaternion
-     *
      * @param {number} angle - The angle of the rotation, in radians.
      * @param {Vec3|Array} axis - The axis of the rotation.
      *
      * @returns {Quaternion} The quaternion representing the rotation.
      */
-    Quaternion.rotationRadians = function( angle, axis ) {
+    Quaternion.rotation = function( angle, axis ) {
         if ( axis instanceof Array ) {
             axis = new Vec3( axis );
         }
@@ -158,6 +225,27 @@
             axis.x * sina,
             axis.y * sina,
             axis.z * sina ).normalize();
+    };
+
+    /**
+     * Returns a rotation matrix to rotate a vector from one direction to
+     * another.
+     * @memberof Quaternion
+     *
+     * @param {Vec3} from - The starting direction.
+     * @param {Vec3} to - The ending direction.
+     *
+     * @returns {Quaternion} The quaternion representing the rotation.
+     */
+    Quaternion.rotationFromTo = function( fromVec, toVec ) {
+        fromVec = new Vec3( fromVec );
+        toVec = new Vec3( toVec );
+        var cross = fromVec.cross( toVec );
+        var dot = fromVec.dot( toVec );
+        var fLen = fromVec.length();
+        var tLen = toVec.length();
+        var w = Math.sqrt( ( fLen * fLen ) * ( tLen * tLen ) ) + dot;
+        return new Quaternion( w, cross.x, cross.y, cross.z ).normalize();
     };
 
     /**
@@ -280,7 +368,7 @@
     Quaternion.random = function() {
         var axis = Vec3.random().normalize(),
             angle = Math.random();
-        return Quaternion.rotationRadians( angle, axis );
+        return Quaternion.rotation( angle, axis );
     };
 
     /**
@@ -301,6 +389,120 @@
      */
     Quaternion.prototype.toArray = function() {
         return [  this.w, this.x, this.y, this.z ];
+    };
+
+    /**
+     * Decomposes the matrix into the corresponding rotation, and scale components.
+     * a scale.
+     * @memberof Mat33
+     *
+     * @returns {Object} The decomposed components of the matrix.
+     */
+    Mat33.prototype.decompose = function() {
+        // axis vectors
+        var x = new Vec3( this.data[0], this.data[1], this.data[2] );
+        var y = new Vec3( this.data[3], this.data[4], this.data[5] );
+        var z = new Vec3( this.data[6], this.data[7], this.data[8] );
+        // scale needs unnormalized vectors
+        var scale = new Vec3( x.length(), y.length(), z.length() );
+        // rotation needs normalized vectors
+        x = x.normalize();
+        y = y.normalize();
+        z = z.normalize();
+        var trace = x.x + y.y + z.z;
+        var s;
+        var rotation;
+        if ( trace > 0 ) {
+            s = 0.5 / Math.sqrt( trace + 1.0 );
+            rotation = new Quaternion(
+                0.25 / s,
+                ( y.z - z.y ) * s,
+                ( z.x - x.z ) * s,
+                ( x.y - y.x ) * s );
+        } else if ( x.x > y.y && x.x > z.z ) {
+            s = 2.0 * Math.sqrt( 1.0 + x.x - y.y - z.z );
+            rotation = new Quaternion(
+                ( y.z - z.y ) / s,
+                0.25 * s,
+                ( y.x + x.y ) / s,
+                ( z.x + x.z ) / s );
+        } else if ( y.y > z.z ) {
+            s = 2.0 * Math.sqrt( 1.0 + y.y - x.x - z.z );
+            rotation = new Quaternion(
+                ( z.x - x.z ) / s,
+                ( y.x + x.y ) / s,
+                0.25 * s,
+                ( z.y + y.z ) / s );
+        } else {
+            s = 2.0 * Math.sqrt( 1.0 + z.z - x.x - y.y );
+            rotation = new Quaternion(
+                ( x.y - y.x ) / s,
+                ( z.x + x.z ) / s,
+                ( z.y + y.z ) / s,
+                0.25 * s );
+        }
+        return {
+            rotation: rotation,
+            scale: scale
+        };
+    };
+
+    /**
+     * Decomposes the matrix into the corresponding rotation, translation, and scale components.
+     * @memberof Mat44
+     *
+     * @returns {Object} The decomposed components of the matrix.
+     */
+    Mat44.prototype.decompose = function() {
+        // translation
+        var translation = new Vec3( this.data[12], this.data[13], this.data[14] );
+        // axis vectors
+        var x = new Vec3( this.data[0], this.data[1], this.data[2] );
+        var y = new Vec3( this.data[4], this.data[5], this.data[6] );
+        var z = new Vec3( this.data[8], this.data[9], this.data[10] );
+        // scale needs unnormalized vectors
+        var scale = new Vec3( x.length(), y.length(), z.length() );
+        // rotation needs normalized vectors
+        x = x.normalize();
+        y = y.normalize();
+        z = z.normalize();
+        var trace = x.x + y.y + z.z;
+        var s;
+        var rotation;
+        if ( trace > 0 ) {
+            s = 0.5 / Math.sqrt( trace + 1.0 );
+            rotation = new Quaternion(
+                0.25 / s,
+                ( y.z - z.y ) * s,
+                ( z.x - x.z ) * s,
+                ( x.y - y.x ) * s );
+        } else if ( x.x > y.y && x.x > z.z ) {
+            s = 2.0 * Math.sqrt( 1.0 + x.x - y.y - z.z );
+            rotation = new Quaternion(
+                ( y.z - z.y ) / s,
+                0.25 * s,
+                ( y.x + x.y ) / s,
+                ( z.x + x.z ) / s );
+        } else if ( y.y > z.z ) {
+            s = 2.0 * Math.sqrt( 1.0 + y.y - x.x - z.z );
+            rotation = new Quaternion(
+                ( z.x - x.z ) / s,
+                ( y.x + x.y ) / s,
+                0.25 * s,
+                ( z.y + y.z ) / s );
+        } else {
+            s = 2.0 * Math.sqrt( 1.0 + z.z - x.x - y.y );
+            rotation = new Quaternion(
+                ( x.y - y.x ) / s,
+                ( z.x + x.z ) / s,
+                ( z.y + y.z ) / s,
+                0.25 * s );
+        }
+        return {
+            rotation: rotation,
+            scale: scale,
+            translation: translation
+        };
     };
 
     module.exports = Quaternion;

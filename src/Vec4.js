@@ -211,14 +211,14 @@
      */
     Vec4.prototype.normalize = function() {
         var mag = this.length();
-        if ( mag !== 0 ) {
-            return new Vec4(
-                this.x / mag,
-                this.y / mag,
-                this.z / mag,
-                this.w / mag );
+        if ( mag === 0 ) {
+            throw 'Cannot normalize a vector of zero length';
         }
-        return new Vec4();
+        return new Vec4(
+            this.x / mag,
+            this.y / mag,
+            this.z / mag,
+            this.w / mag );
     };
 
     /**

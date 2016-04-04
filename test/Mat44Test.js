@@ -7,7 +7,7 @@
     var Mat44 = require('../src/Mat44');
     var Vec3 = require('../src/Vec3');
     var Vec4 = require('../src/Vec4');
-    var Transform = require('../src/Transform');
+    require('../src/Quaternion');
     var EPSILON = require('../src/Epsilon');
 
     describe('Mat44', function() {
@@ -24,7 +24,7 @@
                 for ( i=0; i<p.data.length; i++ ) {
                     q = new Mat44([ a0, a1, a2, a3, b0, b1, b2, b3, c0, c1, c2, c3, d0, d1, d2, d3 ]);
                     q.data[i] = q.data[i] + 1;
-                    assert.equal( p.equals( q ), false );
+                    assert( !p.equals( q ) );
                 }
             });
             it('should return true if all components match', function() {
@@ -34,7 +34,8 @@
                     a3 = Math.random(), b3 = Math.random(), c3 = Math.random(), d3 = Math.random(),
                     p = new Mat44([ a0, a1, a2, a3, b0, b1, b2, b3, c0, c1, c2, c3, d0, d1, d2, d3 ]),
                     q = new Mat44([ a0, a1, a2, a3, b0, b1, b2, b3, c0, c1, c2, c3, d0, d1, d2, d3 ]);
-                assert.equal( p.equals( q ), true );
+                assert( p.equals( q ) );
+                assert( p.equals( q.data ) );
             });
             it('should accept a second epsilon parameter, return true if each component is <= epsilon', function() {
                 var r = Math.random(),
@@ -43,11 +44,11 @@
                         r, r, r, r,
                         r, r, r, r,
                         r, r, r, r ]);
-                assert.equal( m.equals( new Mat44([
+                assert( m.equals( new Mat44([
                     r/2, r/2, r/2, r/2,
                     r/2, r/2, r/2, r/2,
                     r/2, r/2, r/2, r/2,
-                    r/2, r/2, r/2, r/2 ]), r/2 ), true );
+                    r/2, r/2, r/2, r/2 ]), r/2 ) );
             });
         });
 
@@ -55,7 +56,7 @@
             it('should return a Mat44 with all random components', function() {
                 var p = Mat44.random(),
                     q = new Mat44([ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]);
-                assert.equal( p.equals( q ), false );
+                assert( !p.equals( q ) );
             });
         });
 
@@ -63,20 +64,20 @@
             it('should return a deep copy when supplied another Mat44', function() {
                 var p = Mat44.random(),
                     q = new Mat44( p );
-                assert.equal( p.equals( q ), true );
-                assert.equal( p !== q, true );
+                assert( p.equals( q ) );
+                assert( p !== q );
             });
             it('should return a Mat44 from an array of length 16, copied by reference', function() {
                 var a = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16 ],
                     p = new Mat44( a ),
                     q = new Mat44( p );
-                assert.equal( p.equals( q ), true );
-                assert.equal( p.data === a, true );
+                assert( p.equals( q ) );
+                assert( p.data === a );
             });
             it('should return an identity matrix when given no input', function() {
                 var p = new Mat44(),
                     identity = Mat44.identity();
-                assert.equal( p.equals( identity ), true );
+                assert( p.equals( identity ) );
             });
         });
 
@@ -87,17 +88,17 @@
                 var t1 = Vec4.random();
                 var t2 = Vec4.random();
                 var t3 = Vec4.random();
-                assert.equal( p.row(0, t0).row(0).equals( t0 ), true );
-                assert.equal( p.row(1, t1).row(1).equals( t1 ), true );
-                assert.equal( p.row(2, t2).row(2).equals( t2 ), true );
-                assert.equal( p.row(3, t3).row(3).equals( t3 ), true );
+                assert( p.row(0, t0).row(0).equals( t0 ) );
+                assert( p.row(1, t1).row(1).equals( t1 ) );
+                assert( p.row(2, t2).row(2).equals( t2 ) );
+                assert( p.row(3, t3).row(3).equals( t3 ) );
             });
             it('should return a the corresponding row, by zero based index', function() {
                 var p = Mat44.random();
-                assert.equal( p.row(0).equals( new Vec4( p.data[0], p.data[4], p.data[8], p.data[12] ) ), true );
-                assert.equal( p.row(1).equals( new Vec4( p.data[1], p.data[5], p.data[9], p.data[13] ) ), true );
-                assert.equal( p.row(2).equals( new Vec4( p.data[2], p.data[6], p.data[10], p.data[14] ) ), true );
-                assert.equal( p.row(3).equals( new Vec4( p.data[3], p.data[7], p.data[11], p.data[15] ) ), true );
+                assert( p.row(0).equals( new Vec4( p.data[0], p.data[4], p.data[8], p.data[12] ) ) );
+                assert( p.row(1).equals( new Vec4( p.data[1], p.data[5], p.data[9], p.data[13] ) ) );
+                assert( p.row(2).equals( new Vec4( p.data[2], p.data[6], p.data[10], p.data[14] ) ) );
+                assert( p.row(3).equals( new Vec4( p.data[3], p.data[7], p.data[11], p.data[15] ) ) );
             });
         });
 
@@ -108,17 +109,17 @@
                 var t1 = Vec4.random();
                 var t2 = Vec4.random();
                 var t3 = Vec4.random();
-                assert.equal( p.col(0, t0).col(0).equals( t0 ), true );
-                assert.equal( p.col(1, t1).col(1).equals( t1 ), true );
-                assert.equal( p.col(2, t2).col(2).equals( t2 ), true );
-                assert.equal( p.col(3, t3).col(3).equals( t3 ), true );
+                assert( p.col(0, t0).col(0).equals( t0 ) );
+                assert( p.col(1, t1).col(1).equals( t1 ) );
+                assert( p.col(2, t2).col(2).equals( t2 ) );
+                assert( p.col(3, t3).col(3).equals( t3 ) );
             });
             it('should return a the corresponding column, by zero based index', function() {
                 var p = Mat44.random();
-                assert.equal( p.col(0).equals( new Vec4( p.data[0], p.data[1], p.data[2], p.data[3] ) ), true );
-                assert.equal( p.col(1).equals( new Vec4( p.data[4], p.data[5], p.data[6], p.data[7] ) ), true );
-                assert.equal( p.col(2).equals( new Vec4( p.data[8], p.data[9], p.data[10], p.data[11] ) ), true );
-                assert.equal( p.col(3).equals( new Vec4( p.data[12], p.data[13], p.data[14], p.data[15]) ), true );
+                assert( p.col(0).equals( new Vec4( p.data[0], p.data[1], p.data[2], p.data[3] ) ) );
+                assert( p.col(1).equals( new Vec4( p.data[4], p.data[5], p.data[6], p.data[7] ) ) );
+                assert( p.col(2).equals( new Vec4( p.data[8], p.data[9], p.data[10], p.data[11] ) ) );
+                assert( p.col(3).equals( new Vec4( p.data[12], p.data[13], p.data[14], p.data[15]) ) );
             });
         });
 
@@ -126,13 +127,14 @@
             it('should return a new Mat44 by value', function() {
                 var p = Mat44.random(),
                     q = Mat33.random(),
-                    r = p.addMat33( q );
-                assert.equal( r instanceof Mat44, true );
-                assert.equal( r !== p, true );
-                assert.equal( r.col(0).equals( p.col(0).add( new Vec4( q.col(0) ) ) ), true );
-                assert.equal( r.col(1).equals( p.col(1).add( new Vec4( q.col(1) ) ) ), true );
-                assert.equal( r.col(2).equals( p.col(2).add( new Vec4( q.col(2) ) ) ), true );
-                assert.equal( r.col(3).equals( p.col(3) ), true );
+                    r = p.addMat33( q ),
+                    s = p.addMat33( q.data );
+                assert( r instanceof Mat44 );
+                assert( r !== p );
+                assert( r.col(0).equals( p.col(0).add( new Vec4( q.col(0) ) ) ) );
+                assert( r.col(1).equals( p.col(1).add( new Vec4( q.col(1) ) ) ) );
+                assert( s.col(2).equals( p.col(2).add( new Vec4( q.col(2) ) ) ) );
+                assert( s.col(3).equals( p.col(3) ) );
             });
         });
 
@@ -140,13 +142,14 @@
             it('should return a new Mat44 by value', function() {
                 var p = Mat44.random(),
                     q = Mat44.random(),
-                    r = p.addMat44( q );
-                assert.equal( r instanceof Mat44, true );
-                assert.equal( r !== p, true );
-                assert.equal( r.col(0).equals( p.col(0).add( q.col(0) ) ), true );
-                assert.equal( r.col(1).equals( p.col(1).add( q.col(1) ) ), true );
-                assert.equal( r.col(2).equals( p.col(2).add( q.col(2) ) ), true );
-                assert.equal( r.col(3).equals( p.col(3).add( q.col(3) ) ), true );
+                    r = p.addMat44( q ),
+                    s = p.addMat44( q.data );
+                assert( r instanceof Mat44 );
+                assert( r !== p );
+                assert( r.col(0).equals( p.col(0).add( q.col(0) ) ) );
+                assert( r.col(1).equals( p.col(1).add( q.col(1) ) ) );
+                assert( s.col(2).equals( p.col(2).add( q.col(2) ) ) );
+                assert( s.col(3).equals( p.col(3).add( q.col(3) ) ) );
             });
         });
 
@@ -154,13 +157,14 @@
             it('should return a new Mat44 by value', function() {
                 var p = Mat44.random(),
                     q = Mat33.random(),
-                    r = p.subMat33( q );
-                assert.equal( r instanceof Mat44, true );
-                assert.equal( r !== p, true );
-                assert.equal( r.col(0).equals( p.col(0).sub( new Vec4( q.col(0) ) ) ), true );
-                assert.equal( r.col(1).equals( p.col(1).sub( new Vec4( q.col(1) ) ) ), true );
-                assert.equal( r.col(2).equals( p.col(2).sub( new Vec4( q.col(2) ) ) ), true );
-                assert.equal( r.col(3).equals( p.col(3) ), true );
+                    r = p.subMat33( q ),
+                    s = p.subMat33( q.data );
+                assert( r instanceof Mat44 );
+                assert( r !== p );
+                assert( r.col(0).equals( p.col(0).sub( new Vec4( q.col(0) ) ) ) );
+                assert( r.col(1).equals( p.col(1).sub( new Vec4( q.col(1) ) ) ) );
+                assert( s.col(2).equals( p.col(2).sub( new Vec4( q.col(2) ) ) ) );
+                assert( s.col(3).equals( p.col(3) ) );
             });
         });
 
@@ -168,13 +172,14 @@
             it('should return a new Mat44 by value', function() {
                 var p = Mat44.random(),
                     q = Mat44.random(),
-                    r = p.subMat44( q );
-                assert.equal( r instanceof Mat44, true );
-                assert.equal( r !== p, true );
-                assert.equal( r.col(0).equals( p.col(0).sub( q.col(0) ) ), true );
-                assert.equal( r.col(1).equals( p.col(1).sub( q.col(1) ) ), true );
-                assert.equal( r.col(2).equals( p.col(2).sub( q.col(2) ) ), true );
-                assert.equal( r.col(3).equals( p.col(3).sub( q.col(3) ) ), true );
+                    r = p.subMat44( q ),
+                    s = p.subMat44( q.data );
+                assert( r instanceof Mat44 );
+                assert( r !== p );
+                assert( r.col(0).equals( p.col(0).sub( q.col(0) ) ) );
+                assert( r.col(1).equals( p.col(1).sub( q.col(1) ) ) );
+                assert( s.col(2).equals( p.col(2).sub( q.col(2) ) ) );
+                assert( s.col(3).equals( p.col(3).sub( q.col(3) ) ) );
             });
         });
 
@@ -183,8 +188,8 @@
                 var p = Mat44.random(),
                     q = Math.random(),
                     r = p.multScalar( q );
-                assert.equal( r instanceof Mat44, true );
-                assert.equal( p !== r, true );
+                assert( r instanceof Mat44 );
+                assert( p !== r );
             });
         });
 
@@ -193,8 +198,8 @@
                 var p = Mat44.random(),
                     q = Mat33.random(),
                     r = p.multMat33( q );
-                assert.equal( r instanceof Mat44, true );
-                assert.equal( p !== r, true );
+                assert( r instanceof Mat44 );
+                assert( p !== r );
             });
             it('should accept array as an argument', function() {
                 var p = Mat44.random(),
@@ -204,7 +209,7 @@
                         Math.random(), Math.random(), Math.random()
                     ],
                     r = p.multMat33( q );
-                assert.equal( r instanceof Mat44, true );
+                assert( r instanceof Mat44 );
             });
         });
 
@@ -213,8 +218,8 @@
                 var p = Mat44.random(),
                     q = Mat44.random(),
                     r = p.multMat44( q );
-                assert.equal( r instanceof Mat44, true );
-                assert.equal( p !== r, true );
+                assert( r instanceof Mat44 );
+                assert( p !== r );
             });
             it('should accept array as an argument', function() {
                 var p = Mat44.random(),
@@ -225,7 +230,7 @@
                         Math.random(), Math.random(), Math.random(), Math.random()
                     ],
                     r = p.multMat44( q );
-                assert.equal( r instanceof Mat44, true );
+                assert( r instanceof Mat44 );
             });
         });
 
@@ -236,17 +241,17 @@
                     r = p.multVec3( q ),
                     s = Vec4.random(),
                     t = p.multVec3( s );
-                assert.equal( r instanceof Vec3, true );
-                assert.equal( t instanceof Vec3, true );
-                assert.equal( p !== r, true );
-                assert.equal( p !== t, true );
+                assert( r instanceof Vec3 );
+                assert( t instanceof Vec3 );
+                assert( p !== r );
+                assert( p !== t );
             });
             it('should accept array as an argument', function() {
                 var p = Mat44.random(),
                     q = [ Math.random(), Math.random(), Math.random() ],
                     r = p.multVec3( q );
-                assert.equal( r instanceof Vec3, true );
-                assert.equal( r.equals( p.multVec3( new Vec3( q ) ) ), true );
+                assert( r instanceof Vec3 );
+                assert( r.equals( p.multVec3( new Vec3( q ) ) ) );
             });
         });
 
@@ -257,17 +262,17 @@
                     r = p.multVec4( q ),
                     s = Vec4.random(),
                     t = p.multVec4( s );
-                assert.equal( r instanceof Vec4, true );
-                assert.equal( t instanceof Vec4, true );
-                assert.equal( p !== r, true );
-                assert.equal( p !== t, true );
+                assert( r instanceof Vec4 );
+                assert( t instanceof Vec4 );
+                assert( p !== r );
+                assert( p !== t );
             });
             it('should accept array as an argument', function() {
                 var p = Mat44.random(),
                     q = [ Math.random(), Math.random(), Math.random(), Math.random() ],
                     r = p.multVec4( q );
-                assert.equal( r instanceof Vec4, true );
-                assert.equal( r.equals( p.multVec4( new Vec4( q ) ) ), true );
+                assert( r instanceof Vec4 );
+                assert( r.equals( p.multVec4( new Vec4( q ) ) ) );
             });
         });
 
@@ -277,7 +282,7 @@
                     r = Math.random(),
                     q = m.divScalar( r ), i;
                 for ( i=0; i<16; i++ ) {
-                    assert.equal( q.data[i] === m.data[i] / r, true );
+                    assert( q.data[i] === m.data[i] / r );
                 }
             });
         });
@@ -291,7 +296,7 @@
                         0, 0, 1, 0,
                         0, 0, 0, 1
                     ]);
-                assert.equal( p.equals( q ), true );
+                assert( p.equals( q ) );
             });
         });
 
@@ -304,14 +309,14 @@
                         0, r, 0, 0,
                         0, 0, r, 0,
                         0, 0, 0, 1 ]);
-                assert.equal( p.equals( q ), true );
+                assert( p.equals( q ) );
             });
             it('should accept scalar, Vec3, and Array arguments', function() {
                 var r = Math.random(),
                     p = Mat44.scale( r ),
                     q = Mat44.scale( new Vec3( r, r, r ) ),
                     s = Mat44.scale([ r, r, r ]);
-                assert.equal( p.equals( q ) && p.equals( s ), true );
+                assert( p.equals( q ) && p.equals( s ) );
             });
         });
 
@@ -324,66 +329,42 @@
                         0, 1, 0, 0,
                         0, 0, 1, 0,
                         r.x, r.y, r.z, 1 ]);
-                assert.equal( p.equals( q ), true );
+                assert( p.equals( q ) );
             });
             it('should accept Vec3 and Array arguments', function() {
                 var r = Math.random(),
                     p = Mat44.translation( new Vec3( r, r, r ) ),
                     q = Mat44.translation([ r, r, r ]);
-                assert.equal( p.equals( q ), true );
+                assert( p.equals( q ) );
             });
         });
 
-        describe('#rotationDegrees()', function() {
+        describe('#rotation()', function() {
             it('should return a rotation matrix, rotating counter-clockwise', function() {
                 var up =  new Vec3( 0, 1, 0 ),
                     left = new Vec3( 1, 0, 0 ),
                     right = new Vec3( -1, 0, 0 ),
                     forward = new Vec3( 0, 0, 1 ),
-                    up90 = Mat44.rotationDegrees( 90, up ),
-                    left90 = Mat44.rotationDegrees( -90, left ),
-                    forward90 = Mat44.rotationDegrees( 90, forward ),
+                    up90 = Mat44.rotation( 90 * Math.PI / 180, up ),
+                    left90 = Mat44.rotation( -90 * Math.PI / 180, left ),
+                    forward90 = Mat44.rotation( 90 * Math.PI / 180, [ forward.x, forward.y, forward.z ] ),
                     v0 = up90.multVec3( forward ).normalize(),
                     v1 = left90.multVec3( forward ).normalize(),
                     v2 = forward90.multVec3( up ).normalize();
-                assert.equal( v0.equals( left, EPSILON ), true );
-                assert.equal( v1.equals( up, EPSILON ), true );
-                assert.equal( v2.equals( right, EPSILON ), true );
+                assert( v0.equals( left, EPSILON ) );
+                assert( v1.equals( up, EPSILON ) );
+                assert( v2.equals( right, EPSILON ) );
             });
-            it('should accept both Vec3 and Array types as axis', function() {
-                var r = Math.random(),
-                    v = Vec3.random(),
-                    rot0 = Mat44.rotationDegrees( r, v ),
-                    rot1 = Mat44.rotationDegrees( r, [ v.x, v.y, v.z ] );
-                assert.equal( rot0.equals( rot1, EPSILON ), true );
-            });
-            it('should return an identity matrix if given a zero vector as an axis', function() {
+            it('should throw an exception if given a zero vector as an axis', function() {
                 var axis = new Vec3( 0, 0, 0 ),
-                    angle = Math.random();
-                assert.equal( Mat44.rotationDegrees( angle, axis ).equals( new Mat44() ), true );
-            });
-        });
-
-        describe('#rotationRadians()', function() {
-            it('should return a rotation matrix, rotating counter-clockwise', function() {
-                var up =  new Vec3( 0, 1, 0 ),
-                    left = new Vec3( 1, 0, 0 ),
-                    right = new Vec3( -1, 0, 0 ),
-                    forward = new Vec3( 0, 0, 1 ),
-                    up90 = Mat44.rotationRadians( 90 * Math.PI / 180, up ),
-                    left90 = Mat44.rotationRadians( -90 * Math.PI / 180, left ),
-                    forward90 = Mat44.rotationRadians( 90 * Math.PI / 180, forward ),
-                    v0 = up90.multVec3( forward ).normalize(),
-                    v1 = left90.multVec3( forward ).normalize(),
-                    v2 = forward90.multVec3( up ).normalize();
-                assert.equal( v0.equals( left, EPSILON ), true );
-                assert.equal( v1.equals( up, EPSILON ), true );
-                assert.equal( v2.equals( right, EPSILON ), true );
-            });
-            it('should return an identity matrix if given a zero vector as an axis', function() {
-                var axis = new Vec3( 0, 0, 0 ),
-                    angle = Math.random();
-                assert.equal( Mat44.rotationRadians( angle, axis ).equals( new Mat44() ), true );
+                    angle = Math.random(),
+                    result = false;
+                try {
+                    Mat44.rotation( angle, axis );
+                } catch( err ) {
+                    result = true;
+                }
+                assert( result );
             });
         });
 
@@ -400,20 +381,20 @@
                     cc = new Vec3( 1, 0, -1 ).normalize(),
                     cd = new Vec3( 1, 0, 0 ).normalize(),
                     other;
-                assert.equal( rs.equals( s, EPSILON ), true );
-                assert.equal( sr.equals( r, EPSILON ), true );
+                assert( rs.equals( s, EPSILON ) );
+                assert( sr.equals( r, EPSILON ) );
 
-                other = Mat44.rotationDegrees( EPSILON, v ).multVec3( ca ).normalize();
-                assert.equal( Mat44.rotationFromTo( ca, other ).multVec3( ca ).equals( other, EPSILON ), true );
+                other = Mat44.rotation( EPSILON, v ).multVec3( ca ).normalize();
+                assert( Mat44.rotationFromTo( ca, other ).multVec3( ca ).equals( other, EPSILON ) );
 
-                other = Mat44.rotationDegrees( EPSILON, v ).multVec3( cb ).normalize();
-                assert.equal( Mat44.rotationFromTo( cb, other ).multVec3( cb ).equals( other, EPSILON ), true );
+                other = Mat44.rotation( EPSILON, v ).multVec3( cb ).normalize();
+                assert( Mat44.rotationFromTo( cb, other ).multVec3( cb ).equals( other, EPSILON ) );
 
-                other = Mat44.rotationDegrees( EPSILON, v ).multVec3( cc ).normalize();
-                assert.equal( Mat44.rotationFromTo( cc, other ).multVec3( cc ).equals( other, EPSILON ), true );
+                other = Mat44.rotation( EPSILON, v ).multVec3( cc ).normalize();
+                assert( Mat44.rotationFromTo( cc, other ).multVec3( cc ).equals( other, EPSILON ) );
 
-                other = Mat44.rotationDegrees( EPSILON, v ).multVec3( cd ).normalize();
-                assert.equal( Mat44.rotationFromTo( cd, other ).multVec3( cd ).equals( other, EPSILON ), true );
+                other = Mat44.rotation( EPSILON, v ).multVec3( cd ).normalize();
+                assert( Mat44.rotationFromTo( cd, other ).multVec3( cd ).equals( other, EPSILON ) );
             });
         });
 
@@ -422,18 +403,18 @@
                 var i = Mat44.ortho( -1, 1, -1, 1, 1, -1 ),
                     a = Mat44.ortho( -10, 5, -11, 6, 10, 500 ).multVec3( new Vec3( 1, 2, 3 ) ),
                     b = Mat44.ortho( -1, 23, 10, 24, -10, -200 ).multVec3( new Vec3( 1, 2, 3 ) );
-                assert.equal( i.equals( new Mat44() ), true );
-                assert.equal( a.equals( new Vec3( 0.4666666666666667, 0.5294117647058824, -1.0530612244897959 ), EPSILON ), true );
-                assert.equal( b.equals( new Vec3( -0.8333333333333333, -2.142857142857143, -1.0736842105263158 ), EPSILON ), true );
+                assert( i.equals( new Mat44() ) );
+                assert( a.equals( new Vec3( 0.4666666666666667, 0.5294117647058824, -1.0530612244897959 ), EPSILON ) );
+                assert( b.equals( new Vec3( -0.8333333333333333, -2.142857142857143, -1.0736842105263158 ), EPSILON ) );
             });
         });
 
         describe('#perspective()', function() {
             it('should return a perspective projection matrix', function() {
-                var a = Mat44.perspective( 35, 3/2, 1, 500 ).multVec3( new Vec3( 1, 2, 3 ) ),
-                    b = Mat44.perspective( 55, 2, 0.1, 10 ).multVec3( new Vec3( 1, 2, 3 ) );
-                assert.equal( a.equals( new Vec3( 2.1143965349088085, 6.343189604726425, -5.016032064128256 ), EPSILON ), true );
-                assert.equal( b.equals( new Vec3( 0.9604910634855831, 3.8419642539423324, -3.2626262626262625 ), EPSILON ), true );
+                var a = Mat44.perspective( 35 * ( Math.PI / 180 ), 3/2, 1, 500 ).multVec3( new Vec3( 1, 2, 3 ) ),
+                    b = Mat44.perspective( 55 * ( Math.PI / 180 ), 2, 0.1, 10 ).multVec3( new Vec3( 1, 2, 3 ) );
+                assert( a.equals( new Vec3( 2.1143965349088085, 6.343189604726425, -5.016032064128256 ), EPSILON ) );
+                assert( b.equals( new Vec3( 0.9604910634855831, 3.8419642539423324, -3.2626262626262625 ), EPSILON ) );
             });
         });
 
@@ -445,20 +426,20 @@
                         a.data[1], a.data[5], a.data[9], a.data[13],
                         a.data[2], a.data[6], a.data[10], a.data[14],
                         a.data[3], a.data[7], a.data[11], a.data[15] ]);
-                assert.equal( a.transpose().equals( b ), true );
+                assert( a.transpose().equals( b ) );
             });
 
             it('should return a deep copy', function() {
                 var p = Mat44.random(),
                     q = p.transpose();
-                assert.equal( p !== q, true );
+                assert( p !== q );
             });
 
             it('should not modify the calling object', function() {
                 var p = Mat44.random(),
                     c = new Mat44( p );
                 p.transpose();
-                assert.equal( p.equals( c ), true );
+                assert( p.equals( c ) );
             });
         });
 
@@ -466,29 +447,103 @@
             it('should return an inverse copy of the matrix', function() {
                 var identity = Mat44.identity(),
                     a = new Mat44().inverse( Vec3.random(), Vec3.random() );
-                assert.equal( a.inverse().multMat44( a ).equals( identity ), true );
-                assert.equal( a.multMat44( a.inverse() ).equals( identity ), true );
+                assert( a.inverse().multMat44( a ).equals( identity ) );
+                assert( a.multMat44( a.inverse() ).equals( identity ) );
             });
 
             it('should return a deep copy', function() {
                 var p = Mat44.random(),
                     q = p.inverse();
-                assert.equal( p !== q, true );
+                assert( p !== q );
             });
 
             it('should not modify the calling object', function() {
                 var p = Mat44.random(),
                     c = new Mat44( p );
                 p.inverse();
-                assert.equal( p.equals( c ), true );
+                assert( p.equals( c ) );
+            });
+        });
+
+        describe('#scale', function() {
+            it('should return the scale matrix', function() {
+                var p = Vec3.random(),
+                    q = Mat44.scale( p ).scale(),
+                    r = Mat44.scale( p );
+                assert( q.equals( r, EPSILON ) );
+            });
+        });
+
+        describe('#rotation', function() {
+            it('should return the rotation matrix', function() {
+                var p = Vec3.random(),
+                    q = Mat44.rotationFromTo( new Vec3( 0, 0, 1 ), p ),
+                    r = q.rotation();
+                assert( q.equals( r, EPSILON ) );
+            });
+        });
+
+        describe('#translation', function() {
+            it('should return the translation matrix', function() {
+                var r = Vec3.random(),
+                    p = Mat44.translation( r );
+                assert( p.equals( p.translation(), EPSILON ) );
+            });
+        });
+
+        describe('#inverseScale', function() {
+            it('should return the inverse scale matrix', function() {
+                var s = Vec3.random(),
+                    p = Mat44.scale( s ),
+                    q = Mat44.scale( s ).inverse(),
+                    r = p.inverseScale();
+                assert( r.equals( q, EPSILON ) );
+                assert( r.multMat44( p.scale() ).equals( Mat44.identity(), EPSILON ) );
+                assert( p.scale().multMat44( q ).equals( Mat44.identity(), EPSILON ) );
+            });
+        });
+
+        describe('#inverseRotation', function() {
+            it('should return the inverse rotation matrix', function() {
+                var p = Vec3.random(),
+                    q = Mat44.rotationFromTo( new Vec3( 0, 0, 1 ), p ),
+                    r = q.inverseRotation(),
+                    s = q.inverse();
+                assert( r.equals( s, EPSILON ) );
+                assert( r.multMat44( q.rotation() ).equals( Mat44.identity(), EPSILON ) );
+                assert( q.rotation().multMat44( s ).equals( Mat44.identity(), EPSILON ) );
+            });
+        });
+
+        describe('#inverseTranslation', function() {
+            it('should return the inverse translation matrix', function() {
+                var t = Vec3.random(),
+                    p = Mat44.translation( t ),
+                    q = Mat44.translation( t ).inverse(),
+                    r = p.inverseTranslation();
+                assert( q.equals( r, EPSILON ) );
+                assert( q.multMat44( p.translation() ).equals( Mat44.identity(), EPSILON ) );
+                assert( p.translation().multMat44( q ).equals( Mat44.identity(), EPSILON ) );
+            });
+        });
+
+        describe('#view()', function() {
+            it('should return a view matrix', function() {
+                var t = new Mat44();
+                assert( t.view().equals( new Mat44() ) );
             });
         });
 
         describe('#decompose', function() {
-            it('should return the up, forward, scale, and origin components of the matrix', function() {
-                var m = Mat44.random(),
-                    t = new Transform( m.decompose() );
-                assert.equal( m.equals( t.matrix(), EPSILON), true );
+            it('should return the rotation, translation, and scale of the matrix', function() {
+                var t, m, i;
+                for ( i=0; i<36; i++ ) {
+                    m = Mat44.random();
+                    t = m.decompose();
+                    assert( t.rotation.matrix().toMat44().equals( m.rotation(), EPSILON ) );
+                    assert( Mat44.scale( t.scale ).equals( m.scale(), EPSILON ) );
+                    assert( Mat44.translation( t.translation ).equals( m.translation(), EPSILON ) );
+                }
             });
         });
 
@@ -498,25 +553,25 @@
                     s = m.toString().replace(/\n/g, ''),
                     a = s.split(',');
 
-                assert.equal( parseFloat( a[0] ) === m.data[0], true );
-                assert.equal( parseFloat( a[1] ) === m.data[4], true );
-                assert.equal( parseFloat( a[2] ) === m.data[8], true );
-                assert.equal( parseFloat( a[3] ) === m.data[12], true );
+                assert( parseFloat( a[0] ) === m.data[0] );
+                assert( parseFloat( a[1] ) === m.data[4] );
+                assert( parseFloat( a[2] ) === m.data[8] );
+                assert( parseFloat( a[3] ) === m.data[12] );
 
-                assert.equal( parseFloat( a[4] ) === m.data[1], true );
-                assert.equal( parseFloat( a[5] ) === m.data[5], true );
-                assert.equal( parseFloat( a[6] ) === m.data[9], true );
-                assert.equal( parseFloat( a[7] ) === m.data[13], true );
+                assert( parseFloat( a[4] ) === m.data[1] );
+                assert( parseFloat( a[5] ) === m.data[5] );
+                assert( parseFloat( a[6] ) === m.data[9] );
+                assert( parseFloat( a[7] ) === m.data[13] );
 
-                assert.equal( parseFloat( a[8] ) === m.data[2], true );
-                assert.equal( parseFloat( a[9] ) === m.data[6], true );
-                assert.equal( parseFloat( a[10] ) === m.data[10], true );
-                assert.equal( parseFloat( a[11] ) === m.data[14], true );
+                assert( parseFloat( a[8] ) === m.data[2] );
+                assert( parseFloat( a[9] ) === m.data[6] );
+                assert( parseFloat( a[10] ) === m.data[10] );
+                assert( parseFloat( a[11] ) === m.data[14] );
 
-                assert.equal( parseFloat( a[12] ) === m.data[3], true );
-                assert.equal( parseFloat( a[13] ) === m.data[7], true );
-                assert.equal( parseFloat( a[14] ) === m.data[11], true );
-                assert.equal( parseFloat( a[15] ) === m.data[15], true );
+                assert( parseFloat( a[12] ) === m.data[3] );
+                assert( parseFloat( a[13] ) === m.data[7] );
+                assert( parseFloat( a[14] ) === m.data[11] );
+                assert( parseFloat( a[15] ) === m.data[15] );
             });
         });
 
@@ -525,11 +580,29 @@
                 var m = Mat44.random(),
                     a = m.toArray(),
                     i;
-                assert.equal( a instanceof Array, true );
-                assert.equal( a.length === 16, true );
+                assert( a instanceof Array );
+                assert( a.length === 16 );
                 for ( i=0; i<16; i++ ) {
-                    assert.equal( a[i] - m.data[i] < EPSILON, true );
+                    assert( a[i] - m.data[i] < EPSILON );
                 }
+            });
+        });
+
+        describe('#toMat33', function() {
+            it('should return the truncated Mat33 equivolent with the translation component truncated', function() {
+                var m = Mat44.random();
+                var n = m.toMat33();
+                assert( m.data[0] === n.data[0] );
+                assert( m.data[1] === n.data[1] );
+                assert( m.data[2] === n.data[2] );
+
+                assert( m.data[4] === n.data[3] );
+                assert( m.data[5] === n.data[4] );
+                assert( m.data[6] === n.data[5] );
+
+                assert( m.data[8] === n.data[6] );
+                assert( m.data[9] === n.data[7] );
+                assert( m.data[10] === n.data[8] );
             });
         });
 

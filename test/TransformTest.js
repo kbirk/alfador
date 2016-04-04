@@ -3,555 +3,333 @@
     'use strict';
 
     var assert = require('assert');
-    var Mat33 = require('../src/Mat33');
     var Mat44 = require('../src/Mat44');
     var Vec3 = require('../src/Vec3');
     var Transform = require('../src/Transform');
+    var Quaternion = require('../src/Quaternion');
     var EPSILON = require('../src/Epsilon');
 
     describe('Transform', function() {
 
         describe('#equals()', function() {
             it('should return false if any components do not match', function() {
-                var m = Mat44.random(),
-                    t = new Transform( m ),
-                    q, i;
+                var m = Mat44.random();
+                var t = new Transform( m );
+                var q, i;
                 for ( i=0; i<m.data.length; i++ ) {
                     if ( i === 3 || i === 7 || i === 11 || i === 15 ) {
                         continue;
                     }
                     q = new Mat44( m );
                     q.data[i] = q.data[i] + 1;
-                    assert.equal( t.equals( new Transform( q ) ), false );
+                    assert( !t.equals( new Transform( q ) ) );
                 }
             });
             it('should return true if all components match', function() {
-                var m = Mat44.random(),
-                    p = new Transform( m ),
-                    q = new Transform( m );
-                assert.equal( p.equals( q ), true );
+                var m = Mat44.random();
+                var p = new Transform( m );
+                var q = new Transform( m );
+                assert( p.equals( q ) );
             });
             it('should accept a second epsilon parameter, return true if each component is <= epsilon', function() {
-                var m = Mat44.random(),
-                    p = new Transform( m ),
-                    q = new Transform( m );
-                q.rotateWorldDegrees( 0.1, new Vec3( 0, 1, 0 ) );
-                assert.equal( p.equals( q, 1.0 ), true );
+                var m = Mat44.random();
+                var p = new Transform( m );
+                var q = new Transform( m );
+                q.rotateWorld( 0.1 * ( Math.PI / 180 ), new Vec3( 0, 1, 0 ) );
+                assert( p.equals( q, 1.0 ) );
             });
         });
 
         describe('#constructor()', function() {
             it('should return an identity Transform when no, or improper arguments are provided', function() {
-                var t = new Transform(),
-                    u = new Transform( 'improper' ),
-                    v = new Transform( 4, new Vec3() );
-                assert.equal( t.forward.equals( new Vec3( 0, 0, 1 ) ), true );
-                assert.equal( t.left.equals( new Vec3( 1, 0, 0 ) ), true );
-                assert.equal( t.up.equals( new Vec3( 0, 1, 0 ) ), true );
-                assert.equal( t.origin.equals( new Vec3( 0, 0, 0 ) ), true );
-                assert.equal( t.scale.equals( new Vec3( 1, 1, 1) ), true );
-                assert.equal( t.matrix().equals( Mat44.identity() ), true );
-                assert.equal( u.matrix().equals( Mat44.identity() ), true );
-                assert.equal( v.matrix().equals( Mat44.identity() ), true );
+                var t = new Transform();
+                var u = new Transform( 'improper' );
+                var v = new Transform( 4, new Vec3() );
+                assert( t.matrix().equals( Mat44.identity() ) );
+                assert( u.matrix().equals( Mat44.identity() ) );
+                assert( v.matrix().equals( Mat44.identity() ) );
             });
             it('should return a deep copy Transform when a single Transform argument is provided', function() {
-                var t = Transform.random(),
-                    s = new Transform( t );
-                assert.equal( t.forward.equals( s.forward, EPSILON ), true );
-                assert.equal( t.forward !== s.forward, true );
-                assert.equal( t.left.equals( s.left, EPSILON ), true );
-                assert.equal( t.left !== s.left, true );
-                assert.equal( t.up.equals( s.up, EPSILON ), true );
-                assert.equal( t.up !== s.up, true );
-                assert.equal( t.origin.equals( s.origin, EPSILON ), true );
-                assert.equal( t.origin !== s.origin, true );
-                assert.equal( t.scale.equals( s.scale, EPSILON ), true );
-                assert.equal( t.scale !== s.scale, true );
-                assert.equal( t !== s, true );
+                var t = Transform.random();
+                var s = new Transform( t );
+                assert( t.rotation.equals( s.rotation, EPSILON ) );
+                assert( t.rotation !== s.rotation );
+                assert( t.translation.equals( s.translation, EPSILON ) );
+                assert( t.translation !== s.translation );
+                assert( t.scale.equals( s.scale, EPSILON ) );
+                assert( t.scale !== s.scale );
+                assert( t !== s );
             });
-            it('should construct a Transform using up, forward, and origin vector arguments, defaulting scale to 1', function() {
-                var p = Vec3.random().normalize(),
-                    q = Vec3.random().cross( p ).normalize(),
-                    r = Vec3.random(),
-                    t = new Transform({
-                        up: p,
-                        forward: q,
-                        origin: r
-                    });
-                assert.equal( t.up.equals( p, EPSILON ), true );
-                assert.equal( t.forward.equals( q, EPSILON ), true );
-                assert.equal( t.origin.equals( r ), true );
-                assert.equal( t.scale.equals( new Vec3( 1, 1, 1) ), true );
-            });
-            it('should construct a Transform using up, forward, origin, and scale arguments', function() {
-                var p = Vec3.random().normalize(),
-                    q = Vec3.random().cross( p ).normalize(),
-                    r = Vec3.random(),
-                    s = Vec3.random(),
-                    t = new Transform({
-                        up: p,
-                        forward: q,
-                        origin: r,
-                        scale: s
-                    });
-                assert.equal( t.up.equals( p, EPSILON ), true );
-                assert.equal( t.forward.equals( q, EPSILON ), true );
-                assert.equal( t.origin.equals( r ), true );
-                assert.equal( t.scale.equals( s ), true );
+            it('should construct a Transform using rotation, translation and scale arguments, defaulting scale to 1', function() {
+                var rotation = Quaternion.random();
+                var translation = Vec3.random();
+                var scale = Math.random();
+                var t = new Transform({
+                    rotation: rotation,
+                    translation: translation,
+                    scale: scale
+                });
+                assert( t.rotation.equals( rotation, EPSILON ) );
+                assert( t.translation.equals( translation ) );
+                assert( t.scale.equals([ scale, scale, scale ]) );
             });
             it('should construct a Transform from corresponding affine transformation matrix components', function() {
-                var t = Transform.random(),
-                    u = new Transform( t.matrix() );
-                assert.equal( t.up.equals( u.up, EPSILON ), true );
-                assert.equal( t.forward.equals( u.forward, EPSILON ), true );
-                assert.equal( t.origin.equals( u.origin, EPSILON ), true );
-                assert.equal( t.scale.equals( u.scale, EPSILON ), true );
+                var a = Transform.random();
+                var b = new Transform( a.matrix() );
+                var c = new Transform( a.matrix().toMat33() );
+                assert( a.rotation.equals( b.rotation, EPSILON ) );
+                assert( a.translation.equals( b.translation, EPSILON ) );
+                assert( a.scale.equals( b.scale, EPSILON ) );
+                assert( a.rotation.equals( c.rotation, EPSILON ) );
+                assert( a.scale.equals( c.scale, EPSILON ) );
             });
         });
 
         describe('#random()', function() {
             it('should return a Transform with all random components', function() {
-                var p = Transform.random(),
-                    q = Transform.identity();
-                assert.equal( p.matrix().equals( q.matrix() ), false );
-            });
-            it('should return a Transform that is orthogonal', function() {
-                var p = Transform.random();
-                assert.equal( p.up.dot( p.forward ) < EPSILON, true );
+                Transform.random();
             });
         });
 
         describe('#identity', function() {
             it('should return a identity Transform', function() {
                 var t = Transform.identity();
-                assert.equal( t.forward.equals( new Vec3( 0, 0, 1 ) ), true );
-                assert.equal( t.left.equals( new Vec3( 1, 0, 0 ) ), true );
-                assert.equal( t.up.equals( new Vec3( 0, 1, 0 ) ), true );
-                assert.equal( t.scale.equals( new Vec3( 1, 1, 1) ), true );
+                assert( t.xAxis().equals([ 1, 0, 0 ]) );
+                assert( t.yAxis().equals([ 0, 1, 0 ]) );
+                assert( t.zAxis().equals([ 0, 0, 1 ]) );
+                assert( t.translation.equals([ 0, 0, 0 ]) );
+                assert( t.scale.equals([ 1, 1, 1 ]) );
             });
         });
 
-        describe('#rotateForwardTo', function() {
-            it('should, when called with no argument, return the forward vector by value', function() {
-                var f = Vec3.random().normalize(),
-                    p = new Transform().rotateForwardTo( f );
-                assert.equal( f.equals( p.forward, EPSILON ), true );
-                assert.equal( f !== p.forward, true );
-            });
-            it('should, when called with an argument, return the Transform with the specified forward', function() {
-                var v = Vec3.random().normalize(),
-                    p = new Transform().rotateForwardTo( v ),
-                    q = new Transform().rotateForwardTo([ v.x, v.y, v.z ]);
-                assert.equal( v.equals( p.forward, EPSILON ), true );
-                assert.equal( v.equals( q.forward, EPSILON ), true );
-            });
-            it('should ensure orthogonality of Transform axes', function() {
-                var p = new Transform(),
-                    q = p.rotateForwardTo( Vec3.random() );
-                assert.equal( q.forward.dot( q.up ) < EPSILON, true );
-                assert.equal( q.forward.dot( q.left ) < EPSILON, true );
+        describe('#rotateXTo', function() {
+            it('should rotate the transform such that the x-axis aligns with the provided vector', function() {
+                var v = Vec3.random().normalize();
+                var a = new Transform().rotateXTo( v );
+                var b = new Transform().rotateXTo([ v.x, v.y, v.z ]);
+                assert( v.equals( a.xAxis(), EPSILON ) );
+                assert( v.equals( b.xAxis(), EPSILON ) );
             });
         });
 
-        describe('#rotateUpTo', function() {
-            it('should, when called with no argument, return the up vector by value', function() {
-                var u = Vec3.random().normalize(),
-                    p = new Transform().rotateUpTo( u );
-                assert.equal( u.equals( p.up, EPSILON ), true );
-                assert.equal( u !== p.up, true );
-            });
-            it('should, when called with an argument, return the Transform with the specified up', function() {
-                var v = Vec3.random().normalize(),
-                    p = new Transform().rotateUpTo( v ),
-                    q = new Transform().rotateUpTo([ v.x, v.y, v.z ]);
-                assert.equal( v.equals( p.up, EPSILON ), true );
-                assert.equal( v.equals( q.up, EPSILON ), true );
-            });
-            it('should ensure orthogonality of Transform axes', function() {
-                var p = new Transform(),
-                    q = p.rotateUpTo( Vec3.random() );
-                assert.equal( q.up.dot( q.forward ) < EPSILON, true );
-                assert.equal( q.up.dot( q.left ) < EPSILON, true );
+        describe('#rotateYTo', function() {
+            it('should rotate the transform such that the y-axis aligns with the provided vector', function() {
+                var v = Vec3.random().normalize();
+                var a = new Transform().rotateYTo( v );
+                var b = new Transform().rotateYTo([ v.x, v.y, v.z ]);
+                assert( v.equals( a.yAxis(), EPSILON ) );
+                assert( v.equals( b.yAxis(), EPSILON ) );
             });
         });
 
-        describe('#rotateLeftTo', function() {
-            it('should, when called with no argument, return the left vector by value', function() {
-                var l = Vec3.random().normalize(),
-                    p = new Transform().rotateLeftTo( l );
-                assert.equal( l.equals( p.left, EPSILON ), true );
-                assert.equal( l !== p.left, true );
-            });
-            it('should, when called with an argument, return the Transform with the specified left', function() {
-                var v = Vec3.random().normalize(),
-                    p = new Transform().rotateLeftTo( v ),
-                    q = new Transform().rotateLeftTo([ v.x, v.y, v.z ]);
-                assert.equal( v.equals( p.left, EPSILON ), true );
-                assert.equal( v.equals( q.left, EPSILON ), true );
-            });
-            it('should ensure orthogonality of Transform axes', function() {
-                var p = new Transform(),
-                    q = p.rotateLeftTo( Vec3.random() );
-                assert.equal( q.left.dot( q.forward ) < EPSILON, true );
-                assert.equal( q.left.dot( q.up ) < EPSILON, true );
+        describe('#rotateZTo', function() {
+            it('should rotate the transform such that the z-axis aligns with the provided vector', function() {
+                var v = Vec3.random().normalize();
+                var a = new Transform().rotateZTo( v );
+                var b = new Transform().rotateZTo([ v.x, v.y, v.z ]);
+                assert( v.equals( a.zAxis(), EPSILON ) );
+                assert( v.equals( b.zAxis(), EPSILON ) );
             });
         });
 
         describe('#scaleMatrix', function() {
-            it('should return a scale matrix', function() {
-                var p = Vec3.random(),
-                    q = new Transform({
-                        scale: p
-                    }).scaleMatrix(),
-                    r = Mat44.scale( p );
-                assert.equal( q.equals( r, EPSILON ), true );
-            });
-            it('should return by value', function() {
-                var p = Transform.random(),
-                    q = p.scaleMatrix(),
-                    r = p.scaleMatrix();
-                assert.equal( r !== q, true );
+            it('should return the scale matrix', function() {
+                var scale = Vec3.random();
+                var t = new Transform({
+                    scale: scale
+                });
+                var m = Mat44.scale( scale );
+                assert( t.scaleMatrix().equals( m, EPSILON ) );
             });
         });
 
         describe('#rotationMatrix', function() {
             it('should return a rotation matrix', function() {
-                var p = Vec3.random(),
-                    q = new Transform().rotateForwardTo( p ),
-                    r = q.rotationMatrix(),
-                    s = Mat44.rotationFromTo( new Vec3( 0, 0, 1 ), p );
-                assert.equal( s.equals( r, EPSILON ), true );
-            });
-            it('should return by value', function() {
-                var p = Transform.random(),
-                    q = p.rotationMatrix(),
-                    r = p.rotationMatrix();
-                assert.equal( r !== q, true );
+                var rotation = Quaternion.random();
+                var t = new Transform({
+                    rotation: rotation
+                });
+                assert( t.rotationMatrix().equals( rotation.matrix().toMat44(), EPSILON ) );
             });
         });
 
         describe('#translationMatrix', function() {
             it('should return a translation matrix', function() {
-                var p = new Transform({
-                        origin: Vec3.random()
-                    }),
-                    q = Mat44.translation( p.origin );
-                assert.equal( q.equals( p.translationMatrix(), EPSILON ), true );
-            });
-            it('should return by value', function() {
-                var p = Transform.random(),
-                    q = p.translationMatrix(),
-                    r = p.translationMatrix();
-                assert.equal( r !== q, true );
+                var translation = Vec3.random();
+                var t = new Transform({
+                    translation: translation
+                });
+                var m = Mat44.translation( translation );
+                assert( t.translationMatrix().equals( m, EPSILON ) );
             });
         });
 
         describe('#matrix', function() {
-            it('should return the affine Transform matrix', function() {
-                var p = Transform.random();
-                assert.equal( p.matrix().equals( p.translationMatrix().multMat44( p.rotationMatrix() ).multMat44( p.scaleMatrix() ), EPSILON ), true );
-            });
-            it('should return by value', function() {
-                var p = new Transform().rotateForwardTo( Vec3.random() ),
-                    q = p.matrix(),
-                    r = p.matrix();
-                assert.equal( r !== q, true );
+            it('should return the affine transformation matrix', function() {
+                var t = Transform.random();
+                var m = t.translationMatrix().multMat44( t.rotationMatrix() ).multMat44( t.scaleMatrix() );
+                assert( t.matrix().equals( m, EPSILON ) );
             });
         });
 
         describe('#inverseScaleMatrix', function() {
             it('should return an inverse scale matrix', function() {
-                var s = Vec3.random(),
-                    p = new Transform({
-                        scale: s
-                    }),
-                    q = Mat44.scale( s ).inverse(),
-                    r = p.inverseScaleMatrix();
-                assert.equal( r.equals( q, EPSILON ), true );
-                assert.equal( r.multMat44( p.scaleMatrix() ).equals( Mat44.identity(), EPSILON ), true );
-                assert.equal( p.scaleMatrix().multMat44( q ).equals( Mat44.identity(), EPSILON ), true );
-            });
-            it('should return by value', function() {
-                var p = new Transform({
-                        scale: Math.random(),
-                    }),
-                    q = p.inverseScaleMatrix(),
-                    r = p.inverseScaleMatrix();
-                assert.equal( r !== q, true );
+                var scale = Vec3.random();
+                var t = new Transform({
+                    scale: scale
+                });
+                var m = Mat44.scale( scale );
+                assert( t.inverseScaleMatrix().equals( m.inverse(), EPSILON ) );
+                assert( m.multMat44( t.inverseScaleMatrix() ).equals( Mat44.identity(), EPSILON ) );
+                assert( t.scaleMatrix().multMat44( m.inverse() ).equals( Mat44.identity(), EPSILON ) );
             });
         });
 
         describe('#inverseRotationMatrix', function() {
             it('should return an inverse rotation matrix', function() {
-                var p = Vec3.random(),
-                    q = new Transform().rotateForwardTo( p ),
-                    r = q.inverseRotationMatrix(),
-                    s = Mat44.rotationFromTo( new Vec3( 0, 0, 1 ), p ).inverse();
-                assert.equal( s.equals( r, EPSILON ), true );
-                assert.equal( s.multMat44( q.rotationMatrix() ).equals( Mat44.identity(), EPSILON ), true );
-                assert.equal( q.rotationMatrix().multMat44( s ).equals( Mat44.identity(), EPSILON ), true );
-            });
-            it('should return by value', function() {
-                var p = new Transform().rotateForwardTo( Vec3.random() ),
-                    q = p.inverseRotationMatrix(),
-                    r = p.inverseRotationMatrix();
-                assert.equal( r !== q, true );
+                var rotation = Quaternion.random();
+                var t = new Transform({
+                    rotation: rotation
+                });
+                assert( t.inverseRotationMatrix().equals( rotation.matrix().inverse().toMat44(), EPSILON ) );
+                assert( rotation.matrix().toMat44().multMat44( t.inverseRotationMatrix() ).equals( Mat44.identity(), EPSILON ) );
+                assert( t.rotationMatrix().multMat44( rotation.matrix().inverse().toMat44() ).equals( Mat44.identity(), EPSILON ) );
             });
         });
 
         describe('#inverseTranslationMatrix', function() {
             it('should return an inverse translation matrix', function() {
-                var p = new Transform({
-                        origin: Vec3.random()
-                    }),
-                    q = Mat44.translation( p.origin ).inverse(),
-                    r = p.inverseTranslationMatrix();
-                assert.equal( q.equals( r, EPSILON ), true );
-                assert.equal( q.multMat44( p.translationMatrix() ).equals( Mat44.identity(), EPSILON ), true );
-                assert.equal( p.translationMatrix().multMat44( q ).equals( Mat44.identity(), EPSILON ), true );
-            });
-            it('should return by value', function() {
-                var p = new Transform({
-                        origin: Vec3.random()
-                    }),
-                    q = p.inverseTranslationMatrix(),
-                    r = p.inverseTranslationMatrix();
-                assert.equal( r !== q, true );
+                var translation = Vec3.random();
+                var t = new Transform({
+                    translation: translation
+                });
+                var m = Mat44.translation( translation );
+                assert( t.inverseTranslationMatrix().equals( m.inverse(), EPSILON ) );
+                assert( m.multMat44( t.inverseTranslationMatrix() ).equals( Mat44.identity(), EPSILON ) );
+                assert( t.translationMatrix().multMat44( m.inverse() ).equals( Mat44.identity(), EPSILON ) );
             });
         });
 
         describe('#inverseMatrix', function() {
             it('should return an inverse matrix', function() {
-                var p = new Transform({
-                        origin: Vec3.random()
-                    }).rotateForwardTo( Vec3.random() );
-                assert.equal( p.inverseMatrix().equals( p.matrix().inverse(), EPSILON ), true );
-                assert.equal( p.inverseMatrix().multMat44( p.matrix() ).equals( Mat44.identity(), EPSILON ), true );
-            });
-            it('should return by value', function() {
-                var p = new Transform({
-                        origin: Vec3.random()
-                    }).rotateForwardTo( Vec3.random() ),
-                    q = p.inverseMatrix(),
-                    r = p.inverseMatrix();
-                assert.equal( r !== q, true );
+                var t = Transform.random();
+                assert( t.inverseMatrix().equals( t.matrix().inverse(), EPSILON ) );
+                assert( t.inverseMatrix().multMat44( t.matrix() ).equals( Mat44.identity(), EPSILON ) );
+                assert( t.matrix().multMat44( t.inverseMatrix() ).equals( Mat44.identity(), EPSILON ) );
             });
         });
 
         describe('#viewMatrix()', function() {
             it('should return an view matrix', function() {
-                var t = new Transform({
-                        up: new Vec3( 0, 1, 0 ),
-                        forward: new Vec3( 0, 0, -1 ),
-                        left: new Vec3( -1, 0, 0 ),
-                        origin: new Vec3( 0, 0, 0 )
-                    });
-                assert.equal( t.viewMatrix().equals( new Mat44() ), true );
-                assert.equal( new Transform().viewMatrix().equals(
-                    new Mat44([ -1, 0, 0, 0,
-                                 0, 1, 0, 0,
-                                 0, 0, -1, 0,
-                                 0, 0, 0, 1 ]) ), true );
+                var t = new Transform();
+                assert( t.viewMatrix().equals( new Mat44() ) );
             });
         });
 
         describe('#translateWorld', function() {
             it('should translate origin in world space', function() {
-                var r = Vec3.random(),
-                    p = new Transform().translateWorld( r );
-                assert.equal( p.origin.equals( r ), true );
+                var translation = Vec3.random();
+                var t = new Transform().translateWorld( translation );
+                assert( t.translation.equals( translation ) );
             });
             it('should return the transform by reference for chaining', function() {
-                var p = Transform.random(),
-                    q = p.translateWorld( Vec3.random() );
-                assert.equal( p === q, true );
+                var t = Transform.random();
+                assert( t === t.translateWorld( Vec3.random() ) );
             });
         });
 
         describe('#translateLocal', function() {
-            it('should translate origin in world space', function() {
-                var r = Vec3.random(),
-                    p = Transform.random(),
-                    s = p.origin,
-                    q = p.translateLocal( r.normalize() ).origin,
-                    t = s.add( p.rotationMatrix().multVec3( r ).normalize() );
-                assert.equal( q.equals( t, EPSILON ), true );
+            it('should translate origin in local space', function() {
+                var translationLocal = Vec3.random();
+                var a = Transform.random();
+                var b = new Transform( a );
+                var translationWorld = a.rotationMatrix().multVec3( translationLocal );
+                assert( a.translateLocal( translationLocal ).equals( b.translateWorld( translationWorld ), EPSILON ) );
             });
             it('should return the transform by reference for chaining', function() {
-                var p = Transform.random(),
-                    q = p.translateLocal( [ Math.random(), Math.random(), Math.random() ] );
-                assert.equal( p === q, true );
+                var t = Transform.random();
+                assert( t === t.translateLocal([ Math.random(), Math.random(), Math.random() ]) );
             });
         });
 
-        describe('#rotateWorldDegrees', function() {
-            it('should rotate the Transform with an axis specified in world space', function() {
-                var p = new Transform(),
-                    q = p.matrix(),
-                    r = Vec3.random(),
-                    s = Math.random(),
-                    t = p.rotateWorldDegrees( s, r ),
-                    u = Mat44.rotationDegrees( s, r );
-                assert.equal( u.multMat44( q ).equals( t.matrix(), EPSILON ), true );
-            });
-            it('should return the transform by reference for chaining', function() {
-                var p = Transform.random(),
-                    q = p.rotateWorldDegrees( Math.random(), Vec3.random() );
-                assert.equal( p === q, true );
-            });
-        });
-
-        describe('#rotateWorldRadians', function() {
+        describe('#rotateWorld', function() {
             it('should rotate Transform with an axis specified in world space', function() {
-                var p = new Transform(),
-                    q = p.matrix(),
-                    r = Vec3.random(),
-                    s = Math.random(),
-                    t = p.rotateWorldRadians( s * Math.PI / 180, r ),
-                    u = Mat44.rotationRadians( s * Math.PI / 180, r );
-                assert.equal( u.multMat44( q ).equals( t.matrix(), EPSILON ), true );
+                var t = new Transform();
+                var m = t.matrix();
+                var axis = Vec3.random();
+                var angle = Math.random();
+                var a = t.rotateWorld( angle, axis );
+                var b = Mat44.rotation( angle, axis );
+                assert( b.multMat44( m ).equals( a.matrix(), EPSILON ) );
             });
             it('should return the transform by reference for chaining', function() {
-                var p = Transform.random(),
-                    q = p.rotateWorldRadians( Math.random(), Vec3.random() );
-                assert.equal( p === q, true );
+                var t = Transform.random();
+                assert( t === t.rotateWorld( Math.random(), Vec3.random() ) );
             });
         });
 
-        describe('#rotateLocalDegrees', function() {
+        describe('#rotateLocal', function() {
             it('should rotate Transform with an axis specified in local space', function() {
-                var p = new Transform(),
-                    q = p.matrix(),
-                    r = Vec3.random(),
-                    s = Math.random(),
-                    t = p.rotateLocalDegrees( s, p.rotationMatrix().multVec3( r ) ),
-                    u = Mat44.rotationDegrees( s, p.rotationMatrix().multVec3( r ) );
-                assert.equal( u.multMat44( q ).equals( t.matrix(), EPSILON ), true );
+                var t = new Transform();
+                var m = t.matrix();
+                var axis = Vec3.random();
+                var angle = Math.random();
+                var a = t.rotateLocal( angle, t.rotationMatrix().multVec3( axis ) );
+                var b = Mat44.rotation( angle, t.rotationMatrix().multVec3( axis ) );
+                assert( b.multMat44( m ).equals( a.matrix(), EPSILON ) );
             });
             it('should return the transform by reference for chaining', function() {
-                var p = Transform.random(),
-                    q = p.rotateLocalDegrees( Math.random(), Vec3.random() );
-                assert.equal( p === q, true );
-            });
-        });
-
-        describe('#rotateLocalRadians', function() {
-            it('should rotate Transform with an axis specified in local space', function() {
-                var p = new Transform(),
-                    q = p.matrix(),
-                    r = Vec3.random(),
-                    s = Math.random(),
-                    t = p.rotateLocalRadians( s * Math.PI / 180, p.rotationMatrix().multVec3( r ) ),
-                    u = Mat44.rotationRadians( s * Math.PI / 180, p.rotationMatrix().multVec3( r ) );
-                assert.equal( u.multMat44( q ).equals( t.matrix(), EPSILON ), true );
-            });
-            it('should return the transform by reference for chaining', function() {
-                var p = Transform.random(),
-                    q = p.rotateLocalRadians( Math.random(), Vec3.random() );
-                assert.equal( p === q, true );
+                var t = Transform.random();
+                assert( t === t.rotateLocal( Math.random(), Vec3.random() ) );
             });
         });
 
         describe('#localToWorld', function() {
-            it('should convert and return vector argument from Transforms local coordinate system to world coordinate system', function() {
-                var p = Transform.random(),
-                    q = Vec3.random(),
-                    r = p.localToWorld( q );
-                assert.equal( r.equals( p.matrix().multVec3( q ), EPSILON ), true );
-            });
-            it('should ignore scale if second argument is true', function() {
-                var p = new Transform({
-                        scale: Vec3.random(),
-                    }),
-                    q = Vec3.random(),
-                    r = p.localToWorld( q, true );
-                assert.equal( q.equals( r, EPSILON ), true );
-            });
-            it('should ignore rotation if third argument is true', function() {
-                var p = new Transform().rotateForwardTo( Vec3.random() ),
-                    q = Vec3.random(),
-                    r = p.localToWorld( q, false, true );
-                assert.equal( q.equals( r, EPSILON ), true );
-            });
-            it('should ignore translation if fourth argument is true', function() {
-                var p = new Transform({
-                        origin: Vec3.random()
-                    }),
-                    q = Vec3.random(),
-                    r = p.localToWorld( q, false, false, true );
-                assert.equal( q.equals( r, EPSILON ), true );
-            });
-            it('should not modify calling object', function() {
-                var p = Transform.random(),
-                    q = new Transform( p );
-                p.localToWorld( Vec3.random() );
-                assert.equal( q.matrix().equals( p.matrix(), EPSILON ), true );
+            it('should transform the vector argument from the transforms local coordinate system to world coordinate system', function() {
+                var t = Transform.random();
+                var local = Vec3.random();
+                var world = t.localToWorld( local );
+                assert( world.equals( t.matrix().multVec3( local ), EPSILON ) );
+                assert( local.equals( t.worldToLocal( t.localToWorld( local ) ), EPSILON ) );
             });
         });
 
         describe('#worldToLocal', function() {
-            it('should convert and return vector argument from Transforms local coordinate system to world coordinate system', function() {
-                var p = Transform.random(),
-                    q = Vec3.random(),
-                    r = p.worldToLocal( q );
-                assert.equal( r.equals( p.inverseMatrix().multVec3( q ), EPSILON ), true );
-            });
-            it('should ignore scale if second argument is true', function() {
-                var p = new Transform({
-                        scale: Vec3.random(),
-                    }),
-                    q = Vec3.random(),
-                    r = p.worldToLocal( q, true );
-                assert.equal( q.equals( r, EPSILON ), true );
-            });
-            it('should ignore rotation if third argument is true', function() {
-                var p = new Transform().rotateForwardTo( Vec3.random() ),
-                    q = Vec3.random(),
-                    r = p.worldToLocal( q, false, true );
-                assert.equal( q.equals( r, EPSILON ), true );
-            });
-            it('should ignore translation if fourth argument is true', function() {
-                var p = new Transform({
-                        origin: Vec3.random()
-                    }),
-                    q = Vec3.random(),
-                    r = p.worldToLocal( q, false, false, true );
-                assert.equal( q.equals( r, EPSILON ), true );
-            });
-            it('should not modify calling object', function() {
-                var p = Transform.random(),
-                    q = new Transform( p );
-                p.worldToLocal( Vec3.random() );
-                assert.equal( q.matrix().equals( p.matrix(), EPSILON ), true );
+            it('should transform the vector from the transforms local coordinate system to world coordinate system', function() {
+                var t = Transform.random();
+                var world = Vec3.random();
+                var local = t.worldToLocal( world );
+                assert( local.equals( t.inverseMatrix().multVec3( world ), EPSILON ) );
+                assert( world.equals( t.localToWorld( t.worldToLocal( world ) ), EPSILON ) );
             });
         });
 
         describe('#toString', function() {
             it('should return a string containing the comma separated values of the transforms matrix', function() {
-                var t = Transform.random(),
-                    m = t.matrix(),
-                    s = t.toString().replace(/\n/g, ''),
-                    a = s.split(',');
+                var t = Transform.random();
+                var m = t.matrix();
+                var s = t.toString().replace(/\n/g, '');
+                var a = s.split(',');
 
-                assert.equal( parseFloat( a[0] ) === m.data[0], true );
-                assert.equal( parseFloat( a[1] ) === m.data[4], true );
-                assert.equal( parseFloat( a[2] ) === m.data[8], true );
-                assert.equal( parseFloat( a[3] ) === m.data[12], true );
+                assert( parseFloat( a[0] ) === m.data[0] );
+                assert( parseFloat( a[1] ) === m.data[4] );
+                assert( parseFloat( a[2] ) === m.data[8] );
+                assert( parseFloat( a[3] ) === m.data[12] );
 
-                assert.equal( parseFloat( a[4] ) === m.data[1], true );
-                assert.equal( parseFloat( a[5] ) === m.data[5], true );
-                assert.equal( parseFloat( a[6] ) === m.data[9], true );
-                assert.equal( parseFloat( a[7] ) === m.data[13], true );
+                assert( parseFloat( a[4] ) === m.data[1] );
+                assert( parseFloat( a[5] ) === m.data[5] );
+                assert( parseFloat( a[6] ) === m.data[9] );
+                assert( parseFloat( a[7] ) === m.data[13] );
 
-                assert.equal( parseFloat( a[8] ) === m.data[2], true );
-                assert.equal( parseFloat( a[9] ) === m.data[6], true );
-                assert.equal( parseFloat( a[10] ) === m.data[10], true );
-                assert.equal( parseFloat( a[11] ) === m.data[14], true );
+                assert( parseFloat( a[8] ) === m.data[2] );
+                assert( parseFloat( a[9] ) === m.data[6] );
+                assert( parseFloat( a[10] ) === m.data[10] );
+                assert( parseFloat( a[11] ) === m.data[14] );
 
-                assert.equal( parseFloat( a[12] ) === m.data[3], true );
-                assert.equal( parseFloat( a[13] ) === m.data[7], true );
-                assert.equal( parseFloat( a[14] ) === m.data[11], true );
-                assert.equal( parseFloat( a[15] ) === m.data[15], true );
+                assert( parseFloat( a[12] ) === m.data[3] );
+                assert( parseFloat( a[13] ) === m.data[7] );
+                assert( parseFloat( a[14] ) === m.data[11] );
+                assert( parseFloat( a[15] ) === m.data[15] );
             });
         });
 

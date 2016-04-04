@@ -189,12 +189,12 @@
      */
     Vec2.prototype.normalize = function() {
         var mag = this.length();
-        if ( mag !== 0 ) {
-            return new Vec2(
-                this.x / mag,
-                this.y / mag );
+        if ( mag === 0 ) {
+            throw 'Cannot normalize a vector of zero length';
         }
-        return new Vec2();
+        return new Vec2(
+            this.x / mag,
+            this.y / mag );
     };
 
     /**
@@ -205,7 +205,7 @@
      *
      * @returns {number} The unsigned angle in radians.
      */
-    Vec2.prototype.unsignedAngleRadians = function( that ) {
+    Vec2.prototype.unsignedAngle = function( that ) {
         var x = that.x !== undefined ? that.x : that[0];
         var y = that.y !== undefined ? that.y : that[1];
         var angle = Math.atan2( y, x ) - Math.atan2( this.y, this.x );
@@ -213,18 +213,6 @@
             angle += 2 * Math.PI;
         }
         return angle;
-    };
-
-    /**
-     * Returns the unsigned angle between this angle and the argument in degrees.
-     * @memberof Vec2
-     *
-     * @param {Vec2|Vec3|Vec4|Array} that - The vector to measure the angle from.
-     *
-     * @returns {number} The unsigned angle in degrees.
-     */
-    Vec2.prototype.unsignedAngleDegrees = function( that ) {
-        return this.unsignedAngleRadians( that ) * ( 180 / Math.PI );
     };
 
     /**

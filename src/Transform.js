@@ -3,8 +3,8 @@
     'use strict';
 
     var Vec3 = require('./Vec3');
-    var Mat33 = require('./Mat33');
     var Mat44 = require('./Mat44');
+    var Quaternion = require('./Quaternion');
 
     /**
      * Instantiates a Transform object.
@@ -16,17 +16,13 @@
         if ( that.data instanceof Array ) {
             // Mat33 or Mat44, extract transform components
             that = that.decompose();
-            this.up = that.up;
-            this.forward = that.forward;
-            this.left = that.left;
+            this.rotation = that.rotation;
+            this.translation = that.translation || new Vec3();
             this.scale = that.scale;
-            this.origin = that.origin || new Vec3( 0, 0, 0 );
         } else {
-            // set individual components
-            this.up = that.up ? new Vec3( that.up ).normalize() : new Vec3( 0, 1, 0 );
-            this.forward = that.forward ? new Vec3( that.forward ).normalize() : new Vec3( 0, 0, 1 );
-            this.left = that.left ? new Vec3( that.left ).normalize() : this.up.cross( this.forward ).normalize();
-            this.origin = that.origin ? new Vec3( that.origin ) : new Vec3( 0, 0, 0 );
+            // set individual components, by value
+            this.rotation = that.rotation ? new Quaternion( that.rotation ) : new Quaternion();
+            this.translation = that.translation ? new Vec3( that.translation ) : new Vec3();
             if ( typeof that.scale === 'number' ) {
                 this.scale = new Vec3( that.scale, that.scale, that.scale );
             } else {
@@ -43,81 +39,92 @@
      */
     Transform.identity = function() {
         return new Transform({
-            forward: new Vec3( 0, 0, 1 ),
-            up: new Vec3( 0, 1, 0 ),
-            left: new Vec3( 1, 0, 0 ),
-            origin: new Vec3( 0, 0, 0 ),
+            rotation: new Quaternion(),
+            translation: new Vec3(),
             scale: new Vec3( 1, 1, 1 )
         });
     };
 
     /**
-     * If an argument is provided, sets the forward vector, otherwise returns
-     * the forward vector by value. While setting, a rotation matrix from the
-     * orignal forward vector to the new is used to rotate all other axes.
+     * Rotates the transform such that x-axis matches the provided vector.
      * @memberof Transform
      *
-     * @param {Vec3|Array} forward - The forward vector. Optional.
+     * @param {Vec3|Array} x - The x-axis to rotate to.
      *
-     * @returns {Vec3|Transform} The forward vector, or the transform for chaining.
+     * @returns {Transform} The transform object, for chaining.
      */
-    Transform.prototype.rotateForwardTo = function( forward ) {
-        if ( forward instanceof Array ) {
-            forward = new Vec3( forward ).normalize();
-        } else {
-            forward = forward.normalize();
-        }
-        var rot = Mat33.rotationFromTo( this.forward, forward );
-        this.forward = forward;
-        this.up = rot.multVec3( this.up ).normalize();
-        this.left = rot.multVec3( this.left ).normalize();
+    Transform.prototype.rotateXTo = function( x ) {
+        var rot = Quaternion.rotationFromTo( this.xAxis(), x );
+        this.rotation = rot.multQuat( this.rotation );
         return this;
     };
 
     /**
-     * If an argument is provided, sets the up vector, otherwise returns
-     * the up vector by value. While setting, a rotation matrix from the
-     * orignal up vector to the new is used to rotate all other axes.
+     * Rotates the transform such that y-axis matches the provided vector.
      * @memberof Transform
      *
-     * @param {Vec3|Array} up - The up vector. Optional.
+     * @param {Vec3|Array} y - The y-axis to rotate to.
      *
-     * @returns {Vec3|Transform} The up vector, or the transform for chaining.
+     * @returns {Transform} The transform object, for chaining.
      */
-    Transform.prototype.rotateUpTo = function( up ) {
-        if ( up instanceof Array ) {
-            up = new Vec3( up ).normalize();
-        } else {
-            up = up.normalize();
-        }
-        var rot = Mat33.rotationFromTo( this.up, up );
-        this.forward = rot.multVec3( this.forward ).normalize();
-        this.up = up;
-        this.left = rot.multVec3( this.left ).normalize();
+    Transform.prototype.rotateYTo = function( y ) {
+        var rot = Quaternion.rotationFromTo( this.yAxis(), y );
+        this.rotation = rot.multQuat( this.rotation );
         return this;
     };
 
     /**
-     * If an argument is provided, sets the left vector, otherwise returns
-     * the left vector by value. While setting, a rotation matrix from the
-     * orignal left vector to the new is used to rotate all other axes.
+     * Rotates the transform such that z-axis matches the provided vector.
      * @memberof Transform
      *
-     * @param {Vec3|Array} left - The left vector. Optional.
+     * @param {Vec3|Array} z - The z-axis to rotate to.
      *
-     * @returns {Vec3|Transform} The left vector, or the transform for chaining.
+     * @returns {Transform} The transform object, for chaining.
      */
-    Transform.prototype.rotateLeftTo = function( left ) {
-        if ( left instanceof Array ) {
-            left = new Vec3( left ).normalize();
-        } else {
-            left = left.normalize();
-        }
-        var rot = Mat33.rotationFromTo( this.left, left );
-        this.forward = rot.multVec3( this.forward ).normalize();
-        this.up = rot.multVec3( this.up ).normalize();
-        this.left = left;
+    Transform.prototype.rotateZTo = function( z ) {
+        var rot = Quaternion.rotationFromTo( this.zAxis(), z );
+        this.rotation = rot.multQuat( this.rotation );
         return this;
+    };
+
+    /**
+     * Returns the x-axis of the transform.
+     * @memberof Transform
+     *
+     * @returns {Vec3} The x-axis of the transform.
+     */
+    Transform.prototype.xAxis = function() {
+        return this.rotation.xAxis();
+    };
+
+    /**
+     * Returns the y-axis of the transform.
+     * @memberof Transform
+     *
+     * @returns {Vec3} The y-axis of the transform.
+     */
+    Transform.prototype.yAxis = function() {
+        return this.rotation.yAxis();
+    };
+
+    /**
+     * Returns the z-axis of the transform.
+     * @memberof Transform
+     *
+     * @returns {Vec3} The z-axis of the transform.
+     */
+    Transform.prototype.zAxis = function() {
+        return this.rotation.zAxis();
+    };
+
+    /**
+     * Returns the axes of the transform.
+     * @memberof Transform
+     *
+     * @returns {Object} The axes of the transform.
+     */
+    Transform.prototype.axes = function() {
+        return this.rotation.axes();
     };
 
     /**
@@ -137,12 +144,7 @@
      * @returns {Mat44} The rotation matrix.
      */
     Transform.prototype.rotationMatrix = function() {
-        return new Mat44([
-            this.left.x, this.left.y, this.left.z, 0,
-            this.up.x, this.up.y, this.up.z, 0,
-            this.forward.x, this.forward.y, this.forward.z, 0,
-            0, 0, 0, 1
-        ]);
+        return this.rotation.matrix().toMat44();
     };
 
     /**
@@ -152,7 +154,7 @@
      * @returns {Mat44} The translation matrix.
      */
     Transform.prototype.translationMatrix = function() {
-        return Mat44.translation( this.origin );
+        return Mat44.translation( this.translation );
     };
 
     /**
@@ -175,10 +177,11 @@
      * @returns {Mat44} The inverse scale matrix.
      */
     Transform.prototype.inverseScaleMatrix = function() {
-        return Mat44.scale( new Vec3(
+        return Mat44.scale([
             1 / this.scale.x,
             1 / this.scale.y,
-            1 / this.scale.z ) );
+            1 / this.scale.z
+        ]);
     };
 
     /**
@@ -188,12 +191,7 @@
      * @returns {Mat44} The inverse rotation matrix.
      */
     Transform.prototype.inverseRotationMatrix = function() {
-        return new Mat44([
-            this.left.x, this.up.x, this.forward.x, 0,
-            this.left.y, this.up.y, this.forward.y, 0,
-            this.left.z, this.up.z, this.forward.z, 0,
-            0, 0, 0, 1
-        ]);
+        return this.rotation.matrix().inverse().toMat44();
     };
 
     /**
@@ -203,7 +201,7 @@
      * @returns {Mat44} The inverse translation matrix.
      */
     Transform.prototype.inverseTranslationMatrix = function() {
-        return Mat44.translation( this.origin.negate() );
+        return Mat44.translation( this.translation.negate() );
     };
 
     /**
@@ -226,14 +224,7 @@
      * @returns {Mat44} The view matrix.
      */
     Transform.prototype.viewMatrix = function() {
-        var nOrigin = this.origin.negate(),
-            right = this.left.negate(),
-            backward = this.forward.negate();
-        return new Mat44([
-            right.x, this.up.x, backward.x, 0,
-            right.y, this.up.y, backward.y, 0,
-            right.z, this.up.z, backward.z, 0,
-            nOrigin.dot( right ), nOrigin.dot( this.up ), nOrigin.dot( backward ), 1 ]);
+        return this.matrix().view();
     };
 
     /**
@@ -245,7 +236,7 @@
      * @returns {Transform} The transform for chaining.
      */
     Transform.prototype.translateWorld = function( translation ) {
-        this.origin = this.origin.add( translation );
+        this.translation = this.translation.add( translation );
         return this;
     };
 
@@ -259,25 +250,14 @@
      */
     Transform.prototype.translateLocal = function( translation ) {
         if ( translation instanceof Array ) {
-            translation = new Vec3( translation );
-        }
-        this.origin = this.origin.add( this.left.multScalar( translation.x ) )
-            .add( this.up.multScalar( translation.y ) )
-            .add( this.forward.multScalar( translation.z ) );
+           translation = new Vec3( translation );
+       }
+        var axes = this.axes();
+        this.translation = this.translation
+            .add( axes.x.multScalar( translation.x ) )
+            .add( axes.y.multScalar( translation.y ) )
+            .add( axes.z.multScalar( translation.z ) );
         return this;
-    };
-
-    /**
-     * Rotates the transform by an angle around an axis in world space.
-     * @memberof Transform
-     *
-     * @param {number} angle - The angle of the rotation, in degrees.
-     * @param {Vec3} axis - The axis of the rotation.
-     *
-     * @returns {Transform} The transform for chaining.
-     */
-    Transform.prototype.rotateWorldDegrees = function( angle, axis ) {
-        return this.rotateWorldRadians( angle * Math.PI / 180, axis );
     };
 
     /**
@@ -289,25 +269,10 @@
      *
      * @returns {Transform} The transform for chaining.
      */
-    Transform.prototype.rotateWorldRadians = function( angle, axis ) {
-        var rot = Mat33.rotationRadians( angle, axis );
-        this.up = rot.multVec3( this.up );
-        this.forward = rot.multVec3( this.forward );
-        this.left = rot.multVec3( this.left );
+    Transform.prototype.rotateWorld = function( angle, axis ) {
+        var rot = Quaternion.rotation( angle, axis );
+        this.rotation = rot.multQuat( this.rotation );
         return this;
-    };
-
-    /**
-     * Rotates the transform by an angle around an axis in local space.
-     * @memberof Transform
-     *
-     * @param {number} angle - The angle of the rotation, in degrees.
-     * @param {Vec3} axis - The axis of the rotation.
-     *
-     * @returns {Transform} The transform for chaining.
-     */
-    Transform.prototype.rotateLocalDegrees = function( angle, axis ) {
-        return this.rotateWorldDegrees( angle, this.rotationMatrix().multVec3( axis ) );
     };
 
     /**
@@ -319,8 +284,8 @@
      *
      * @returns {Transform} The transform for chaining.
      */
-    Transform.prototype.rotateLocalRadians = function( angle, axis ) {
-        return this.rotateWorldRadians( angle, this.rotationMatrix().multVec3( axis ) );
+    Transform.prototype.rotateLocal = function( angle, axis ) {
+        return this.rotateWorld( angle, this.rotationMatrix().multVec3( axis ) );
     };
 
     /**
@@ -329,24 +294,11 @@
      * @memberof Transform
      *
      * @param {Vec3|Vec4} vec - The vector argument to transform.
-     * @param {boolean} ignoreScale - Whether or not to include the scale in the transform.
-     * @param {boolean} ignoreRotation - Whether or not to include the rotation in the transform.
-     * @param {boolean} ignoreTranslation - Whether or not to include the translation in the transform.
      *
      * @returns {Transform} The transform for chaining.
      */
-    Transform.prototype.localToWorld = function( vec, ignoreScale, ignoreRotation, ignoreTranslation ) {
-        var mat = new Mat44();
-        if ( !ignoreScale ) {
-            mat = this.scaleMatrix().multMat44( mat );
-        }
-        if ( !ignoreRotation ) {
-            mat = this.rotationMatrix().multMat44( mat );
-        }
-        if ( !ignoreTranslation ) {
-            mat = this.translationMatrix().multMat44( mat );
-        }
-        return mat.multVec3( vec );
+    Transform.prototype.localToWorld = function( vec ) {
+        return this.matrix().multVec3( vec );
     };
 
     /**
@@ -355,24 +307,11 @@
      * @memberof Transform
      *
      * @param {Vec3|Vec4} vec - The vector argument to transform.
-     * @param {boolean} ignoreScale - Whether or not to include the scale in the transform.
-     * @param {boolean} ignoreRotation - Whether or not to include the rotation in the transform.
-     * @param {boolean} ignoreTranslation - Whether or not to include the translation in the transform.
      *
      * @returns {Transform} The transform for chaining.
      */
-    Transform.prototype.worldToLocal = function( vec, ignoreScale, ignoreRotation, ignoreTranslation ) {
-        var mat = new Mat44();
-        if ( !ignoreTranslation ) {
-            mat = this.inverseTranslationMatrix().multMat44( mat );
-        }
-        if ( !ignoreRotation ) {
-            mat = this.inverseRotationMatrix().multMat44( mat );
-        }
-        if ( !ignoreScale ) {
-            mat = this.inverseScaleMatrix().multMat44( mat );
-        }
-        return mat.multVec3( vec );
+    Transform.prototype.worldToLocal = function( vec ) {
+        return this.inverseMatrix().multVec3( vec );
     };
 
     /**
@@ -386,24 +325,20 @@
      * @returns {boolean} Whether or not the transform components match.
      */
     Transform.prototype.equals = function( that, epsilon ) {
-        return this.origin.equals( that.origin, epsilon ) &&
-            this.forward.equals( that.forward, epsilon ) &&
-            this.up.equals( that.up, epsilon ) &&
-            this.left.equals( that.left, epsilon ) &&
-            this.scale.equals( that.scale, epsilon );
+        return this.matrix().equals( that.matrix(), epsilon );
     };
 
     /**
-     * Returns a transform with a random origin, orientation, and scale.
+     * Returns a transform with a random translation, orientation, and scale.
      * @memberof Transform
      *
      * @returns {Transform} The random transform.
      */
     Transform.random = function() {
         return new Transform({
-            origin: Vec3.random(),
+            translation: Vec3.random(),
             scale: Vec3.random(),
-        }).rotateForwardTo( Vec3.random() );
+        }).rotateXTo( Vec3.random() );
     };
 
     /**

@@ -7,7 +7,7 @@
     var Mat44 = require('../src/Mat44');
     var Vec3 = require('../src/Vec3');
     var Vec4 = require('../src/Vec4');
-    var Transform = require('../src/Transform');
+    require('../src/Quaternion');
     var EPSILON = require('../src/Epsilon');
 
     describe('Mat33', function() {
@@ -23,7 +23,7 @@
                 for ( i=0; i<p.data.length; i++ ) {
                     q = new Mat33([ a0, a1, a2, b0, b1, b2, c0, c1, c2 ]);
                     q.data[i] = q.data[i] + 1;
-                    assert.equal( p.equals( q ), false );
+                    assert( !p.equals( q ) );
                 }
             });
             it('should return true if all components match', function() {
@@ -32,7 +32,8 @@
                     a2 = Math.random(), b2 = Math.random(), c2 = Math.random(),
                     p = new Mat33([ a0, a1, a2, b0, b1, b2, c0, c1, c2 ]),
                     q = new Mat33([ a0, a1, a2, b0, b1, b2, c0, c1, c2 ]);
-                assert.equal( p.equals( q ), true );
+                assert( p.equals( q ) );
+                assert( p.equals( q.data ) );
             });
             it('should accept a second epsilon parameter, return true if each component is <= epsilon', function() {
                 var r = Math.random(),
@@ -40,10 +41,10 @@
                         r, r, r,
                         r, r, r,
                         r, r, r ]);
-                assert.equal( m.equals( new Mat33([
+                assert( m.equals( new Mat33([
                     r/2, r/2, r/2,
                     r/2, r/2, r/2,
-                    r/2, r/2, r/2 ]), r/2 ), true );
+                    r/2, r/2, r/2 ]), r/2 ) );
             });
         });
 
@@ -51,7 +52,7 @@
             it('should return a Mat33 with all random components', function() {
                 var p = Mat33.random(),
                     q = new Mat33([ 0, 0, 0, 0, 0, 0, 0, 0, 0 ]);
-                assert.equal( p.equals( q ), false );
+                assert( !p.equals( q ) );
             });
         });
 
@@ -59,20 +60,20 @@
             it('should return a deep copy when supplied another Mat33', function() {
                 var p = Mat33.random(),
                     q = new Mat33( p );
-                assert.equal( p.equals( q ), true );
-                assert.equal( p !== q, true );
+                assert( p.equals( q ) );
+                assert( p !== q );
             });
             it('should return a Mat33 from an array of length 9', function() {
                 var a = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
                     p = new Mat33( a ),
                     q = new Mat33( p );
-                assert.equal( p.equals( q ), true );
-                assert.equal( p.data === a, true );
+                assert( p.equals( q ) );
+                assert( p.data === a );
             });
             it('should return an identity matrix when given no input', function() {
                 var p = new Mat33(),
                     identity = Mat33.identity();
-                assert.equal( p.equals( identity ), true );
+                assert( p.equals( identity ) );
             });
         });
 
@@ -82,15 +83,15 @@
                 var t0 = Vec3.random();
                 var t1 = Vec3.random();
                 var t2 = Vec3.random();
-                assert.equal( p.row(0, t0).row(0).equals( t0 ), true );
-                assert.equal( p.row(0, t1).row(0).equals( t1 ), true );
-                assert.equal( p.row(0, t2).row(0).equals( t2 ), true );
+                assert( p.row(0, t0).row(0).equals( t0 ) );
+                assert( p.row(0, t1).row(0).equals( t1 ) );
+                assert( p.row(0, t2).row(0).equals( t2 ) );
             });
             it('should return a the corresponding row, by zero based index', function() {
                 var p = Mat33.random();
-                assert.equal( p.row(0).equals( new Vec3( p.data[0], p.data[3], p.data[6] ) ), true );
-                assert.equal( p.row(1).equals( new Vec3( p.data[1], p.data[4], p.data[7] ) ), true );
-                assert.equal( p.row(2).equals( new Vec3( p.data[2], p.data[5], p.data[8] ) ), true );
+                assert( p.row(0).equals( new Vec3( p.data[0], p.data[3], p.data[6] ) ) );
+                assert( p.row(1).equals( new Vec3( p.data[1], p.data[4], p.data[7] ) ) );
+                assert( p.row(2).equals( new Vec3( p.data[2], p.data[5], p.data[8] ) ) );
             });
         });
 
@@ -100,15 +101,15 @@
                 var t0 = Vec3.random();
                 var t1 = Vec3.random();
                 var t2 = Vec3.random();
-                assert.equal( p.col(0, t0).col(0).equals( t0 ), true );
-                assert.equal( p.col(0, t1).col(0).equals( t1 ), true );
-                assert.equal( p.col(0, t2).col(0).equals( t2 ), true );
+                assert( p.col(0, t0).col(0).equals( t0 ) );
+                assert( p.col(0, t1).col(0).equals( t1 ) );
+                assert( p.col(0, t2).col(0).equals( t2 ) );
             });
             it('should return a the corresponding column, by zero based index', function() {
                 var p = Mat33.random();
-                assert.equal( p.col(0).equals( new Vec3( p.data[0], p.data[1], p.data[2] ) ), true );
-                assert.equal( p.col(1).equals( new Vec3( p.data[3], p.data[4], p.data[5] ) ), true );
-                assert.equal( p.col(2).equals( new Vec3( p.data[6], p.data[7], p.data[8] ) ), true );
+                assert( p.col(0).equals( new Vec3( p.data[0], p.data[1], p.data[2] ) ) );
+                assert( p.col(1).equals( new Vec3( p.data[3], p.data[4], p.data[5] ) ) );
+                assert( p.col(2).equals( new Vec3( p.data[6], p.data[7], p.data[8] ) ) );
             });
         });
 
@@ -116,12 +117,13 @@
             it('should return a new Mat33 by value', function() {
                 var p = Mat33.random(),
                     q = Mat33.random(),
-                    r = p.addMat33( q );
-                assert.equal( r instanceof Mat33, true );
-                assert.equal( r !== p, true );
-                assert.equal( r.col(0).equals( p.col(0).add( q.col(0) ) ), true );
-                assert.equal( r.col(1).equals( p.col(1).add( q.col(1) ) ), true );
-                assert.equal( r.col(2).equals( p.col(2).add( q.col(2) ) ), true );
+                    r = p.addMat33( q ),
+                    s = p.addMat33( q.data );
+                assert( r instanceof Mat33 );
+                assert( r !== p );
+                assert( r.col(0).equals( p.col(0).add( q.col(0) ) ) );
+                assert( r.col(1).equals( p.col(1).add( q.col(1) ) ) );
+                assert( s.col(2).equals( p.col(2).add( q.col(2) ) ) );
             });
         });
 
@@ -129,12 +131,13 @@
             it('should return a new Mat33 by value', function() {
                 var p = Mat33.random(),
                     q = Mat44.random(),
-                    r = p.addMat44( q );
-                assert.equal( r instanceof Mat33, true );
-                assert.equal( r !== p, true );
-                assert.equal( r.col(0).equals( p.col(0).add( q.col(0) ) ), true );
-                assert.equal( r.col(1).equals( p.col(1).add( q.col(1) ) ), true );
-                assert.equal( r.col(2).equals( p.col(2).add( q.col(2) ) ), true );
+                    r = p.addMat44( q ),
+                    s = p.addMat44( q.data );
+                assert( r instanceof Mat33 );
+                assert( r !== p );
+                assert( r.col(0).equals( p.col(0).add( q.col(0) ) ) );
+                assert( r.col(1).equals( p.col(1).add( q.col(1) ) ) );
+                assert( s.col(2).equals( p.col(2).add( q.col(2) ) ) );
             });
         });
 
@@ -142,12 +145,13 @@
             it('should return a Mat33 when passed a Mat33 argument', function() {
                 var p = Mat33.random(),
                     q = Mat33.random(),
-                    r = p.subMat33( q );
-                assert.equal( r instanceof Mat33, true );
-                assert.equal( r !== p, true );
-                assert.equal( r.col(0).equals( p.col(0).sub( q.col(0) ) ), true );
-                assert.equal( r.col(1).equals( p.col(1).sub( q.col(1) ) ), true );
-                assert.equal( r.col(2).equals( p.col(2).sub( q.col(2) ) ), true );
+                    r = p.subMat33( q ),
+                    s = p.subMat33( q.data );
+                assert( r instanceof Mat33 );
+                assert( r !== p );
+                assert( r.col(0).equals( p.col(0).sub( q.col(0) ) ) );
+                assert( r.col(1).equals( p.col(1).sub( q.col(1) ) ) );
+                assert( s.col(2).equals( p.col(2).sub( q.col(2) ) ) );
             });
         });
 
@@ -155,12 +159,13 @@
             it('should return a Mat33 when passed a Mat44 argument', function() {
                 var p = Mat33.random(),
                     q = Mat44.random(),
-                    r = p.subMat44( q );
-                assert.equal( r instanceof Mat33, true );
-                assert.equal( r !== p, true );
-                assert.equal( r.col(0).equals( p.col(0).sub( q.col(0) ) ), true );
-                assert.equal( r.col(1).equals( p.col(1).sub( q.col(1) ) ), true );
-                assert.equal( r.col(2).equals( p.col(2).sub( q.col(2) ) ), true );
+                    r = p.subMat44( q ),
+                    s = p.subMat44( q.data );
+                assert( r instanceof Mat33 );
+                assert( r !== p );
+                assert( r.col(0).equals( p.col(0).sub( q.col(0) ) ) );
+                assert( r.col(1).equals( p.col(1).sub( q.col(1) ) ) );
+                assert( s.col(2).equals( p.col(2).sub( q.col(2) ) ) );
             });
         });
 
@@ -169,8 +174,8 @@
                 var p = Mat33.random(),
                     q = Math.random(),
                     r = p.multScalar( q );
-                assert.equal( r instanceof Mat33, true );
-                assert.equal( p !== r, true );
+                assert( r instanceof Mat33 );
+                assert( p !== r );
             });
         });
 
@@ -179,8 +184,8 @@
                 var p = Mat33.random(),
                     q = Mat33.random(),
                     r = p.multMat33( q );
-                assert.equal( r instanceof Mat33, true );
-                assert.equal( p !== r, true );
+                assert( r instanceof Mat33 );
+                assert( p !== r );
             });
             it('should accept array as an argument', function() {
                 var p = Mat33.random(),
@@ -190,7 +195,7 @@
                         Math.random(), Math.random(), Math.random()
                     ],
                     r = p.multMat33( q );
-                assert.equal( r instanceof Mat33, true );
+                assert( r instanceof Mat33 );
             });
         });
 
@@ -198,9 +203,11 @@
             it('should return a new Mat33 by value', function() {
                 var p = Mat33.random(),
                     q = Mat44.random(),
-                    r = p.multMat44( q );
-                assert.equal( r instanceof Mat33, true );
-                assert.equal( p !== r, true );
+                    r = p.multMat44( q ),
+                    s = p.multMat44( q.data );
+                assert( r instanceof Mat33 );
+                assert( s instanceof Mat33 );
+                assert( p !== r );
             });
             it('should accept array as an argument', function() {
                 var p = Mat33.random(),
@@ -211,7 +218,7 @@
                         Math.random(), Math.random(), Math.random(), Math.random()
                     ],
                     r = p.multMat33( q );
-                assert.equal( r instanceof Mat33, true );
+                assert( r instanceof Mat33 );
             });
         });
 
@@ -222,17 +229,17 @@
                     r = p.multVec3( q ),
                     s = Vec4.random(),
                     t = p.multVec3( s );
-                assert.equal( r instanceof Vec3, true );
-                assert.equal( t instanceof Vec3, true );
-                assert.equal( p !== r, true );
-                assert.equal( p !== t, true );
+                assert( r instanceof Vec3 );
+                assert( t instanceof Vec3 );
+                assert( p !== r );
+                assert( p !== t );
             });
             it('should accept array as an argument', function() {
                 var p = Mat33.random(),
                     q = [ Math.random(), Math.random(), Math.random() ],
                     r = p.multVec3( q );
-                assert.equal( r instanceof Vec3, true );
-                assert.equal( r.equals( p.multVec3( new Vec3( q ) ) ), true );
+                assert( r instanceof Vec3 );
+                assert( r.equals( p.multVec3( new Vec3( q ) ) ) );
             });
         });
 
@@ -242,7 +249,7 @@
                     r = Math.random(),
                     q = m.divScalar( r ), i;
                 for ( i=0; i<9; i++ ) {
-                    assert.equal( q.data[i] === m.data[i] / r, true );
+                    assert( q.data[i] === m.data[i] / r );
                 }
             });
         });
@@ -255,7 +262,7 @@
                         0, 1, 0,
                         0, 0, 1
                     ]);
-                assert.equal( p.equals( q ), true );
+                assert( p.equals( q ) );
             });
         });
 
@@ -264,67 +271,43 @@
                 var r = Math.random(),
                     p = Mat33.scale( r ),
                     q = new Mat33([ r, 0, 0, 0, r, 0, 0, 0, r ]);
-                assert.equal( p.equals( q ), true );
+                assert( p.equals( q ) );
             });
             it('should accept scalar, Vec3, and Array arguments', function() {
                 var r = Math.random(),
                     p = Mat33.scale( r ),
                     q = Mat33.scale( new Vec3( r, r, r ) ),
                     s = Mat33.scale([ r, r, r ]);
-                assert.equal( p.equals( q ) && p.equals( s ) , true );
+                assert( p.equals( q ) && p.equals( s )  );
             });
         });
 
-        describe('#rotationDegrees()', function() {
+        describe('#rotation()', function() {
             it('should return a rotation matrix, rotating counter-clockwise', function() {
                 var up =  new Vec3( 0, 1, 0 ),
                     left = new Vec3( 1, 0, 0 ),
                     right = new Vec3( -1, 0, 0 ),
                     forward = new Vec3( 0, 0, 1 ),
-                    up90 = Mat33.rotationDegrees( 90, up ),
-                    left90 = Mat33.rotationDegrees( -90, left ),
-                    forward90 = Mat33.rotationDegrees( 90, forward ),
+                    up90 = Mat33.rotation( 90 * Math.PI / 180, up ),
+                    left90 = Mat33.rotation( -90 * Math.PI / 180, left ),
+                    forward90 = Mat33.rotation( 90 * Math.PI / 180, forward ),
                     v0 = up90.multVec3( forward ).normalize(),
                     v1 = left90.multVec3( forward ).normalize(),
                     v2 = forward90.multVec3( up ).normalize();
-                assert.equal( v0.equals( left, EPSILON ), true );
-                assert.equal( v1.equals( up, EPSILON ), true );
-                assert.equal( v2.equals( right, EPSILON ), true );
+                assert( v0.equals( left, EPSILON ) );
+                assert( v1.equals( up, EPSILON ) );
+                assert( v2.equals( right, EPSILON ) );
             });
-            it('should accept both Vec3 and Array types as axis', function() {
-                var r = Math.random(),
-                    v = Vec3.random(),
-                    rot0 = Mat33.rotationDegrees( r, v ),
-                    rot1 = Mat33.rotationDegrees( r, [ v.x, v.y, v.z ] );
-                assert.equal( rot0.equals( rot1, EPSILON ), true );
-            });
-            it('should return an identity matrix if given a zero vector as an axis', function() {
+            it('should throw an exception if given a zero vector as an axis', function() {
                 var axis = new Vec3( 0, 0, 0 ),
-                    angle = Math.random();
-                assert.equal( Mat33.rotationDegrees( angle, axis ).equals( new Mat33() ), true );
-            });
-        });
-
-        describe('#rotationRadians()', function() {
-            it('should return a rotation matrix, rotating counter-clockwise', function() {
-                var up =  new Vec3( 0, 1, 0 ),
-                    left = new Vec3( 1, 0, 0 ),
-                    right = new Vec3( -1, 0, 0 ),
-                    forward = new Vec3( 0, 0, 1 ),
-                    up90 = Mat33.rotationRadians( 90 * Math.PI / 180, up ),
-                    left90 = Mat33.rotationRadians( -90 * Math.PI / 180, left ),
-                    forward90 = Mat33.rotationRadians( 90 * Math.PI / 180, forward ),
-                    v0 = up90.multVec3( forward ).normalize(),
-                    v1 = left90.multVec3( forward ).normalize(),
-                    v2 = forward90.multVec3( up ).normalize();
-                assert.equal( v0.equals( left, EPSILON ), true );
-                assert.equal( v1.equals( up, EPSILON ), true );
-                assert.equal( v2.equals( right, EPSILON ), true );
-            });
-            it('should return an identity matrix if given a zero vector as an axis', function() {
-                var axis = new Vec3( 0, 0, 0 ),
-                    angle = Math.random();
-                assert.equal( Mat33.rotationRadians( angle, axis ).equals( new Mat33() ), true );
+                    angle = Math.random(),
+                    result = false;
+                try {
+                    Mat33.rotation( angle, axis );
+                } catch( err ) {
+                    result = true;
+                }
+                assert( result );
             });
         });
 
@@ -340,20 +323,20 @@
                     cc = new Vec3( 1, 0, -1 ).normalize(),
                     cd = new Vec3( 1, 0, 0 ).normalize(),
                     other;
-                assert.equal( rs.equals( s, EPSILON ), true );
-                assert.equal( sr.equals( r, EPSILON ), true );
+                assert( rs.equals( s, EPSILON ) );
+                assert( sr.equals( r, EPSILON ) );
 
-                other = Mat33.rotationDegrees( EPSILON, v ).multVec3( ca ).normalize();
-                assert.equal( Mat33.rotationFromTo( ca, other ).multVec3( ca ).equals( other, EPSILON ), true );
+                other = Mat33.rotation( EPSILON, v ).multVec3( ca ).normalize();
+                assert( Mat33.rotationFromTo( ca, other ).multVec3( ca ).equals( other, EPSILON ) );
 
-                other = Mat33.rotationDegrees( EPSILON, v ).multVec3( cb ).normalize();
-                assert.equal( Mat33.rotationFromTo( cb, other ).multVec3( cb ).equals( other, EPSILON ), true );
+                other = Mat33.rotation( EPSILON, v ).multVec3( cb ).normalize();
+                assert( Mat33.rotationFromTo( cb, other ).multVec3( cb ).equals( other, EPSILON ) );
 
-                other = Mat33.rotationDegrees( EPSILON, v ).multVec3( cc ).normalize();
-                assert.equal( Mat33.rotationFromTo( cc, other ).multVec3( cc ).equals( other, EPSILON ), true );
+                other = Mat33.rotation( EPSILON, v ).multVec3( cc ).normalize();
+                assert( Mat33.rotationFromTo( cc, other ).multVec3( cc ).equals( other, EPSILON ) );
 
-                other = Mat33.rotationDegrees( EPSILON, v ).multVec3( cd ).normalize();
-                assert.equal( Mat33.rotationFromTo( cd, other ).multVec3( cd ).equals( other, EPSILON ), true );
+                other = Mat33.rotation( EPSILON, v ).multVec3( cd ).normalize();
+                assert( Mat33.rotationFromTo( cd, other ).multVec3( cd ).equals( other, EPSILON ) );
             });
         });
 
@@ -364,20 +347,20 @@
                         a.data[0], a.data[3], a.data[6],
                         a.data[1], a.data[4], a.data[7],
                         a.data[2], a.data[5] ,a.data[8] ]);
-                assert.equal( a.transpose().equals( b ), true );
+                assert( a.transpose().equals( b ) );
             });
 
             it('should return a deep copy', function() {
                 var p = Mat33.random(),
                     q = p.transpose();
-                assert.equal( p !== q, true );
+                assert( p !== q );
             });
 
             it('should not modify the calling object', function() {
                 var p = Mat33.random(),
                     c = new Mat33( p );
                 p.transpose();
-                assert.equal( p.equals( c ), true );
+                assert( p.equals( c ) );
             });
         });
 
@@ -385,30 +368,75 @@
             it('should return an inverse copy of the matrix', function() {
                 var identity = Mat33.identity(),
                     a = new Mat33().inverse( Vec3.random(), Vec3.random() );
-                assert.equal( a.inverse().multMat33( a ).equals( identity ), true );
-                assert.equal( a.multMat33( a.inverse() ).equals( identity ), true );
+                assert( a.inverse().multMat33( a ).equals( identity ) );
+                assert( a.multMat33( a.inverse() ).equals( identity ) );
             });
 
             it('should return a deep copy', function() {
                 var p = Mat33.random(),
                     q = p.inverse();
-                assert.equal( p !== q, true );
+                assert( p !== q );
             });
 
             it('should not modify the calling object', function() {
                 var p = Mat33.random(),
                     c = new Mat33( p );
                 p.inverse();
-                assert.equal( p.equals( c ), true );
+                assert( p.equals( c ) );
+            });
+        });
+
+        describe('#scale', function() {
+            it('should return the scale matrix', function() {
+                var p = Vec3.random(),
+                    q = Mat33.scale( p ).scale(),
+                    r = Mat33.scale( p );
+                assert( q.equals( r, EPSILON ) );
+            });
+        });
+
+        describe('#rotation', function() {
+            it('should return the rotation matrix', function() {
+                var p = Vec3.random(),
+                    q = Mat33.rotationFromTo( new Vec3( 0, 0, 1 ), p ),
+                    r = q.rotation();
+                assert( q.equals( r, EPSILON ) );
+            });
+        });
+
+        describe('#inverseScale', function() {
+            it('should return the inverse scale matrix', function() {
+                var s = Vec3.random(),
+                    p = Mat33.scale( s ),
+                    q = Mat33.scale( s ).inverse(),
+                    r = p.inverseScale();
+                assert( r.equals( q, EPSILON ) );
+                assert( r.multMat33( p.scale() ).equals( Mat33.identity(), EPSILON ) );
+                assert( p.scale().multMat33( q ).equals( Mat33.identity(), EPSILON ) );
+            });
+        });
+
+        describe('#inverseRotation', function() {
+            it('should return the inverse rotation matrix', function() {
+                var p = Vec3.random(),
+                    q = Mat33.rotationFromTo( new Vec3( 0, 0, 1 ), p ),
+                    r = q.inverseRotation(),
+                    s = q.inverse();
+                assert( r.equals( s, EPSILON ) );
+                assert( r.multMat33( q.rotation() ).equals( Mat33.identity(), EPSILON ) );
+                assert( q.rotation().multMat33( s ).equals( Mat33.identity(), EPSILON ) );
             });
         });
 
         describe('#decompose', function() {
-            it('should return the up, forward, scale, and origin components of the matrix', function() {
-                var m = Mat33.random(),
-                    t = new Transform( m.decompose() ),
-                    t33 = new Mat33().multMat44( t.matrix() );
-                assert.equal( m.equals( t33, EPSILON), true );
+            it('should return the rotation and scale of the matrix', function() {
+                var t, m, i;
+                for ( i=0; i<36; i++ ) {
+                    m = Mat33.random();
+                    t = m.decompose();
+                    assert( t.rotation.matrix().equals( m.rotation(), EPSILON ) );
+                    assert( Mat33.scale( t.scale ).equals( m.scale(), EPSILON ) );
+                }
             });
         });
 
@@ -418,17 +446,17 @@
                     s = m.toString().replace(/\n/g, ''),
                     a = s.split(',');
 
-                assert.equal( parseFloat( a[0] ) === m.data[0], true );
-                assert.equal( parseFloat( a[1] ) === m.data[3], true );
-                assert.equal( parseFloat( a[2] ) === m.data[6], true );
+                assert( parseFloat( a[0] ) === m.data[0] );
+                assert( parseFloat( a[1] ) === m.data[3] );
+                assert( parseFloat( a[2] ) === m.data[6] );
 
-                assert.equal( parseFloat( a[3] ) === m.data[1], true );
-                assert.equal( parseFloat( a[4] ) === m.data[4], true );
-                assert.equal( parseFloat( a[5] ) === m.data[7], true );
+                assert( parseFloat( a[3] ) === m.data[1] );
+                assert( parseFloat( a[4] ) === m.data[4] );
+                assert( parseFloat( a[5] ) === m.data[7] );
 
-                assert.equal( parseFloat( a[6] ) === m.data[2], true );
-                assert.equal( parseFloat( a[7] ) === m.data[5], true );
-                assert.equal( parseFloat( a[8] ) === m.data[8], true );
+                assert( parseFloat( a[6] ) === m.data[2] );
+                assert( parseFloat( a[7] ) === m.data[5] );
+                assert( parseFloat( a[8] ) === m.data[8] );
             });
         });
 
@@ -437,11 +465,38 @@
                 var m = Mat33.random(),
                     a = m.toArray(),
                     i;
-                assert.equal( a instanceof Array, true );
-                assert.equal( a.length === 9, true );
+                assert( a instanceof Array );
+                assert( a.length === 9 );
                 for ( i=0; i<9; i++ ) {
-                    assert.equal( a[i] - m.data[i] < EPSILON, true );
+                    assert( a[i] - m.data[i] < EPSILON );
                 }
+            });
+        });
+
+        describe('#toMat44', function() {
+            it('should return the expanded Mat44 equivolent with no translation', function() {
+                var n = Mat33.random();
+                var m = n.toMat44();
+
+                assert( m.data[0] === n.data[0] );
+                assert( m.data[1] === n.data[1] );
+                assert( m.data[2] === n.data[2] );
+                assert( m.data[3] === 0 );
+
+                assert( m.data[4] === n.data[3] );
+                assert( m.data[5] === n.data[4] );
+                assert( m.data[6] === n.data[5] );
+                assert( m.data[7] === 0 );
+
+                assert( m.data[8] === n.data[6] );
+                assert( m.data[9] === n.data[7] );
+                assert( m.data[10] === n.data[8] );
+                assert( m.data[11] === 0 );
+
+                assert( m.data[12] === 0 );
+                assert( m.data[13] === 0 );
+                assert( m.data[14] === 0 );
+                assert( m.data[15] === 1 );
             });
         });
 

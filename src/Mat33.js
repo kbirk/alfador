@@ -19,7 +19,7 @@
         if ( that instanceof Array ) {
             this.data = that;
         } else {
-            this.data = new Array( 16 );
+            this.data = new Array( 9 );
             this.data[0] = that.data[0];
             this.data[1] = that.data[1];
             this.data[2] = that.data[2];
@@ -37,7 +37,7 @@
      * @memberof Mat33
      *
      * @param {number} index - The 0-based row index.
-     * @param {Vec3||Array} vec - The vector to replace the row. Optional.
+     * @param {Vec3|Array} vec - The vector to replace the row. Optional.
      *
      * @returns {Vec3} The row vector.
      */
@@ -59,7 +59,7 @@
      * @memberof Mat33
      *
      * @param {number} index - The 0-based col index.
-     * @param {Vec3||Array} vec - The vector to replace the col. Optional.
+     * @param {Vec3|Array} vec - The vector to replace the col. Optional.
      *
      * @returns {Vec3} The column vector.
      */
@@ -119,31 +119,18 @@
      * Returns a rotation matrix defined by an axis and an angle.
      * @memberof Mat33
      *
-     * @param {number} angle - The angle of the rotation, in degrees.
-     * @param {Vec3} axis - The axis of the rotation.
-     *
-     * @returns {Mat33} The rotation matrix.
-     */
-    Mat33.rotationDegrees = function( angle, axis ) {
-        return this.rotationRadians( angle*Math.PI/180, axis );
-    };
-
-    /**
-     * Returns a rotation matrix defined by an axis and an angle.
-     * @memberof Mat33
-     *
      * @param {number} angle - The angle of the rotation, in radians.
      * @param {Vec3} axis - The axis of the rotation.
      *
      * @returns {Mat33} The rotation matrix.
      */
-    Mat33.rotationRadians = function( angle, axis ) {
+    Mat33.rotation = function( angle, axis ) {
         if ( axis instanceof Array ) {
             axis = new Vec3( axis );
         }
         // zero vector, return identity
         if ( axis.lengthSquared() === 0 ) {
-            return this.identity();
+            throw 'Cannot create rotation matrix for a zero vector axis';
         }
         var normAxis = axis.normalize(),
             x = normAxis.x,
@@ -186,9 +173,9 @@
             Efficiently Building a Matrix to Rotate One Vector to Another
             Journal of Graphics Tools, 4(4):1-4, 1999
         */
-        var from = new Vec3( fromVec ).normalize();
-        var to = new Vec3( toVec ).normalize();
-        var e = from.dot( to );
+        fromVec = new Vec3( fromVec ).normalize();
+        toVec = new Vec3( toVec ).normalize();
+        var e = fromVec.dot( toVec );
         var f = Math.abs( e );
         var x, u, v;
         var fx, fy, fz;
@@ -197,9 +184,9 @@
         if ( f > 1.0 - EPSILON ) {
             // 'from' and 'to' almost parallel
             // nearly orthogonal
-            fx = Math.abs( from.x );
-            fy = Math.abs( from.y );
-            fz = Math.abs( from.z );
+            fx = Math.abs( fromVec.x );
+            fy = Math.abs( fromVec.y );
+            fz = Math.abs( fromVec.z );
             if ( fx < fy ) {
                 if ( fx < fz ) {
                     x = new Vec3( 1, 0, 0 );
@@ -213,8 +200,8 @@
                     x = new Vec3( 0, 0, 1 );
                 }
             }
-            u = x.sub( from );
-            v = x.sub( to );
+            u = x.sub( fromVec );
+            v = x.sub( toVec );
             c1 = 2.0 / u.dot( u );
             c2 = 2.0 / v.dot( v );
             c3 = c1*c2 * u.dot( v );
@@ -232,7 +219,7 @@
             ]);
         }
         // the most common case, unless 'from'='to', or 'to'=-'from'
-        v = from.cross( to );
+        v = fromVec.cross( toVec );
         u = 1.0 / ( 1.0 + e );    // optimization by Gottfried Chen
         ux = u * v.x;
         uz = u * v.z;
@@ -272,7 +259,7 @@
             this.data[5] + that[5],
             this.data[6] + that[6],
             this.data[7] + that[7],
-            this.data[8] + that[8],
+            this.data[8] + that[8]
         ]);
     };
 
@@ -296,7 +283,7 @@
             this.data[5] + that[6],
             this.data[6] + that[8],
             this.data[7] + that[9],
-            this.data[8] + that[10],
+            this.data[8] + that[10]
         ]);
     };
 
@@ -320,7 +307,7 @@
             this.data[5] - that[5],
             this.data[6] - that[6],
             this.data[7] - that[7],
-            this.data[8] - that[8],
+            this.data[8] - that[8]
         ]);
     };
 
@@ -344,7 +331,7 @@
             this.data[5] - that[6],
             this.data[6] - that[8],
             this.data[7] - that[9],
-            this.data[8] - that[10],
+            this.data[8] - that[10]
         ]);
     };
 
@@ -538,22 +525,68 @@
     };
 
     /**
-     * Decomposes the matrix into the corresponding x, y, and z axes, along with
-     * a scale.
+     * Returns the rotation matrix from the affine-transformation.
      * @memberof Mat33
      *
-     * @returns {Object} The decomposed components of the matrix.
+     * @returns {Mat33} The rotation matrix.
      */
-    Mat33.prototype.decompose = function() {
-        var col0 = this.col( 0 ),
-            col1 = this.col( 1 ),
-            col2 = this.col( 2 );
-        return {
-            left: col0.normalize(),
-            up: col1.normalize(),
-            forward: col2.normalize(),
-            scale: new Vec3( col0.length(), col1.length(), col2.length() )
-        };
+    Mat33.prototype.rotation = function() {
+        var x = new Vec3( this.data[0], this.data[1], this.data[2] ).normalize();
+        var y = new Vec3( this.data[3], this.data[4], this.data[5] ).normalize();
+        var z = new Vec3( this.data[6], this.data[7], this.data[8] ).normalize();
+        return new Mat33([
+            x.x, x.y, x.z,
+            y.x, y.y, y.z,
+            z.x, z.y, z.z
+        ]);
+    };
+
+    /**
+     * Returns the scale matrix from the affine-transformation.
+     * @memberof Mat33
+     *
+     * @returns {Mat33} The scale matrix.
+     */
+    Mat33.prototype.scale = function() {
+        var x = new Vec3( this.data[0], this.data[1], this.data[2] );
+        var y = new Vec3( this.data[3], this.data[4], this.data[5] );
+        var z = new Vec3( this.data[6], this.data[7], this.data[8] );
+        return Mat33.scale([ x.length(), y.length(), z.length() ]);
+    };
+
+    /**
+     * Returns the inverse of the transform's rotation matrix.
+     * @memberof Mat33
+     *
+     * @returns {Mat33} The inverse rotation matrix.
+     */
+    Mat33.prototype.inverseRotation = function() {
+        var x = new Vec3( this.data[0], this.data[1], this.data[2] ).normalize();
+        var y = new Vec3( this.data[3], this.data[4], this.data[5] ).normalize();
+        var z = new Vec3( this.data[6], this.data[7], this.data[8] ).normalize();
+        return new Mat33([
+            x.x, y.x, z.x,
+            x.y, y.y, z.y,
+            x.z, y.z, z.z
+        ]);
+    };
+
+    /**
+     * Returns the inverse of the transform's scale matrix.
+     * @memberof Mat33
+     *
+     * @returns {Mat33} The inverse scale matrix.
+     */
+    Mat33.prototype.inverseScale = function() {
+        var x = new Vec3( this.data[0], this.data[1], this.data[2] );
+        var y = new Vec3( this.data[3], this.data[4], this.data[5] );
+        var z = new Vec3( this.data[6], this.data[7], this.data[8] );
+        var scale = new Vec3( x.length(), y.length(), z.length() );
+        return Mat33.scale([
+            1 / scale.x,
+            1 / scale.y,
+            1 / scale.z
+        ]);
     };
 
     /**
@@ -563,7 +596,7 @@
      * @returns {Mat33} A random transform matrix.
      */
     Mat33.random = function() {
-        var r = Mat33.rotationRadians( Math.random() * 360, Vec3.random() );
+        var r = Mat33.rotation( Math.random() * 360, Vec3.random() );
         var s = Mat33.scale( Math.random() * 10 );
         return r.multMat33( s );
     };
@@ -587,7 +620,17 @@
      * @returns {Array} The matrix as an array.
      */
     Mat33.prototype.toArray = function() {
-        return this.data.slice( 0 );
+        return [
+            this.data[0],
+            this.data[1],
+            this.data[2],
+            this.data[3],
+            this.data[4],
+            this.data[5],
+            this.data[6],
+            this.data[7],
+            this.data[8],
+        ];
     };
 
     module.exports = Mat33;

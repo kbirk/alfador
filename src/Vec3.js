@@ -198,13 +198,13 @@
      */
     Vec3.prototype.normalize = function() {
         var mag = this.length();
-        if ( mag !== 0 ) {
-            return new Vec3(
-                this.x / mag,
-                this.y / mag,
-                this.z / mag );
+        if ( mag === 0 ) {
+            throw 'Cannot normalize a vector of zero length';
         }
-        return new Vec3();
+        return new Vec3(
+            this.x / mag,
+            this.y / mag,
+            this.z / mag );
     };
 
     /**
@@ -232,7 +232,7 @@
      *
      * @returns {number} The unsigned angle in radians.
      */
-    Vec3.prototype.unsignedAngleRadians = function( that, normal ) {
+    Vec3.prototype.unsignedAngle = function( that, normal ) {
         var a = this;
         var b = new Vec3( that );
         var cross = a.cross( b );
@@ -256,19 +256,6 @@
             }
         }
         return angle;
-    };
-
-    /**
-     * Returns the unsigned angle between this angle and the argument, projected
-     * onto a plane, in degrees.
-     * @memberof Vec3
-     *
-     * @param {Vec3|Vec4|Array} that - The vector to measure the angle from.
-     *
-     * @returns {number} The unsigned angle in degrees.
-     */
-    Vec3.prototype.unsignedAngleDegrees = function( that, normal ) {
-        return this.unsignedAngleRadians( that, normal ) * ( 180 / Math.PI );
     };
 
     /**
