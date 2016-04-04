@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Triangle.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Mat33.html">Mat33</a><ul class='methods'><li data-type='method'><a href="Mat33.html#addMat33">addMat33</a></li><li data-type='method'><a href="Mat33.html#addMat44">addMat44</a></li><li data-type='method'><a href="Mat33.html#col">col</a></li><li data-type='method'><a href="Mat33.html#decompose">decompose</a></li><li data-type='method'><a href="Mat33.html#divScalar">divScalar</a></li><li data-type='method'><a href="Mat33.html#equals">equals</a></li><li data-type='method'><a href="Mat33.html#inverse">inverse</a></li><li data-type='method'><a href="Mat33.html#inverseRotation">inverseRotation</a></li><li data-type='method'><a href="Mat33.html#inverseScale">inverseScale</a></li><li data-type='method'><a href="Mat33.html#multMat33">multMat33</a></li><li data-type='method'><a href="Mat33.html#multMat44">multMat44</a></li><li data-type='method'><a href="Mat33.html#multScalar">multScalar</a></li><li data-type='method'><a href="Mat33.html#multVec3">multVec3</a></li><li data-type='method'><a href="Mat33.html#rotation">rotation</a></li><li data-type='method'><a href="Mat33.html#row">row</a></li><li data-type='method'><a href="Mat33.html#scale">scale</a></li><li data-type='method'><a href="Mat33.html#subMat33">subMat33</a></li><li data-type='method'><a href="Mat33.html#subMat44">subMat44</a></li><li data-type='method'><a href="Mat33.html#toArray">toArray</a></li><li data-type='method'><a href="Mat33.html#toMat44">toMat44</a></li><li data-type='method'><a href="Mat33.html#toString">toString</a></li><li data-type='method'><a href="Mat33.html#transpose">transpose</a></li><li data-type='method'><a href="Mat33.html#.identity">identity</a></li><li data-type='method'><a href="Mat33.html#.random">random</a></li><li data-type='method'><a href="Mat33.html#.rotation">rotation</a></li><li data-type='method'><a href="Mat33.html#.rotationFromTo">rotationFromTo</a></li><li data-type='method'><a href="Mat33.html#.scale">scale</a></li></ul></li><li><a href="Mat44.html">Mat44</a><ul class='methods'><li data-type='method'><a href="Mat44.html#addMat33">addMat33</a></li><li data-type='method'><a href="Mat44.html#addMat44">addMat44</a></li><li data-type='method'><a href="Mat44.html#col">col</a></li><li data-type='method'><a href="Mat44.html#decompose">decompose</a></li><li data-type='method'><a href="Mat44.html#divScalar">divScalar</a></li><li data-type='method'><a href="Mat44.html#equals">equals</a></li><li data-type='method'><a href="Mat44.html#inverse">inverse</a></li><li data-type='method'><a href="Mat44.html#inverseRotation">inverseRotation</a></li><li data-type='method'><a href="Mat44.html#inverseScale">inverseScale</a></li><li data-type='method'><a href="Mat44.html#inverseTranslation">inverseTranslation</a></li><li data-type='method'><a href="Mat44.html#multMat33">multMat33</a></li><li data-type='method'><a href="Mat44.html#multMat44">multMat44</a></li><li data-type='method'><a href="Mat44.html#multScalar">multScalar</a></li><li data-type='method'><a href="Mat44.html#multVec3">multVec3</a></li><li data-type='method'><a href="Mat44.html#multVec4">multVec4</a></li><li data-type='method'><a href="Mat44.html#rotation">rotation</a></li><li data-type='method'><a href="Mat44.html#row">row</a></li><li data-type='method'><a href="Mat44.html#scale">scale</a></li><li data-type='method'><a href="Mat44.html#subMat33">subMat33</a></li><li data-type='method'><a href="Mat44.html#subMat44">subMat44</a></li><li data-type='method'><a href="Mat44.html#toArray">toArray</a></li><li data-type='method'><a href="Mat44.html#toMat33">toMat33</a></li><li data-type='method'><a href="Mat44.html#toString">toString</a></li><li data-type='method'><a href="Mat44.html#translation">translation</a></li><li data-type='method'><a href="Mat44.html#transpose">transpose</a></li><li data-type='method'><a href="Mat44.html#.identity">identity</a></li><li data-type='method'><a href="Mat44.html#.random">random</a></li><li data-type='method'><a href="Mat44.html#.rotation">rotation</a></li><li data-type='method'><a href="Mat44.html#.rotationFromTo">rotationFromTo</a></li><li data-type='method'><a href="Mat44.html#.scale">scale</a></li><li data-type='method'><a href="Mat44.html#.translation">translation</a></li></ul></li><li><a href="Quaternion.html">Quaternion</a><ul class='methods'><li data-type='method'><a href="Quaternion.html#.identity">identity</a></li><li data-type='method'><a href="Quaternion.html#.random">random</a></li><li data-type='method'><a href="Quaternion.html#.rotation">rotation</a></li><li data-type='method'><a href="Quaternion.html#.rotationFromTo">rotationFromTo</a></li><li data-type='method'><a href="Quaternion.html#.slerp">slerp</a></li><li data-type='method'><a href="Quaternion.html#axes">axes</a></li><li data-type='method'><a href="Quaternion.html#conjugate">conjugate</a></li><li data-type='method'><a href="Quaternion.html#equals">equals</a></li><li data-type='method'><a href="Quaternion.html#inverse">inverse</a></li><li data-type='method'><a href="Quaternion.html#matrix">matrix</a></li><li data-type='method'><a href="Quaternion.html#multQuat">multQuat</a></li><li data-type='method'><a href="Quaternion.html#negate">negate</a></li><li data-type='method'><a href="Quaternion.html#normalize">normalize</a></li><li data-type='method'><a href="Quaternion.html#rotate">rotate</a></li><li data-type='method'><a href="Quaternion.html#toArray">toArray</a></li><li data-type='method'><a href="Quaternion.html#toString">toString</a></li><li data-type='method'><a href="Quaternion.html#xAxis">xAxis</a></li><li data-type='method'><a href="Quaternion.html#yAxis">yAxis</a></li><li data-type='method'><a href="Quaternion.html#zAxis">zAxis</a></li></ul></li><li><a href="Transform.html">Transform</a><ul class='methods'><li data-type='method'><a href="Transform.html#.identity">identity</a></li><li data-type='method'><a href="Transform.html#.random">random</a></li><li data-type='method'><a href="Transform.html#axes">axes</a></li><li data-type='method'><a href="Transform.html#equals">equals</a></li><li data-type='method'><a href="Transform.html#inverseMatrix">inverseMatrix</a></li><li data-type='method'><a href="Transform.html#inverseRotationMatrix">inverseRotationMatrix</a></li><li data-type='method'><a href="Transform.html#inverseScaleMatrix">inverseScaleMatrix</a></li><li data-type='method'><a href="Transform.html#inverseTranslationMatrix">inverseTranslationMatrix</a></li><li data-type='method'><a href="Transform.html#localToWorld">localToWorld</a></li><li data-type='method'><a href="Transform.html#matrix">matrix</a></li><li data-type='method'><a href="Transform.html#rotateLocal">rotateLocal</a></li><li data-type='method'><a href="Transform.html#rotateWorld">rotateWorld</a></li><li data-type='method'><a href="Transform.html#rotateXTo">rotateXTo</a></li><li data-type='method'><a href="Transform.html#rotateYTo">rotateYTo</a></li><li data-type='method'><a href="Transform.html#rotateZTo">rotateZTo</a></li><li data-type='method'><a href="Transform.html#rotationMatrix">rotationMatrix</a></li><li data-type='method'><a href="Transform.html#scaleMatrix">scaleMatrix</a></li><li data-type='method'><a href="Transform.html#toString">toString</a></li><li data-type='method'><a href="Transform.html#translateLocal">translateLocal</a></li><li data-type='method'><a href="Transform.html#translateWorld">translateWorld</a></li><li data-type='method'><a href="Transform.html#translationMatrix">translationMatrix</a></li><li data-type='method'><a href="Transform.html#viewMatrix">viewMatrix</a></li><li data-type='method'><a href="Transform.html#worldToLocal">worldToLocal</a></li><li data-type='method'><a href="Transform.html#xAxis">xAxis</a></li><li data-type='method'><a href="Transform.html#yAxis">yAxis</a></li><li data-type='method'><a href="Transform.html#zAxis">zAxis</a></li></ul></li><li><a href="Triangle.html">Triangle</a><ul class='methods'><li data-type='method'><a href="Triangle.html#.random">random</a></li><li data-type='method'><a href="Triangle.html#area">area</a></li><li data-type='method'><a href="Triangle.html#centroid">centroid</a></li><li data-type='method'><a href="Triangle.html#closestPoint">closestPoint</a></li><li data-type='method'><a href="Triangle.html#equals">equals</a></li><li data-type='method'><a href="Triangle.html#intersect">intersect</a></li><li data-type='method'><a href="Triangle.html#isInside">isInside</a></li><li data-type='method'><a href="Triangle.html#normal">normal</a></li><li data-type='method'><a href="Triangle.html#radius">radius</a></li><li data-type='method'><a href="Triangle.html#toString">toString</a></li></ul></li><li><a href="Vec2.html">Vec2</a><ul class='methods'><li data-type='method'><a href="Vec2.html#add">add</a></li><li data-type='method'><a href="Vec2.html#cross">cross</a></li><li data-type='method'><a href="Vec2.html#divScalar">divScalar</a></li><li data-type='method'><a href="Vec2.html#dot">dot</a></li><li data-type='method'><a href="Vec2.html#equals">equals</a></li><li data-type='method'><a href="Vec2.html#length">length</a></li><li data-type='method'><a href="Vec2.html#lengthSquared">lengthSquared</a></li><li data-type='method'><a href="Vec2.html#multScalar">multScalar</a></li><li data-type='method'><a href="Vec2.html#negate">negate</a></li><li data-type='method'><a href="Vec2.html#normalize">normalize</a></li><li data-type='method'><a href="Vec2.html#sub">sub</a></li><li data-type='method'><a href="Vec2.html#toArray">toArray</a></li><li data-type='method'><a href="Vec2.html#toString">toString</a></li><li data-type='method'><a href="Vec2.html#unsignedAngle">unsignedAngle</a></li><li data-type='method'><a href="Vec2.html#.random">random</a></li></ul></li><li><a href="Vec3.html">Vec3</a><ul class='methods'><li data-type='method'><a href="Vec3.html#add">add</a></li><li data-type='method'><a href="Vec3.html#cross">cross</a></li><li data-type='method'><a href="Vec3.html#divScalar">divScalar</a></li><li data-type='method'><a href="Vec3.html#dot">dot</a></li><li data-type='method'><a href="Vec3.html#equals">equals</a></li><li data-type='method'><a href="Vec3.html#length">length</a></li><li data-type='method'><a href="Vec3.html#lengthSquared">lengthSquared</a></li><li data-type='method'><a href="Vec3.html#multScalar">multScalar</a></li><li data-type='method'><a href="Vec3.html#negate">negate</a></li><li data-type='method'><a href="Vec3.html#normalize">normalize</a></li><li data-type='method'><a href="Vec3.html#projectOntoPlane">projectOntoPlane</a></li><li data-type='method'><a href="Vec3.html#sub">sub</a></li><li data-type='method'><a href="Vec3.html#toArray">toArray</a></li><li data-type='method'><a href="Vec3.html#toString">toString</a></li><li data-type='method'><a href="Vec3.html#unsignedAngle">unsignedAngle</a></li><li data-type='method'><a href="Vec3.html#.random">random</a></li></ul></li><li><a href="Vec4.html">Vec4</a><ul class='methods'><li data-type='method'><a href="Vec4.html#add">add</a></li><li data-type='method'><a href="Vec4.html#divScalar">divScalar</a></li><li data-type='method'><a href="Vec4.html#dot">dot</a></li><li data-type='method'><a href="Vec4.html#equals">equals</a></li><li data-type='method'><a href="Vec4.html#length">length</a></li><li data-type='method'><a href="Vec4.html#lengthSquared">lengthSquared</a></li><li data-type='method'><a href="Vec4.html#multScalar">multScalar</a></li><li data-type='method'><a href="Vec4.html#negate">negate</a></li><li data-type='method'><a href="Vec4.html#normalize">normalize</a></li><li data-type='method'><a href="Vec4.html#sub">sub</a></li><li data-type='method'><a href="Vec4.html#toArray">toArray</a></li><li data-type='method'><a href="Vec4.html#toString">toString</a></li><li data-type='method'><a href="Vec4.html#.random">random</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Triangle.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>(function () {
+
+    'use strict';
+
+    var Vec3 = require('./Vec3');
+
+    function closestPointOnEdge( a, b, point ) {
+        var ab = b.sub( a );
+        // project c onto ab, computing parameterized position d(t) = a + t*(b * a)
+        var t = new Vec3( point ).sub( a ).dot( ab ) / ab.dot( ab );
+        // If outside segment, clamp t (and therefore d) to the closest endpoint
+        if ( t &lt; 0 ) {
+            t = 0;
+        }
+        if ( t > 1 ) {
+            t = 1;
+        }
+        // compute projected position from the clamped t
+        return a.add( ab.multScalar( t ) );
+    }
+
+    /**
+     * Instantiates a Triangle object.
+     * @class Triangle
+     * @classdesc A CCW-winded triangle object.
+     */
+    function Triangle() {
+        switch ( arguments.length ) {
+            case 1:
+                // array or object argument
+                var arg = arguments[0];
+                this.a = new Vec3( arg[0] || arg.a );
+                this.b = new Vec3( arg[1] || arg.b );
+                this.c = new Vec3( arg[2] || arg.c );
+                break;
+            case 3:
+                // individual vector arguments
+                this.a = new Vec3( arguments[0] );
+                this.b = new Vec3( arguments[1] );
+                this.c = new Vec3( arguments[2] );
+                break;
+            default:
+                this.a = new Vec3( 0, 0, 0 );
+                this.b = new Vec3( 1, 0, 0 );
+                this.c = new Vec3( 1, 1, 0 );
+                break;
+        }
+    }
+
+    /**
+     * Returns the radius of the bounding sphere of the triangle.
+     * @memberof Triangle
+     *
+     * @returns {number} The radius of the bounding sphere.
+     */
+    Triangle.prototype.radius = function() {
+        var centroid = this.centroid(),
+            aDist = this.a.sub( centroid ).length(),
+            bDist = this.b.sub( centroid ).length(),
+            cDist = this.c.sub( centroid ).length();
+        return Math.max( aDist, Math.max( bDist, cDist ) );
+    };
+
+    /**
+     * Returns the centroid of the triangle.
+     * @memberof Triangle
+     *
+     * @returns {number} The centroid of the triangle.
+     */
+    Triangle.prototype.centroid = function() {
+        return this.a
+            .add( this.b )
+            .add( this.c )
+            .divScalar( 3 );
+    };
+
+    /**
+     * Returns the normal of the triangle.
+     * @memberof Triangle
+     *
+     * @returns {number} The normal of the triangle.
+     */
+    Triangle.prototype.normal = function() {
+        var ab = this.b.sub( this.a ),
+            ac = this.c.sub( this.a );
+        return ab.cross( ac ).normalize();
+    };
+
+    /**
+     * Returns the area of the triangle.
+     * @memberof Triangle
+     *
+     * @returns {number} The area of the triangle.
+     */
+    Triangle.prototype.area = function() {
+        var ab = this.b.sub( this.a ),
+            ac = this.c.sub( this.a );
+        return ab.cross( ac ).length() / 2.0;
+    };
+
+    /**
+     * Returns true if the point is inside the triangle. The point must be
+     * coplanar.
+     * @memberof Triangle
+     *
+     * @param {Vec3|Array} point - The point to test.
+     *
+     * @returns {boolean} Whether or not the point is inside the triangle.
+     */
+    Triangle.prototype.isInside = function( point ) {
+        var p = new Vec3( point );
+        // Translate point and triangle so that point lies at origin
+        var a = this.a.sub( p );
+        var b = this.b.sub( p );
+        var c = this.c.sub( p );
+        // Compute normal vectors for triangles pab and pbc
+        var u = b.cross( c );
+        var v = c.cross( a );
+        // Make sure they are both pointing in the same direction
+        if ( u.dot( v ) &lt; 0.0 ) {
+            return false;
+        }
+        // Compute normal vector for triangle pca
+        var w = a.cross( b );
+        // Make sure it points in the same direction as the first two
+        if ( u.dot( w ) &lt; 0.0 ) {
+            return false;
+        }
+        // Otherwise P must be in (or on) the triangle
+        return true;
+    };
+
+    /**
+     * Intersect the triangle and return intersection information.
+     * @memberof Triangle
+     *
+     * @param {Vec3|Array} origin - The origin of the intersection ray
+     * @param {Vec3|Array} direction - The direction of the intersection ray.
+     * @param {boolean} ignoreBehind - Whether or not to ignore intersections behind the origin of the ray.
+     * @param {boolean} ignoreBackface - Whether or not to ignore the backface of the triangle.
+     *
+     * @returns {Object|boolean} The intersection information, or false if there is no intersection.
+     */
+    Triangle.prototype.intersect = function( origin, direction, ignoreBehind, ignoreBackface ) {
+        // Compute ray/plane intersection
+        var o = new Vec3( origin );
+        var d = new Vec3( direction );
+        var normal = this.normal();
+        var dn = d.dot( normal );
+        if ( dn === 0 ) {
+            // ray is parallel to plane
+            // TODO: check if ray is co-linear and intersects?
+            return false;
+        }
+        var t = this.a.sub( o ).dot( normal ) / dn;
+        if ( ignoreBehind &amp;&amp; ( t &lt; 0 ) ) {
+            // plane is behind ray
+            return false;
+        }
+        if ( ignoreBackface ) {
+            //  ignore triangles facing away from ray
+            if ( ( t > 0 &amp;&amp; dn > 0 ) || ( t &lt; 0 &amp;&amp; dn &lt; 0 ) ) {
+                // triangle is facing opposite the direction of intersection
+                return false;
+            }
+        }
+        var position = o.add( d.multScalar( t ) );
+        // check if point is inside the triangle
+        if ( !this.isInside( position ) ) {
+            return false;
+        }
+        return {
+            position: position,
+            normal: normal,
+            t: t
+        };
+    };
+
+    /**
+     * Returns the closest point on the triangle to the specified point.
+     * @memberof Triangle
+     *
+     * @param {Vec3|Array} point - The point to test.
+     *
+     * @returns {Vec3} The closest point on the edge.
+     */
+    Triangle.prototype.closestPoint = function( point ) {
+        var e0 = closestPointOnEdge( this.a, this.b, point );
+        var e1 = closestPointOnEdge( this.b, this.c, point );
+        var e2 = closestPointOnEdge( this.c, this.a, point );
+        var d0 = ( e0.sub( point ) ).lengthSquared();
+        var d1 = ( e1.sub( point ) ).lengthSquared();
+        var d2 = ( e2.sub( point ) ).lengthSquared();
+        if ( d0 &lt; d1 ) {
+            return ( d0 &lt; d2 ) ? e0 : e2;
+        } else {
+            return ( d1 &lt; d2 ) ? e1 : e2;
+        }
+    };
+
+    /**
+     * Returns a random Triangle of unit length.
+     * @memberof Triangle
+     *
+     * @returns {Triangle} A random triangle of unit radius.
+     */
+    Triangle.random = function() {
+        var a = Vec3.random(),
+            b = Vec3.random(),
+            c = Vec3.random(),
+            centroid = a.add( b ).add( c ).divScalar( 3 ),
+            aCent = a.sub( centroid ),
+            bCent = b.sub( centroid ),
+            cCent = c.sub( centroid ),
+            aDist = aCent.length(),
+            bDist = bCent.length(),
+            cDist = cCent.length(),
+            maxDist = Math.max( Math.max( aDist, bDist ), cDist ),
+            scale = 1 / maxDist;
+        return new Triangle(
+            aCent.multScalar( scale ),
+            bCent.multScalar( scale ),
+            cCent.multScalar( scale ) );
+    };
+
+    /**
+     * Returns true if the vector components match those of a provided triangle.
+     * An optional epsilon value may be provided.
+     * @memberof Triangle
+     *
+     * @param {Triangle} that - The vector to test equality with.
+     * @param {number} epsilon - The epsilon value. Optional.
+     *
+     * @returns {boolean} Whether or not the vector components match.
+     */
+    Triangle.prototype.equals = function( that, epsilon ) {
+        epsilon = epsilon === undefined ? 0 : epsilon;
+        return this.a.equals( that.a, epsilon ) &amp;&amp;
+            this.b.equals( that.b, epsilon ) &amp;&amp;
+            this.c.equals( that.c, epsilon );
+    };
+
+    /**
+     * Returns a string representation of the vector.
+     * @memberof Triangle
+     *
+     * @returns {String} The string representation of the vector.
+     */
+    Triangle.prototype.toString = function() {
+        return this.a.toString() + ', ' +
+            this.b.toString() + ', ' +
+            this.c.toString();
+    };
+
+    module.exports = Triangle;
+
+}());
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Mon Apr 04 2016 19:24:58 GMT-0400 (EDT) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

@@ -1,0 +1,2580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Quaternion - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Mat33.html">Mat33</a><ul class='methods'><li data-type='method'><a href="Mat33.html#addMat33">addMat33</a></li><li data-type='method'><a href="Mat33.html#addMat44">addMat44</a></li><li data-type='method'><a href="Mat33.html#col">col</a></li><li data-type='method'><a href="Mat33.html#decompose">decompose</a></li><li data-type='method'><a href="Mat33.html#divScalar">divScalar</a></li><li data-type='method'><a href="Mat33.html#equals">equals</a></li><li data-type='method'><a href="Mat33.html#inverse">inverse</a></li><li data-type='method'><a href="Mat33.html#inverseRotation">inverseRotation</a></li><li data-type='method'><a href="Mat33.html#inverseScale">inverseScale</a></li><li data-type='method'><a href="Mat33.html#multMat33">multMat33</a></li><li data-type='method'><a href="Mat33.html#multMat44">multMat44</a></li><li data-type='method'><a href="Mat33.html#multScalar">multScalar</a></li><li data-type='method'><a href="Mat33.html#multVec3">multVec3</a></li><li data-type='method'><a href="Mat33.html#rotation">rotation</a></li><li data-type='method'><a href="Mat33.html#row">row</a></li><li data-type='method'><a href="Mat33.html#scale">scale</a></li><li data-type='method'><a href="Mat33.html#subMat33">subMat33</a></li><li data-type='method'><a href="Mat33.html#subMat44">subMat44</a></li><li data-type='method'><a href="Mat33.html#toArray">toArray</a></li><li data-type='method'><a href="Mat33.html#toMat44">toMat44</a></li><li data-type='method'><a href="Mat33.html#toString">toString</a></li><li data-type='method'><a href="Mat33.html#transpose">transpose</a></li><li data-type='method'><a href="Mat33.html#.identity">identity</a></li><li data-type='method'><a href="Mat33.html#.random">random</a></li><li data-type='method'><a href="Mat33.html#.rotation">rotation</a></li><li data-type='method'><a href="Mat33.html#.rotationFromTo">rotationFromTo</a></li><li data-type='method'><a href="Mat33.html#.scale">scale</a></li></ul></li><li><a href="Mat44.html">Mat44</a><ul class='methods'><li data-type='method'><a href="Mat44.html#addMat33">addMat33</a></li><li data-type='method'><a href="Mat44.html#addMat44">addMat44</a></li><li data-type='method'><a href="Mat44.html#col">col</a></li><li data-type='method'><a href="Mat44.html#decompose">decompose</a></li><li data-type='method'><a href="Mat44.html#divScalar">divScalar</a></li><li data-type='method'><a href="Mat44.html#equals">equals</a></li><li data-type='method'><a href="Mat44.html#inverse">inverse</a></li><li data-type='method'><a href="Mat44.html#inverseRotation">inverseRotation</a></li><li data-type='method'><a href="Mat44.html#inverseScale">inverseScale</a></li><li data-type='method'><a href="Mat44.html#inverseTranslation">inverseTranslation</a></li><li data-type='method'><a href="Mat44.html#multMat33">multMat33</a></li><li data-type='method'><a href="Mat44.html#multMat44">multMat44</a></li><li data-type='method'><a href="Mat44.html#multScalar">multScalar</a></li><li data-type='method'><a href="Mat44.html#multVec3">multVec3</a></li><li data-type='method'><a href="Mat44.html#multVec4">multVec4</a></li><li data-type='method'><a href="Mat44.html#rotation">rotation</a></li><li data-type='method'><a href="Mat44.html#row">row</a></li><li data-type='method'><a href="Mat44.html#scale">scale</a></li><li data-type='method'><a href="Mat44.html#subMat33">subMat33</a></li><li data-type='method'><a href="Mat44.html#subMat44">subMat44</a></li><li data-type='method'><a href="Mat44.html#toArray">toArray</a></li><li data-type='method'><a href="Mat44.html#toMat33">toMat33</a></li><li data-type='method'><a href="Mat44.html#toString">toString</a></li><li data-type='method'><a href="Mat44.html#translation">translation</a></li><li data-type='method'><a href="Mat44.html#transpose">transpose</a></li><li data-type='method'><a href="Mat44.html#.identity">identity</a></li><li data-type='method'><a href="Mat44.html#.random">random</a></li><li data-type='method'><a href="Mat44.html#.rotation">rotation</a></li><li data-type='method'><a href="Mat44.html#.rotationFromTo">rotationFromTo</a></li><li data-type='method'><a href="Mat44.html#.scale">scale</a></li><li data-type='method'><a href="Mat44.html#.translation">translation</a></li></ul></li><li><a href="Quaternion.html">Quaternion</a><ul class='methods'><li data-type='method'><a href="Quaternion.html#.identity">identity</a></li><li data-type='method'><a href="Quaternion.html#.random">random</a></li><li data-type='method'><a href="Quaternion.html#.rotation">rotation</a></li><li data-type='method'><a href="Quaternion.html#.rotationFromTo">rotationFromTo</a></li><li data-type='method'><a href="Quaternion.html#.slerp">slerp</a></li><li data-type='method'><a href="Quaternion.html#axes">axes</a></li><li data-type='method'><a href="Quaternion.html#conjugate">conjugate</a></li><li data-type='method'><a href="Quaternion.html#equals">equals</a></li><li data-type='method'><a href="Quaternion.html#inverse">inverse</a></li><li data-type='method'><a href="Quaternion.html#matrix">matrix</a></li><li data-type='method'><a href="Quaternion.html#multQuat">multQuat</a></li><li data-type='method'><a href="Quaternion.html#negate">negate</a></li><li data-type='method'><a href="Quaternion.html#normalize">normalize</a></li><li data-type='method'><a href="Quaternion.html#rotate">rotate</a></li><li data-type='method'><a href="Quaternion.html#toArray">toArray</a></li><li data-type='method'><a href="Quaternion.html#toString">toString</a></li><li data-type='method'><a href="Quaternion.html#xAxis">xAxis</a></li><li data-type='method'><a href="Quaternion.html#yAxis">yAxis</a></li><li data-type='method'><a href="Quaternion.html#zAxis">zAxis</a></li></ul></li><li><a href="Transform.html">Transform</a><ul class='methods'><li data-type='method'><a href="Transform.html#.identity">identity</a></li><li data-type='method'><a href="Transform.html#.random">random</a></li><li data-type='method'><a href="Transform.html#axes">axes</a></li><li data-type='method'><a href="Transform.html#equals">equals</a></li><li data-type='method'><a href="Transform.html#inverseMatrix">inverseMatrix</a></li><li data-type='method'><a href="Transform.html#inverseRotationMatrix">inverseRotationMatrix</a></li><li data-type='method'><a href="Transform.html#inverseScaleMatrix">inverseScaleMatrix</a></li><li data-type='method'><a href="Transform.html#inverseTranslationMatrix">inverseTranslationMatrix</a></li><li data-type='method'><a href="Transform.html#localToWorld">localToWorld</a></li><li data-type='method'><a href="Transform.html#matrix">matrix</a></li><li data-type='method'><a href="Transform.html#rotateLocal">rotateLocal</a></li><li data-type='method'><a href="Transform.html#rotateWorld">rotateWorld</a></li><li data-type='method'><a href="Transform.html#rotateXTo">rotateXTo</a></li><li data-type='method'><a href="Transform.html#rotateYTo">rotateYTo</a></li><li data-type='method'><a href="Transform.html#rotateZTo">rotateZTo</a></li><li data-type='method'><a href="Transform.html#rotationMatrix">rotationMatrix</a></li><li data-type='method'><a href="Transform.html#scaleMatrix">scaleMatrix</a></li><li data-type='method'><a href="Transform.html#toString">toString</a></li><li data-type='method'><a href="Transform.html#translateLocal">translateLocal</a></li><li data-type='method'><a href="Transform.html#translateWorld">translateWorld</a></li><li data-type='method'><a href="Transform.html#translationMatrix">translationMatrix</a></li><li data-type='method'><a href="Transform.html#viewMatrix">viewMatrix</a></li><li data-type='method'><a href="Transform.html#worldToLocal">worldToLocal</a></li><li data-type='method'><a href="Transform.html#xAxis">xAxis</a></li><li data-type='method'><a href="Transform.html#yAxis">yAxis</a></li><li data-type='method'><a href="Transform.html#zAxis">zAxis</a></li></ul></li><li><a href="Triangle.html">Triangle</a><ul class='methods'><li data-type='method'><a href="Triangle.html#.random">random</a></li><li data-type='method'><a href="Triangle.html#area">area</a></li><li data-type='method'><a href="Triangle.html#centroid">centroid</a></li><li data-type='method'><a href="Triangle.html#closestPoint">closestPoint</a></li><li data-type='method'><a href="Triangle.html#equals">equals</a></li><li data-type='method'><a href="Triangle.html#intersect">intersect</a></li><li data-type='method'><a href="Triangle.html#isInside">isInside</a></li><li data-type='method'><a href="Triangle.html#normal">normal</a></li><li data-type='method'><a href="Triangle.html#radius">radius</a></li><li data-type='method'><a href="Triangle.html#toString">toString</a></li></ul></li><li><a href="Vec2.html">Vec2</a><ul class='methods'><li data-type='method'><a href="Vec2.html#add">add</a></li><li data-type='method'><a href="Vec2.html#cross">cross</a></li><li data-type='method'><a href="Vec2.html#divScalar">divScalar</a></li><li data-type='method'><a href="Vec2.html#dot">dot</a></li><li data-type='method'><a href="Vec2.html#equals">equals</a></li><li data-type='method'><a href="Vec2.html#length">length</a></li><li data-type='method'><a href="Vec2.html#lengthSquared">lengthSquared</a></li><li data-type='method'><a href="Vec2.html#multScalar">multScalar</a></li><li data-type='method'><a href="Vec2.html#negate">negate</a></li><li data-type='method'><a href="Vec2.html#normalize">normalize</a></li><li data-type='method'><a href="Vec2.html#sub">sub</a></li><li data-type='method'><a href="Vec2.html#toArray">toArray</a></li><li data-type='method'><a href="Vec2.html#toString">toString</a></li><li data-type='method'><a href="Vec2.html#unsignedAngle">unsignedAngle</a></li><li data-type='method'><a href="Vec2.html#.random">random</a></li></ul></li><li><a href="Vec3.html">Vec3</a><ul class='methods'><li data-type='method'><a href="Vec3.html#add">add</a></li><li data-type='method'><a href="Vec3.html#cross">cross</a></li><li data-type='method'><a href="Vec3.html#divScalar">divScalar</a></li><li data-type='method'><a href="Vec3.html#dot">dot</a></li><li data-type='method'><a href="Vec3.html#equals">equals</a></li><li data-type='method'><a href="Vec3.html#length">length</a></li><li data-type='method'><a href="Vec3.html#lengthSquared">lengthSquared</a></li><li data-type='method'><a href="Vec3.html#multScalar">multScalar</a></li><li data-type='method'><a href="Vec3.html#negate">negate</a></li><li data-type='method'><a href="Vec3.html#normalize">normalize</a></li><li data-type='method'><a href="Vec3.html#projectOntoPlane">projectOntoPlane</a></li><li data-type='method'><a href="Vec3.html#sub">sub</a></li><li data-type='method'><a href="Vec3.html#toArray">toArray</a></li><li data-type='method'><a href="Vec3.html#toString">toString</a></li><li data-type='method'><a href="Vec3.html#unsignedAngle">unsignedAngle</a></li><li data-type='method'><a href="Vec3.html#.random">random</a></li></ul></li><li><a href="Vec4.html">Vec4</a><ul class='methods'><li data-type='method'><a href="Vec4.html#add">add</a></li><li data-type='method'><a href="Vec4.html#divScalar">divScalar</a></li><li data-type='method'><a href="Vec4.html#dot">dot</a></li><li data-type='method'><a href="Vec4.html#equals">equals</a></li><li data-type='method'><a href="Vec4.html#length">length</a></li><li data-type='method'><a href="Vec4.html#lengthSquared">lengthSquared</a></li><li data-type='method'><a href="Vec4.html#multScalar">multScalar</a></li><li data-type='method'><a href="Vec4.html#negate">negate</a></li><li data-type='method'><a href="Vec4.html#normalize">normalize</a></li><li data-type='method'><a href="Vec4.html#sub">sub</a></li><li data-type='method'><a href="Vec4.html#toArray">toArray</a></li><li data-type='method'><a href="Vec4.html#toString">toString</a></li><li data-type='method'><a href="Vec4.html#.random">random</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Quaternion</h1>
+    
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+        Quaternion
+        </h2>
+        
+            <div class="class-description">A quaternion representing an orientation.</div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+    <h2>Constructor</h2>
+    
+
+    <h4 class="name" id="Quaternion"><span class="type-signature"></span>new Quaternion<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Instantiates a Quaternion object.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Quaternion.js.html">Quaternion.js</a>, <a href="Quaternion.js.html#line9">line 9</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".identity"><span class="type-signature">(static) </span>identity<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Quaternion.html">Quaternion</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns a quaternion that represents an oreintation matchingthe identity matrix.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Quaternion.js.html">Quaternion.js</a>, <a href="Quaternion.js.html#line53">line 53</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The identity quaternion.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Quaternion.html">Quaternion</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".random"><span class="type-signature">(static) </span>random<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Quaternion.html">Quaternion</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns a random Quaternion of unit length.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Quaternion.js.html">Quaternion.js</a>, <a href="Quaternion.js.html#line368">line 368</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A random vector of unit length.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Quaternion.html">Quaternion</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".rotation"><span class="type-signature">(static) </span>rotation<span class="signature">(angle, axis)</span><span class="type-signature"> &rarr; {<a href="Quaternion.html">Quaternion</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns a quaternion representing the rotation defined by an axisand an angle.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>angle</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The angle of the rotation, in radians.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>axis</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Vec3.html">Vec3</a></span>
+|
+
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The axis of the rotation.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Quaternion.js.html">Quaternion.js</a>, <a href="Quaternion.js.html#line213">line 213</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The quaternion representing the rotation.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Quaternion.html">Quaternion</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".rotationFromTo"><span class="type-signature">(static) </span>rotationFromTo<span class="signature">(from, to)</span><span class="type-signature"> &rarr; {<a href="Quaternion.html">Quaternion</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns a rotation matrix to rotate a vector from one direction toanother.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>from</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Vec3.html">Vec3</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The starting direction.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>to</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Vec3.html">Vec3</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ending direction.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Quaternion.js.html">Quaternion.js</a>, <a href="Quaternion.js.html#line240">line 240</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The quaternion representing the rotation.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Quaternion.html">Quaternion</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".slerp"><span class="type-signature">(static) </span>slerp<span class="signature">(fromRot, toRot, t)</span><span class="type-signature"> &rarr; {<a href="Quaternion.html">Quaternion</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns a quaternion that has been spherically interpolated betweentwo provided quaternions for a given t value.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fromRot</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Quaternion.html">Quaternion</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The rotation at t = 0.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>toRot</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Quaternion.html">Quaternion</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The rotation at t = 1.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>t</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The t value, from 0 to 1.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Quaternion.js.html">Quaternion.js</a>, <a href="Quaternion.js.html#line262">line 262</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The quaternion representing the interpolated rotation.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Quaternion.html">Quaternion</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="axes"><span class="type-signature"></span>axes<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the axes of the rotation matrix that the quaternion represents.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Quaternion.js.html">Quaternion.js</a>, <a href="Quaternion.js.html#line164">line 164</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The axes of the matrix represented by the quaternion.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="conjugate"><span class="type-signature"></span>conjugate<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Quaternion.html">Quaternion</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the conjugate of the quaternion.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Quaternion.js.html">Quaternion.js</a>, <a href="Quaternion.js.html#line348">line 348</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The conjugate of the quaternion.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Quaternion.html">Quaternion</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="equals"><span class="type-signature"></span>equals<span class="signature">(that, epsilon)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns true if the vector components match those of a provided vector.An optional epsilon value may be provided.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>that</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Quaternion.html">Quaternion</a></span>
+|
+
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The vector to calculate the dot product with.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>epsilon</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The epsilon value. Optional.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Quaternion.js.html">Quaternion.js</a>, <a href="Quaternion.js.html#line308">line 308</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Whether or not the vector components match.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="inverse"><span class="type-signature"></span>inverse<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Quaternion.html">Quaternion</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the inverse of the quaternion.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Quaternion.js.html">Quaternion.js</a>, <a href="Quaternion.js.html#line358">line 358</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The inverse of the quaternion.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Quaternion.html">Quaternion</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="matrix"><span class="type-signature"></span>matrix<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Mat33.html">Mat33</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the rotation matrix that the quaternion represents.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Quaternion.js.html">Quaternion.js</a>, <a href="Quaternion.js.html#line187">line 187</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The rotation matrix represented by the quaternion.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Mat33.html">Mat33</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="multQuat"><span class="type-signature"></span>multQuat<span class="signature">(that)</span><span class="type-signature"> &rarr; {<a href="Quaternion.html">Quaternion</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Concatenates the rotations of the two quaternions, returninga new Quaternion object.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>that</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Quaternion.html">Quaternion</a></span>
+|
+
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The quaterion to concatenate.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Quaternion.js.html">Quaternion.js</a>, <a href="Quaternion.js.html#line76">line 76</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The resulting concatenated quaternion.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Quaternion.html">Quaternion</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="negate"><span class="type-signature"></span>negate<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Quaternion.html">Quaternion</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns a new Quaternion with each component negated.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Quaternion.js.html">Quaternion.js</a>, <a href="Quaternion.js.html#line63">line 63</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The negated quaternion.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Quaternion.html">Quaternion</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="normalize"><span class="type-signature"></span>normalize<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Quaternion.html">Quaternion</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns a new Quaternion of unit length.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Quaternion.js.html">Quaternion.js</a>, <a href="Quaternion.js.html#line326">line 326</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The quaternion of unit length.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Quaternion.html">Quaternion</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="rotate"><span class="type-signature"></span>rotate<span class="signature">(that)</span><span class="type-signature"> &rarr; {<a href="Vec3.html">Vec3</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Applies the orientation of the quaternion as a rotationmatrix to the provided vector, returning a new Vec3 object.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>that</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Vec3.html">Vec3</a></span>
+|
+
+<span class="param-type"><a href="Vec4.html">Vec4</a></span>
+|
+
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The vector to rotate.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Quaternion.js.html">Quaternion.js</a>, <a href="Quaternion.js.html#line94">line 94</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The resulting rotated vector.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Vec3.html">Vec3</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="toArray"><span class="type-signature"></span>toArray<span class="signature">()</span><span class="type-signature"> &rarr; {Array}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns an array representation of the quaternion.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Quaternion.js.html">Quaternion.js</a>, <a href="Quaternion.js.html#line390">line 390</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The quaternion as an array.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="toString"><span class="type-signature"></span>toString<span class="signature">()</span><span class="type-signature"> &rarr; {String}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns a string representation of the quaternion.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Quaternion.js.html">Quaternion.js</a>, <a href="Quaternion.js.html#line380">line 380</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The string representation of the quaternion.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">String</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="xAxis"><span class="type-signature"></span>xAxis<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Vec3.html">Vec3</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the x-axis of the rotation matrix that the quaternion represents.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Quaternion.js.html">Quaternion.js</a>, <a href="Quaternion.js.html#line107">line 107</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The x-axis of the rotation matrix represented by the quaternion.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Vec3.html">Vec3</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="yAxis"><span class="type-signature"></span>yAxis<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Vec3.html">Vec3</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the y-axis of the rotation matrix that the quaternion represents.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Quaternion.js.html">Quaternion.js</a>, <a href="Quaternion.js.html#line126">line 126</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The y-axis of the rotation matrix represented by the quaternion.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Vec3.html">Vec3</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="zAxis"><span class="type-signature"></span>zAxis<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Vec3.html">Vec3</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Returns the z-axis of the rotation matrix that the quaternion represents.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Quaternion.js.html">Quaternion.js</a>, <a href="Quaternion.js.html#line145">line 145</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The z-axis of the rotation matrix represented by the quaternion.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Vec3.html">Vec3</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Mon Apr 04 2016 19:24:58 GMT-0400 (EDT) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
