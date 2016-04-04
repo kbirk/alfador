@@ -13,12 +13,18 @@
     var del = require('del');
     var jshint = require('gulp-jshint');
     var coveralls = require('gulp-coveralls');
+    var shell = require('gulp-shell');
 
     var project = 'alfador';
     var paths = {
         root: 'src/exports.js',
-        src: 'src/**/*.js',
-        tests: 'test/**/*.js',
+        src: [
+            'src/**/*.js'
+        ],
+        tests: [
+            'test/**/*.js'
+        ],
+        docs: 'src/*.js',
         build: 'build'
     };
 
@@ -60,7 +66,7 @@
     }
 
     gulp.task('clean', function () {
-        del([ 'build/*']);
+        del( paths.build );
     });
 
     gulp.task('lint', function() {
@@ -74,7 +80,7 @@
             .pipe( istanbul({ includeUntested: false }) ) // Covering files
             .pipe( istanbul.hookRequire() )
             .on( 'finish', function () {
-                return gulp.src([ paths.tests ])
+                return gulp.src( paths.tests )
                     .pipe( mocha({ reporter: 'list' })
                         .on( 'error', handleErrorTimeout ) ) // print mocha error message
                     .pipe( istanbul.writeReports() ); // Creating the reports after tests runned
@@ -94,10 +100,14 @@
         return build( paths.root, project + '.js', false );
     });
 
+    gulp.task('docs', shell.task([
+      './node_modules/.bin/jsdoc ' + paths.docs + ' --readme README.md --destination docs --template node_modules/minami'
+    ]));
+
     gulp.task('build', function( done ) {
         runSequence(
             [ 'clean', 'lint' ],
-            [ 'build-js', 'build-min-js' ],
+            [ 'build-js', 'build-min-js', 'docs' ],
             done );
     });
 

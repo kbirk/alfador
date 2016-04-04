@@ -4,14 +4,18 @@
 
 A fast 3D math library for JavaScript
 
-### Installation
+## Installation
 
-Requires [bower](http://bower.io/) or [node](http://nodejs.org/).
+Requires [node](http://nodejs.org/) or [bower](http://bower.io/).
 
 ```bash
-bower install alfador
+npm install esper
 ```
 or
 ```bash
-npm install alfador
+bower install esper
 ```
+
+## Documentation
+
+* [API Documentation](https://kbirk.github.io/alfador/)
