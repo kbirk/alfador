@@ -9,11 +9,11 @@ A fast 3D math library for JavaScript
 Requires [node](http://nodejs.org/) or [bower](http://bower.io/).
 
 ```bash
-npm install esper
+npm install alfador
 ```
 or
 ```bash
-bower install esper
+bower install alfador
 ```
 
 ## Documentation
